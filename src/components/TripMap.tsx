@@ -3,6 +3,7 @@ import { MapContainer, Marker, Polyline, Popup, TileLayer, useMap } from "react-
 import L from "leaflet";
 import type { LatLng } from "../lib/geocode";
 import { googleSearchUrl } from "../lib/links";
+import { spreadMarkers } from "../lib/mapLayout";
 import { dayColor } from "../lib/stops";
 
 const SIGHT_TYPES = new Set(["attraction", "activity", "free"]);
@@ -18,11 +19,12 @@ export type TripMapStop = {
 };
 
 function numberedIcon(n: number, color: string, focused: boolean) {
+  const wide = n >= 10;
   return L.divIcon({
     className: "pin-wrap",
-    html: `<div class="pin ${focused ? "pin-focus" : ""}" style="background:${color}">${n}</div>`,
-    iconSize: [28, 28],
-    iconAnchor: [14, 14],
+    html: `<div class="pin ${wide ? "pin-wide" : ""} ${focused ? "pin-focus" : ""}" style="background:${color}">${n}</div>`,
+    iconSize: wide ? [32, 28] : [28, 28],
+    iconAnchor: wide ? [16, 14] : [14, 14],
   });
 }
 
@@ -87,18 +89,20 @@ export function TripMap({
   const [fly, setFly] = useState<{ point: LatLng; token: number } | null>(null);
 
   const resolved = useMemo(() => {
-    const seen = new Map<string, number>();
-    return stops
+    const raw = stops
       .map((stop) => {
         const point = points.get(stop.query);
         if (!point) return null;
-        const nth = seen.get(`${stop.query}-${stop.dayIndex}`) ?? 0;
-        seen.set(`${stop.query}-${stop.dayIndex}`, nth + 1);
-        const jitter = nth * 0.00022;
-        return { ...stop, point: { ...point, lat: point.lat + jitter * 0.5, lng: point.lng + jitter }, color: dayColor(stop.dayIndex) };
+        return { ...stop, point, color: dayColor(stop.dayIndex) };
       })
       .filter((item): item is TripMapStop & { point: LatLng; color: string } => item != null);
+    return spreadMarkers(raw);
   }, [stops, points]);
+
+  const missing = useMemo(
+    () => stops.filter((stop) => stop.query && !points.get(stop.query)).map((stop) => stop.number),
+    [stops, points],
+  );
 
   const byDay = useMemo(() => {
     const groups = new Map<number, typeof resolved>();
@@ -111,7 +115,7 @@ export function TripMap({
   }, [resolved]);
 
   const allPoints = useMemo(() => resolved.map((item) => item.point), [resolved]);
-  const center = resolved[0]?.point ?? { lat: 48.2082, lng: 16.3738 };
+  const center = resolved[0]?.point ?? { lat: 26.2124, lng: 127.6809, label: "Okinawa" };
 
   function goToDay(index: number) {
     const first = firstStopOfDay(resolved.filter((item) => item.dayIndex === index));
@@ -129,6 +133,13 @@ export function TripMap({
   return (
     <div className="map-shell">
       {loading && <div className="map-status">正在把全程地點放到地圖上…</div>}
+      {!loading && missing.length > 0 && (
+        <div className="map-missing">
+          全程地圖暫缺第 {missing.slice(0, 8).join("、")}
+          {missing.length > 8 ? ` 等 ${missing.length} 點` : " 點"}
+          （地名 geocode 失敗）。時間軸編號仍在。
+        </div>
+      )}
       {showLegend && (
         <ol className="map-legend">
           {Array.from({ length: dayCount }, (_, index) => (
@@ -163,6 +174,7 @@ export function TripMap({
             key={`${item.dayIndex}-${item.number}`}
             position={[item.point.lat, item.point.lng]}
             icon={numberedIcon(item.number, item.color, item.number === focusNumber)}
+            zIndexOffset={item.number === focusNumber ? 1000 : item.number}
             eventHandlers={{ click: () => onSelect(item.dayIndex, item.itemIndex) }}
           >
             <Popup>

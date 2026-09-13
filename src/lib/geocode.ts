@@ -167,14 +167,37 @@ function nameMatches(hitName: string, names: string[]): boolean {
   return names.some((name) => Boolean(name && hitName && (hitName.includes(name) || name.includes(hitName))));
 }
 
+/** Latin city names ↔ local spellings so Photon/Nominatim Japanese cities still match. */
+const CITY_ALIASES: Record<string, string[]> = {
+  naha: ["那覇", "那霸", "なは"],
+  nago: ["名護", "なご"],
+  onna: ["恩納", "おんな"],
+  motobu: ["本部", "もとぶ"],
+  nakijin: ["今帰仁", "なきじん"],
+  ginoza: ["宜野座", "ぎのざ"],
+  kin: ["金武", "きん"],
+  uruma: ["うるま"],
+  nanjo: ["南城", "なんじょう"],
+  ginowan: ["宜野湾", "ぎのわん"],
+  urasoe: ["浦添", "うらそえ"],
+  okinawa: ["沖縄", "おきなわ"],
+};
+
+function cityTokens(city: string | null): string[] {
+  if (!city) return [];
+  const key = city.toLowerCase().replace(/\s+/g, "");
+  return [...new Set([norm(city), key, ...(CITY_ALIASES[key] ?? []).map(norm)].filter(Boolean))];
+}
+
 function scoreHit(hit: PhotonHit, parsed: ReturnType<typeof parsePlace>, bias: LatLng | null | undefined, aliases: string[]): number {
   if (parsed.countryCode && hit.countryCode && hit.countryCode !== parsed.countryCode) return -1000;
 
   const km = bias ? kmBetween(bias, hit.lat, hit.lng) : Infinity;
   if (parsed.city && bias && km > 120) return -500;
 
-  const city = parsed.city ? norm(parsed.city) : "";
-  const cityHit = Boolean(city && [hit.city, hit.state, hit.label].some((part) => part && norm(part).includes(city)));
+  const tokens = cityTokens(parsed.city);
+  const cityBlob = [hit.city, hit.state, hit.label].map((part) => (part ? norm(part) : "")).join("|");
+  const cityHit = tokens.some((token) => token && cityBlob.includes(token));
   const names = [parsed.name, ...aliases].map(norm).filter(Boolean);
   const hitName = norm(hit.name || hit.label);
   const named = nameMatches(hitName, names);
@@ -330,7 +353,12 @@ async function geocodeOne(input: GeocodeQuery, bias?: LatLng | null): Promise<La
   ensureCache();
   const key = input.query.trim();
   if (!key) return null;
-  if (cache.has(key)) return cache.get(key) ?? null;
+  // Only trust positive cache hits. Failed lookups must retry — English JP names
+  // often fail once without bias then succeed after a nearby stop resolves.
+  if (cache.has(key)) {
+    const hit = cache.get(key);
+    if (hit) return hit;
+  }
 
   const parsed = parsePlace(key);
   const aliases = expandAliases(input);
@@ -341,7 +369,7 @@ async function geocodeOne(input: GeocodeQuery, bias?: LatLng | null): Promise<La
   const regionBias = cityBias || bias || null;
   const variants = searchVariants(input);
 
-  for (const q of variants.slice(0, 3)) {
+  for (const q of variants.slice(0, 5)) {
     try {
       const hits = await photonSearch(q, regionBias);
       const picked = pickHit(hits, parsed, regionBias, aliases);
@@ -350,7 +378,7 @@ async function geocodeOne(input: GeocodeQuery, bias?: LatLng | null): Promise<La
       /* try next variant or Nominatim */
     }
   }
-  for (const q of variants.slice(0, 4)) {
+  for (const q of variants.slice(0, 5)) {
     try {
       const hits = await nominatimSearch(q, parsed.countryCode);
       const picked = pickHit(hits, parsed, regionBias, aliases);
@@ -359,6 +387,7 @@ async function geocodeOne(input: GeocodeQuery, bias?: LatLng | null): Promise<La
       /* try next */
     }
   }
+  // Do not persist null — a later call with better regional bias may succeed.
   return null;
 }
 
@@ -377,22 +406,20 @@ export async function geocodeMany(
     if (cache.has(input.query)) {
       const hit = cache.get(input.query);
       if (hit) result.set(input.query, hit);
+      else missing.push(input);
     } else {
       missing.push(input);
     }
   }
 
-  let cursor = 0;
-  const workers = Math.min(3, missing.length);
-  async function worker() {
-    while (cursor < missing.length) {
-      const index = cursor;
-      cursor += 1;
-      const input = missing[index];
-      const point = await geocodeOne(input, bias);
-      if (point) result.set(input.query, point);
+  // Resolve sequentially so each success can bias the next (same-day itineraries).
+  let runningBias = bias ?? null;
+  for (const input of missing) {
+    const point = await geocodeOne(input, runningBias);
+    if (point) {
+      result.set(input.query, point);
+      runningBias = point;
     }
   }
-  if (workers > 0) await Promise.all(Array.from({ length: workers }, () => worker()));
   return result;
 }
