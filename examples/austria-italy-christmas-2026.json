@@ -1,0 +1,3790 @@
+{
+  "schemaVersion": "1.0.0",
+  "trip": {
+    "title": "奧地利・意大利聖誕 16 日",
+    "startDate": "2026-12-19",
+    "endDate": "2027-01-03",
+    "origin": {
+      "city": "Hong Kong",
+      "country": "Hong Kong",
+      "iata": "HKG"
+    },
+    "travelers": {
+      "adults": 2,
+      "children": 0
+    },
+    "currencies": {
+      "local": "EUR",
+      "display": "HKD"
+    },
+    "pace": "packed",
+    "language": "zh-Hant",
+    "notes": "平安夜市集提早關閉；聖誕日與元旦部分店鋪休業；梵蒂岡有服裝規定；最後的晚餐需預約。 金額為估算，到當地可能不同。"
+  },
+  "days": [
+    {
+      "day": 1,
+      "date": "2026-12-19",
+      "title": "飛行啟程日",
+      "stayCity": "Vienna",
+      "countries": [
+        "Austria"
+      ],
+      "routeLogic": "香港凌晨起飛，當地清晨抵維也納機場（VIE），機場快線約 16–25 分鐘至市中心。",
+      "tip": "以休息為主，準備接下來的行程。",
+      "highlights": [
+        {
+          "name": "Arrival transfer and rest",
+          "placeQuery": "Vienna International Airport, Schwechat, Austria",
+          "stars": 2,
+          "bonus": false
+        },
+        {
+          "name": "Short adaptation near hotel",
+          "placeQuery": "Innere Stadt, Vienna, Austria",
+          "stars": 2,
+          "bonus": false
+        }
+      ],
+      "timeline": [
+        {
+          "start": "00:30",
+          "end": "01:00",
+          "endNextDay": false,
+          "type": "flight",
+          "title": "Depart Hong Kong International Airport",
+          "placeQuery": "Hong Kong International Airport, Hong Kong, Hong Kong",
+          "displayNameZh": "香港國際機場起飛",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "flight",
+            "fromPlaceQuery": "Hong Kong International Airport, Hong Kong, Hong Kong",
+            "toPlaceQuery": "Vienna International Airport, Schwechat, Austria",
+            "line": null,
+            "operator": null,
+            "durationMin": null,
+            "cost": {
+              "amount": 11000,
+              "currency": "HKD"
+            }
+          },
+          "ticket": {
+            "name": "機票 x2",
+            "cost": {
+              "amount": 0,
+              "currency": "HKD"
+            }
+          }
+        },
+        {
+          "start": "06:00",
+          "end": null,
+          "endNextDay": false,
+          "type": "transit",
+          "title": "Arrive Vienna International Airport",
+          "placeQuery": "Vienna International Airport, Schwechat, Austria",
+          "displayNameZh": "抵達維也納機場",
+          "mustSee": false,
+          "notes": "當地清晨抵達，確切時間視航班而定。",
+          "transport": {
+            "mode": "flight",
+            "fromPlaceQuery": "Hong Kong International Airport, Hong Kong, Hong Kong",
+            "toPlaceQuery": "Vienna International Airport, Schwechat, Austria",
+            "line": null,
+            "operator": null,
+            "durationMin": null,
+            "cost": {
+              "amount": 0,
+              "currency": "HKD"
+            }
+          },
+          "ticket": {
+            "name": null,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "08:30",
+          "end": "09:30",
+          "endNextDay": false,
+          "type": "transit",
+          "title": "Airport train to city hotel for luggage drop",
+          "placeQuery": "Innere Stadt, Vienna, Austria",
+          "displayNameZh": "機場快線前往市中心飯店寄存行李",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "train",
+            "fromPlaceQuery": "Vienna International Airport, Schwechat, Austria",
+            "toPlaceQuery": "Innere Stadt, Vienna, Austria",
+            "line": "CAT / Railjet",
+            "operator": "ÖBB",
+            "durationMin": 20,
+            "cost": {
+              "amount": 30,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": null,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "14:00",
+          "end": null,
+          "endNextDay": false,
+          "type": "hotel",
+          "title": "Hotel check-in",
+          "placeQuery": "Innere Stadt, Vienna, Austria",
+          "displayNameZh": "飯店辦理入住",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Innere Stadt, Vienna, Austria",
+            "toPlaceQuery": "Innere Stadt, Vienna, Austria",
+            "line": null,
+            "operator": null,
+            "durationMin": 0,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": null,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "15:00",
+          "end": "18:00",
+          "endNextDay": false,
+          "type": "rest",
+          "title": "Settle in, nearby supermarket and light walk",
+          "placeQuery": "Innere Stadt, Vienna, Austria",
+          "displayNameZh": "近酒店短暫適應、周邊超市採買與輕度散步",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Innere Stadt, Vienna, Austria",
+            "toPlaceQuery": "Innere Stadt, Vienna, Austria",
+            "line": null,
+            "operator": null,
+            "durationMin": 15,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": null,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "19:00",
+          "end": null,
+          "endNextDay": false,
+          "type": "meal",
+          "title": "Dinner and early sleep for jet lag",
+          "placeQuery": "Innere Stadt, Vienna, Austria",
+          "displayNameZh": "晚餐與早早就寢調整時差",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Innere Stadt, Vienna, Austria",
+            "toPlaceQuery": "Innere Stadt, Vienna, Austria",
+            "line": null,
+            "operator": null,
+            "durationMin": 5,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "晚餐 x2",
+            "cost": {
+              "amount": 64,
+              "currency": "EUR"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "day": 2,
+      "date": "2026-12-20",
+      "title": "維也納經典建築與沉浸式教堂光影",
+      "stayCity": "Vienna",
+      "countries": [
+        "Austria"
+      ],
+      "routeLogic": "全天市內地鐵與步行。",
+      "tip": "在宏偉的新哥德式大教堂內體驗現代光影美學。",
+      "highlights": [
+        {
+          "name": "Stephansdom and old town walk",
+          "placeQuery": "Stephansdom, Vienna, Austria",
+          "stars": 5,
+          "bonus": false
+        },
+        {
+          "name": "Peterskirche free organ concert",
+          "placeQuery": "Peterskirche, Vienna, Austria",
+          "stars": 5,
+          "bonus": false
+        },
+        {
+          "name": "Votivkirche immersive light show",
+          "placeQuery": "Votivkirche, Vienna, Austria",
+          "stars": 5,
+          "bonus": true
+        },
+        {
+          "name": "Belvedere Palace and Klimt The Kiss",
+          "placeQuery": "Belvedere Palace, Vienna, Austria",
+          "stars": 5,
+          "bonus": false
+        },
+        {
+          "name": "Hofburg and Sisi Museum",
+          "placeQuery": "Hofburg, Vienna, Austria",
+          "stars": 4,
+          "bonus": false
+        }
+      ],
+      "timeline": [
+        {
+          "start": "09:00",
+          "end": "10:30",
+          "endNextDay": false,
+          "type": "attraction",
+          "title": "Stephansdom interior and old town walk",
+          "placeQuery": "Stephansdom, Vienna, Austria",
+          "displayNameZh": "斯蒂芬大教堂內部參觀與老城漫步",
+          "mustSee": true,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Innere Stadt, Vienna, Austria",
+            "toPlaceQuery": "Stephansdom, Vienna, Austria",
+            "line": null,
+            "operator": null,
+            "durationMin": 10,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "Cathedral interior",
+            "cost": {
+              "amount": 48,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "10:30",
+          "end": "11:15",
+          "endNextDay": false,
+          "type": "attraction",
+          "title": "Peterskirche baroque interior and organ",
+          "placeQuery": "Peterskirche, Vienna, Austria",
+          "displayNameZh": "聖彼得教堂欣賞巴洛克與管風琴",
+          "mustSee": true,
+          "notes": "步行約 3 分鐘",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Stephansdom, Vienna, Austria",
+            "toPlaceQuery": "Peterskirche, Vienna, Austria",
+            "line": null,
+            "operator": null,
+            "durationMin": 3,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "免費",
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "11:30",
+          "end": "13:00",
+          "endNextDay": false,
+          "type": "attraction",
+          "title": "Hofburg apartments and Sisi Museum",
+          "placeQuery": "Hofburg, Vienna, Austria",
+          "displayNameZh": "霍夫堡宮殿內殿與茜茜公主博物館",
+          "mustSee": true,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Peterskirche, Vienna, Austria",
+            "toPlaceQuery": "Hofburg, Vienna, Austria",
+            "line": null,
+            "operator": null,
+            "durationMin": 8,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "Hofburg / Sisi Museum",
+            "cost": {
+              "amount": 48,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "13:00",
+          "end": "14:30",
+          "endNextDay": false,
+          "type": "meal",
+          "title": "Old town lunch",
+          "placeQuery": "Innere Stadt, Vienna, Austria",
+          "displayNameZh": "老城區午餐",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Hofburg, Vienna, Austria",
+            "toPlaceQuery": "Innere Stadt, Vienna, Austria",
+            "line": null,
+            "operator": null,
+            "durationMin": 5,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "午餐 x2",
+            "cost": {
+              "amount": 36,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "14:45",
+          "end": "16:30",
+          "endNextDay": false,
+          "type": "attraction",
+          "title": "Belvedere Upper Palace and Klimt",
+          "placeQuery": "Belvedere Palace, Vienna, Austria",
+          "displayNameZh": "美景宮主展館與克林姆真跡",
+          "mustSee": true,
+          "notes": "",
+          "transport": {
+            "mode": "metro",
+            "fromPlaceQuery": "Innere Stadt, Vienna, Austria",
+            "toPlaceQuery": "Belvedere Palace, Vienna, Austria",
+            "line": "U1",
+            "operator": "Wiener Linien",
+            "durationMin": 15,
+            "cost": {
+              "amount": 4,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "Belvedere Upper Palace",
+            "cost": {
+              "amount": 48,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "16:45",
+          "end": "17:45",
+          "endNextDay": false,
+          "type": "attraction",
+          "title": "Votivkirche Genesis of Light immersive show",
+          "placeQuery": "Votivkirche, Vienna, Austria",
+          "displayNameZh": "感恩教堂《創世紀之光》沉浸式光影展",
+          "mustSee": true,
+          "notes": "",
+          "transport": {
+            "mode": "metro",
+            "fromPlaceQuery": "Belvedere Palace, Vienna, Austria",
+            "toPlaceQuery": "Votivkirche, Vienna, Austria",
+            "line": "U1 / U2",
+            "operator": "Wiener Linien",
+            "durationMin": 15,
+            "cost": {
+              "amount": 4,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "Genesis of Light",
+            "cost": {
+              "amount": 48,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "18:30",
+          "end": "20:30",
+          "endNextDay": false,
+          "type": "activity",
+          "title": "Vienna court concert",
+          "placeQuery": "Hofburg, Vienna, Austria",
+          "displayNameZh": "Klook 維也納宮廷音樂會",
+          "mustSee": true,
+          "notes": "",
+          "transport": {
+            "mode": "metro",
+            "fromPlaceQuery": "Votivkirche, Vienna, Austria",
+            "toPlaceQuery": "Hofburg, Vienna, Austria",
+            "line": "U2",
+            "operator": "Wiener Linien",
+            "durationMin": 10,
+            "cost": {
+              "amount": 4,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "Vienna Hofburg Orchestra concert",
+            "cost": {
+              "amount": 140,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "21:00",
+          "end": null,
+          "endNextDay": false,
+          "type": "meal",
+          "title": "City centre dinner",
+          "placeQuery": "Innere Stadt, Vienna, Austria",
+          "displayNameZh": "市中心晚餐",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Hofburg, Vienna, Austria",
+            "toPlaceQuery": "Innere Stadt, Vienna, Austria",
+            "line": null,
+            "operator": null,
+            "durationMin": 8,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "晚餐 x2",
+            "cost": {
+              "amount": 64,
+              "currency": "EUR"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "day": 3,
+      "date": "2026-12-21",
+      "title": "美泉宮、後山登高與國家歌劇院",
+      "stayCity": "Vienna",
+      "countries": [
+        "Austria"
+      ],
+      "routeLogic": "地鐵 U4 約 20–25 分鐘至 Schönbrunn。",
+      "tip": "深度探索宮殿內部，午後返回市中心欣賞歌劇院夜景。",
+      "highlights": [
+        {
+          "name": "Schonbrunn Palace Imperial Tour",
+          "placeQuery": "Schonbrunn Palace, Vienna, Austria",
+          "stars": 5,
+          "bonus": false
+        },
+        {
+          "name": "Schonbrunn gardens and Gloriette",
+          "placeQuery": "Gloriette Schonbrunn, Vienna, Austria",
+          "stars": 4,
+          "bonus": false
+        },
+        {
+          "name": "Vienna State Opera exterior walk",
+          "placeQuery": "Vienna State Opera, Vienna, Austria",
+          "stars": 4,
+          "bonus": false
+        }
+      ],
+      "timeline": [
+        {
+          "start": "09:00",
+          "end": "09:30",
+          "endNextDay": false,
+          "type": "transit",
+          "title": "U4 metro to Schonbrunn",
+          "placeQuery": "Schonbrunn Palace, Vienna, Austria",
+          "displayNameZh": "搭乘地鐵 U4 至 Schönbrunn 站",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "metro",
+            "fromPlaceQuery": "Innere Stadt, Vienna, Austria",
+            "toPlaceQuery": "Schonbrunn Palace, Vienna, Austria",
+            "line": "U4",
+            "operator": "Wiener Linien",
+            "durationMin": 22,
+            "cost": {
+              "amount": 4,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": null,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "09:30",
+          "end": "12:00",
+          "endNextDay": false,
+          "type": "attraction",
+          "title": "Schonbrunn Imperial Apartments with Klook ticket",
+          "placeQuery": "Schonbrunn Palace, Vienna, Austria",
+          "displayNameZh": "Klook 套票參觀美泉宮帝王包廂",
+          "mustSee": true,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Schonbrunn Palace, Vienna, Austria",
+            "toPlaceQuery": "Schonbrunn Palace, Vienna, Austria",
+            "line": null,
+            "operator": null,
+            "durationMin": 5,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "Schonbrunn skip-the-line",
+            "cost": {
+              "amount": 90,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "12:00",
+          "end": "13:30",
+          "endNextDay": false,
+          "type": "attraction",
+          "title": "Palace gardens and Gloriette viewpoint",
+          "placeQuery": "Gloriette Schonbrunn, Vienna, Austria",
+          "displayNameZh": "美泉宮後山花園與凱旋門登高",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Schonbrunn Palace, Vienna, Austria",
+            "toPlaceQuery": "Gloriette Schonbrunn, Vienna, Austria",
+            "line": null,
+            "operator": null,
+            "durationMin": 20,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "門票 x2",
+            "cost": {
+              "amount": 48,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "13:30",
+          "end": "15:00",
+          "endNextDay": false,
+          "type": "meal",
+          "title": "Lunch near the palace",
+          "placeQuery": "Schonbrunn Palace, Vienna, Austria",
+          "displayNameZh": "皇宮周邊午餐",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Gloriette Schonbrunn, Vienna, Austria",
+            "toPlaceQuery": "Schonbrunn Palace, Vienna, Austria",
+            "line": null,
+            "operator": null,
+            "durationMin": 15,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "午餐 x2",
+            "cost": {
+              "amount": 36,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "15:15",
+          "end": "16:00",
+          "endNextDay": false,
+          "type": "transit",
+          "title": "Metro back to city centre",
+          "placeQuery": "Innere Stadt, Vienna, Austria",
+          "displayNameZh": "搭地鐵返回市中心",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "metro",
+            "fromPlaceQuery": "Schonbrunn Palace, Vienna, Austria",
+            "toPlaceQuery": "Innere Stadt, Vienna, Austria",
+            "line": "U4",
+            "operator": "Wiener Linien",
+            "durationMin": 22,
+            "cost": {
+              "amount": 4,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": null,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "16:30",
+          "end": "18:00",
+          "endNextDay": false,
+          "type": "attraction",
+          "title": "Vienna State Opera exterior and Karntner Strasse",
+          "placeQuery": "Vienna State Opera, Vienna, Austria",
+          "displayNameZh": "維也納國家歌劇院外觀與購物街",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Innere Stadt, Vienna, Austria",
+            "toPlaceQuery": "Vienna State Opera, Vienna, Austria",
+            "line": null,
+            "operator": null,
+            "durationMin": 10,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "免費",
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "19:00",
+          "end": null,
+          "endNextDay": false,
+          "type": "meal",
+          "title": "Dinner and free time",
+          "placeQuery": "Innere Stadt, Vienna, Austria",
+          "displayNameZh": "晚餐與自由活動",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Vienna State Opera, Vienna, Austria",
+            "toPlaceQuery": "Innere Stadt, Vienna, Austria",
+            "line": null,
+            "operator": null,
+            "durationMin": 8,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "晚餐 x2",
+            "cost": {
+              "amount": 64,
+              "currency": "EUR"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "day": 4,
+      "date": "2026-12-22",
+      "title": "維也納→薩爾茨堡",
+      "stayCity": "Salzburg",
+      "countries": [
+        "Austria"
+      ],
+      "routeLogic": "維也納 Hbf → 薩爾茨堡 Hbf，Railjet 約 2 小時 25 分。",
+      "tip": "乘纜車登上要塞，夜晚享受莫扎特晚宴。",
+      "highlights": [
+        {
+          "name": "Getreidegasse and Mozart's birthplace",
+          "placeQuery": "Getreidegasse, Salzburg, Austria",
+          "stars": 4,
+          "bonus": false
+        },
+        {
+          "name": "Hohensalzburg Fortress snow panorama",
+          "placeQuery": "Hohensalzburg Fortress, Salzburg, Austria",
+          "stars": 5,
+          "bonus": false
+        },
+        {
+          "name": "Salzburg Cathedral",
+          "placeQuery": "Salzburg Cathedral, Salzburg, Austria",
+          "stars": 4,
+          "bonus": false
+        }
+      ],
+      "timeline": [
+        {
+          "start": "08:30",
+          "end": "11:00",
+          "endNextDay": false,
+          "type": "transit",
+          "title": "Railjet from Vienna to Salzburg",
+          "placeQuery": "Salzburg Hauptbahnhof, Salzburg, Austria",
+          "displayNameZh": "Railjet 高鐵由維也納前往薩爾茨堡",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "train",
+            "fromPlaceQuery": "Wien Hauptbahnhof, Vienna, Austria",
+            "toPlaceQuery": "Salzburg Hauptbahnhof, Salzburg, Austria",
+            "line": "Railjet",
+            "operator": "ÖBB",
+            "durationMin": 145,
+            "cost": {
+              "amount": 30,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "Railjet Vienna-Salzburg",
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "11:30",
+          "end": null,
+          "endNextDay": false,
+          "type": "hotel",
+          "title": "Arrive Salzburg station, transfer to hotel for luggage drop",
+          "placeQuery": "Altstadt, Salzburg, Austria",
+          "displayNameZh": "抵達薩爾茨堡火車站，轉乘至飯店寄存行李",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "bus",
+            "fromPlaceQuery": "Salzburg Hauptbahnhof, Salzburg, Austria",
+            "toPlaceQuery": "Altstadt, Salzburg, Austria",
+            "line": null,
+            "operator": null,
+            "durationMin": 15,
+            "cost": {
+              "amount": 4,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": null,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "12:00",
+          "end": "13:30",
+          "endNextDay": false,
+          "type": "attraction",
+          "title": "Getreidegasse walk and lunch",
+          "placeQuery": "Getreidegasse, Salzburg, Austria",
+          "displayNameZh": "莫扎特出生地老街散步與午餐",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Altstadt, Salzburg, Austria",
+            "toPlaceQuery": "Getreidegasse, Salzburg, Austria",
+            "line": null,
+            "operator": null,
+            "durationMin": 8,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "Mozart's Birthplace optional",
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "14:00",
+          "end": "16:30",
+          "endNextDay": false,
+          "type": "attraction",
+          "title": "Cable car to Hohensalzburg Fortress",
+          "placeQuery": "Hohensalzburg Fortress, Salzburg, Austria",
+          "displayNameZh": "纜車登上薩爾茨堡要塞俯瞰雪景",
+          "mustSee": true,
+          "notes": "",
+          "transport": {
+            "mode": "cable_car",
+            "fromPlaceQuery": "Getreidegasse, Salzburg, Austria",
+            "toPlaceQuery": "Hohensalzburg Fortress, Salzburg, Austria",
+            "line": null,
+            "operator": "Festungsbahn",
+            "durationMin": 5,
+            "cost": {
+              "amount": 24,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "Fortress funicular and admission",
+            "cost": {
+              "amount": 48,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "16:45",
+          "end": "17:30",
+          "endNextDay": false,
+          "type": "attraction",
+          "title": "Salzburg Cathedral",
+          "placeQuery": "Salzburg Cathedral, Salzburg, Austria",
+          "displayNameZh": "薩爾茨堡主教座堂",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Hohensalzburg Fortress, Salzburg, Austria",
+            "toPlaceQuery": "Salzburg Cathedral, Salzburg, Austria",
+            "line": null,
+            "operator": null,
+            "durationMin": 10,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "免費",
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "18:00",
+          "end": "21:00",
+          "endNextDay": false,
+          "type": "activity",
+          "title": "Salzburg Mozart dinner concert",
+          "placeQuery": "Stiftskeller St. Peter, Salzburg, Austria",
+          "displayNameZh": "Klook 薩爾茨堡莫扎特音樂晚宴",
+          "mustSee": true,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Salzburg Cathedral, Salzburg, Austria",
+            "toPlaceQuery": "Stiftskeller St. Peter, Salzburg, Austria",
+            "line": null,
+            "operator": null,
+            "durationMin": 8,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "Mozart dinner concert",
+            "cost": {
+              "amount": 140,
+              "currency": "EUR"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "day": 5,
+      "date": "2026-12-23",
+      "title": "哈修塔特日遊（聖誕前完成）",
+      "stayCity": "Salzburg",
+      "countries": [
+        "Austria"
+      ],
+      "routeLogic": "薩爾茨堡 ⇄ 哈修塔特，Klook 一日遊專車接送最省時。",
+      "tip": "聖誕前夕造訪，避開節日人潮，享受純粹的湖光山色。",
+      "highlights": [
+        {
+          "name": "Hallstatt lakeside postcard view and old town",
+          "placeQuery": "Hallstatt Old Town, Hallstatt, Austria",
+          "stars": 5,
+          "bonus": false
+        },
+        {
+          "name": "Salt mine cable car and Salzwelten",
+          "placeQuery": "Salzwelten Hallstatt, Hallstatt, Austria",
+          "stars": 5,
+          "bonus": false
+        },
+        {
+          "name": "Lakeside cafe break",
+          "placeQuery": "Hallstatt Old Town, Hallstatt, Austria",
+          "stars": 4,
+          "bonus": false
+        }
+      ],
+      "timeline": [
+        {
+          "start": "08:30",
+          "end": "10:30",
+          "endNextDay": false,
+          "type": "transit",
+          "title": "Klook private day-tour transfer to Hallstatt",
+          "placeQuery": "Hallstatt Old Town, Hallstatt, Austria",
+          "displayNameZh": "Klook 一日遊專車由薩爾茨堡出發",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "private_car",
+            "fromPlaceQuery": "Altstadt, Salzburg, Austria",
+            "toPlaceQuery": "Hallstatt Old Town, Hallstatt, Austria",
+            "line": null,
+            "operator": "Klook day tour",
+            "durationMin": 120,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "Hallstatt day tour with transfer",
+            "cost": {
+              "amount": 180,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "10:30",
+          "end": "13:00",
+          "endNextDay": false,
+          "type": "attraction",
+          "title": "Hallstatt postcard viewpoint and old town walk",
+          "placeQuery": "Hallstatt Old Town, Hallstatt, Austria",
+          "displayNameZh": "哈修塔特明信片角度與湖畔老鎮",
+          "mustSee": true,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Hallstatt Old Town, Hallstatt, Austria",
+            "toPlaceQuery": "Hallstatt Old Town, Hallstatt, Austria",
+            "line": null,
+            "operator": null,
+            "durationMin": 5,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "免費",
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "13:00",
+          "end": "14:00",
+          "endNextDay": false,
+          "type": "meal",
+          "title": "Lakeside restaurant lunch",
+          "placeQuery": "Hallstatt Old Town, Hallstatt, Austria",
+          "displayNameZh": "湖景餐廳午餐",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Hallstatt Old Town, Hallstatt, Austria",
+            "toPlaceQuery": "Hallstatt Old Town, Hallstatt, Austria",
+            "line": null,
+            "operator": null,
+            "durationMin": 5,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "午餐 x2",
+            "cost": {
+              "amount": 36,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "14:00",
+          "end": "16:30",
+          "endNextDay": false,
+          "type": "attraction",
+          "title": "Salt mine cable car and Salzwelten visit",
+          "placeQuery": "Salzwelten Hallstatt, Hallstatt, Austria",
+          "displayNameZh": "鹽礦纜車與薩爾茨堡鹽礦",
+          "mustSee": true,
+          "notes": "",
+          "transport": {
+            "mode": "cable_car",
+            "fromPlaceQuery": "Hallstatt Old Town, Hallstatt, Austria",
+            "toPlaceQuery": "Salzwelten Hallstatt, Hallstatt, Austria",
+            "line": null,
+            "operator": null,
+            "durationMin": 10,
+            "cost": {
+              "amount": 24,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "Salzwelten Hallstatt",
+            "cost": {
+              "amount": 48,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "16:30",
+          "end": "18:30",
+          "endNextDay": false,
+          "type": "transit",
+          "title": "Private transfer back to Salzburg",
+          "placeQuery": "Altstadt, Salzburg, Austria",
+          "displayNameZh": "專車接送返回薩爾茨堡",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "private_car",
+            "fromPlaceQuery": "Salzwelten Hallstatt, Hallstatt, Austria",
+            "toPlaceQuery": "Altstadt, Salzburg, Austria",
+            "line": null,
+            "operator": "Klook day tour",
+            "durationMin": 120,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": null,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "19:30",
+          "end": null,
+          "endNextDay": false,
+          "type": "meal",
+          "title": "Salzburg city dinner",
+          "placeQuery": "Altstadt, Salzburg, Austria",
+          "displayNameZh": "薩爾茨堡市區晚餐",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Altstadt, Salzburg, Austria",
+            "toPlaceQuery": "Altstadt, Salzburg, Austria",
+            "line": null,
+            "operator": null,
+            "durationMin": 8,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "晚餐 x2",
+            "cost": {
+              "amount": 64,
+              "currency": "EUR"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "day": 6,
+      "date": "2026-12-24",
+      "title": "薩爾茨堡→維也納・平安夜主市集",
+      "stayCity": "Vienna",
+      "countries": [
+        "Austria"
+      ],
+      "routeLogic": "薩爾茨堡 Hbf → 維也納 Hbf 約 2 小時 25 分，中午前抵達。",
+      "tip": "市集今日提早關閉，務必在下午抵達市政廳廣場感受平安夜氣氛。",
+      "highlights": [
+        {
+          "name": "Wiener Christkindlmarkt at Rathausplatz",
+          "placeQuery": "Rathausplatz, Vienna, Austria",
+          "stars": 5,
+          "bonus": false
+        },
+        {
+          "name": "City Hall lights and ice rink",
+          "placeQuery": "Rathausplatz, Vienna, Austria",
+          "stars": 5,
+          "bonus": false
+        },
+        {
+          "name": "Christmas Eve old town walk",
+          "placeQuery": "Innere Stadt, Vienna, Austria",
+          "stars": 4,
+          "bonus": false
+        }
+      ],
+      "timeline": [
+        {
+          "start": "09:30",
+          "end": "12:00",
+          "endNextDay": false,
+          "type": "transit",
+          "title": "Railjet back to Vienna",
+          "placeQuery": "Wien Hauptbahnhof, Vienna, Austria",
+          "displayNameZh": "Railjet 火車返回維也納",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "train",
+            "fromPlaceQuery": "Salzburg Hauptbahnhof, Salzburg, Austria",
+            "toPlaceQuery": "Wien Hauptbahnhof, Vienna, Austria",
+            "line": "Railjet",
+            "operator": "ÖBB",
+            "durationMin": 145,
+            "cost": {
+              "amount": 30,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "Railjet Salzburg-Vienna",
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "12:30",
+          "end": null,
+          "endNextDay": false,
+          "type": "hotel",
+          "title": "Vienna hotel check-in",
+          "placeQuery": "Innere Stadt, Vienna, Austria",
+          "displayNameZh": "抵達維也納飯店辦理入住",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "metro",
+            "fromPlaceQuery": "Wien Hauptbahnhof, Vienna, Austria",
+            "toPlaceQuery": "Innere Stadt, Vienna, Austria",
+            "line": null,
+            "operator": null,
+            "durationMin": 15,
+            "cost": {
+              "amount": 4,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": null,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "13:00",
+          "end": "14:00",
+          "endNextDay": false,
+          "type": "meal",
+          "title": "Lunch break",
+          "placeQuery": "Innere Stadt, Vienna, Austria",
+          "displayNameZh": "午餐休息",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Innere Stadt, Vienna, Austria",
+            "toPlaceQuery": "Innere Stadt, Vienna, Austria",
+            "line": null,
+            "operator": null,
+            "durationMin": 5,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "午餐 x2",
+            "cost": {
+              "amount": 36,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "14:30",
+          "end": "18:30",
+          "endNextDay": false,
+          "type": "attraction",
+          "title": "Arrive early at Rathausplatz Christkindlmarkt",
+          "placeQuery": "Rathausplatz, Vienna, Austria",
+          "displayNameZh": "市政廳廣場平安夜主市集",
+          "mustSee": true,
+          "notes": "18:30 前務必抵達，市集提早關閉。",
+          "transport": {
+            "mode": "tram",
+            "fromPlaceQuery": "Innere Stadt, Vienna, Austria",
+            "toPlaceQuery": "Rathausplatz, Vienna, Austria",
+            "line": "D / 1 / 71",
+            "operator": "Wiener Linien",
+            "durationMin": 12,
+            "cost": {
+              "amount": 4,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "免費",
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "18:30",
+          "end": "20:30",
+          "endNextDay": false,
+          "type": "attraction",
+          "title": "City Hall winter lights and old town Christmas Eve walk",
+          "placeQuery": "Rathausplatz, Vienna, Austria",
+          "displayNameZh": "市廳燈光秀與聖誕夜老城散步",
+          "mustSee": true,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Rathausplatz, Vienna, Austria",
+            "toPlaceQuery": "Rathausplatz, Vienna, Austria",
+            "line": null,
+            "operator": null,
+            "durationMin": 5,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "免費",
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "21:00",
+          "end": null,
+          "endNextDay": false,
+          "type": "meal",
+          "title": "Simple Christmas Eve dinner",
+          "placeQuery": "Innere Stadt, Vienna, Austria",
+          "displayNameZh": "平安夜簡易晚餐",
+          "mustSee": false,
+          "notes": "部分餐廳提早打烊。",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Rathausplatz, Vienna, Austria",
+            "toPlaceQuery": "Innere Stadt, Vienna, Austria",
+            "line": null,
+            "operator": null,
+            "durationMin": 10,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "晚餐 x2",
+            "cost": {
+              "amount": 64,
+              "currency": "EUR"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "day": 7,
+      "date": "2026-12-25",
+      "title": "聖誕日・維也納浪漫重鎮",
+      "stayCity": "Vienna",
+      "countries": [
+        "Austria"
+      ],
+      "routeLogic": "市內步行與地鐵。",
+      "tip": "聖誕節當天多數店鋪休業，最適合漫步市集與欣賞街景燈光。",
+      "highlights": [
+        {
+          "name": "Wiener Christkindlmarkt Christmas Day evening",
+          "placeQuery": "Rathausplatz, Vienna, Austria",
+          "stars": 5,
+          "bonus": false
+        },
+        {
+          "name": "Karlskirche Christmas artisan market",
+          "placeQuery": "Karlskirche, Vienna, Austria",
+          "stars": 5,
+          "bonus": false
+        },
+        {
+          "name": "Ringstrasse Christmas lights",
+          "placeQuery": "Ringstrasse, Vienna, Austria",
+          "stars": 4,
+          "bonus": false
+        }
+      ],
+      "timeline": [
+        {
+          "start": "10:00",
+          "end": "12:00",
+          "endNextDay": false,
+          "type": "attraction",
+          "title": "Christmas Day old town and Ringstrasse walk",
+          "placeQuery": "Ringstrasse, Vienna, Austria",
+          "displayNameZh": "聖誕日老城區與戒指路漫步",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Innere Stadt, Vienna, Austria",
+            "toPlaceQuery": "Ringstrasse, Vienna, Austria",
+            "line": null,
+            "operator": null,
+            "durationMin": 10,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "免費",
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "12:00",
+          "end": "13:30",
+          "endNextDay": false,
+          "type": "meal",
+          "title": "Christmas Day lunch",
+          "placeQuery": "Innere Stadt, Vienna, Austria",
+          "displayNameZh": "聖誕節特選午宴",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Ringstrasse, Vienna, Austria",
+            "toPlaceQuery": "Innere Stadt, Vienna, Austria",
+            "line": null,
+            "operator": null,
+            "durationMin": 8,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "午餐 x2",
+            "cost": {
+              "amount": 36,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "14:30",
+          "end": "17:00",
+          "endNextDay": false,
+          "type": "attraction",
+          "title": "Karlskirche and artisan Christmas market",
+          "placeQuery": "Karlskirche, Vienna, Austria",
+          "displayNameZh": "查理教堂與前方手工藝聖誕市集",
+          "mustSee": true,
+          "notes": "",
+          "transport": {
+            "mode": "metro",
+            "fromPlaceQuery": "Innere Stadt, Vienna, Austria",
+            "toPlaceQuery": "Karlskirche, Vienna, Austria",
+            "line": "U1 / U2 / U4 Karlsplatz",
+            "operator": "Wiener Linien",
+            "durationMin": 10,
+            "cost": {
+              "amount": 4,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "Karlskirche optional",
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "17:30",
+          "end": "21:00",
+          "endNextDay": false,
+          "type": "attraction",
+          "title": "Return to Rathausplatz main market",
+          "placeQuery": "Rathausplatz, Vienna, Austria",
+          "displayNameZh": "重返市政廳主市集聖誕正日晚間",
+          "mustSee": true,
+          "notes": "",
+          "transport": {
+            "mode": "tram",
+            "fromPlaceQuery": "Karlskirche, Vienna, Austria",
+            "toPlaceQuery": "Rathausplatz, Vienna, Austria",
+            "line": null,
+            "operator": null,
+            "durationMin": 12,
+            "cost": {
+              "amount": 4,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "免費",
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "day": 8,
+      "date": "2026-12-26",
+      "title": "維也納 ➔ 羅馬（夜間火車移動）",
+      "stayCity": "in_transit",
+      "countries": [
+        "Austria",
+        "Italy"
+      ],
+      "routeLogic": "白天自由活動，傍晚登上 ÖBB Nightjet 直達羅馬。",
+      "tip": "善用夜間火車移動，一覺醒來直接省下一天交通時間並抵達羅馬。",
+      "highlights": [
+        {
+          "name": "Naschmarkt food hunting",
+          "placeQuery": "Naschmarkt, Vienna, Austria",
+          "stars": 4,
+          "bonus": false
+        },
+        {
+          "name": "Classic Viennese cafe afternoon",
+          "placeQuery": "Cafe Central, Vienna, Austria",
+          "stars": 4,
+          "bonus": false
+        }
+      ],
+      "timeline": [
+        {
+          "start": "09:30",
+          "end": "11:30",
+          "endNextDay": false,
+          "type": "hotel",
+          "title": "Sleep in and hotel checkout",
+          "placeQuery": "Innere Stadt, Vienna, Austria",
+          "displayNameZh": "睡到自然醒，飯店退房",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Innere Stadt, Vienna, Austria",
+            "toPlaceQuery": "Innere Stadt, Vienna, Austria",
+            "line": null,
+            "operator": null,
+            "durationMin": 0,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": null,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "11:45",
+          "end": "13:30",
+          "endNextDay": false,
+          "type": "meal",
+          "title": "Naschmarkt snacks for lunch",
+          "placeQuery": "Naschmarkt, Vienna, Austria",
+          "displayNameZh": "納許市場尋找特色小吃當午餐",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "metro",
+            "fromPlaceQuery": "Innere Stadt, Vienna, Austria",
+            "toPlaceQuery": "Naschmarkt, Vienna, Austria",
+            "line": "U4 Kettenbruckengasse",
+            "operator": "Wiener Linien",
+            "durationMin": 12,
+            "cost": {
+              "amount": 4,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "午餐 x2",
+            "cost": {
+              "amount": 36,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "13:30",
+          "end": "16:30",
+          "endNextDay": false,
+          "type": "free",
+          "title": "Classic Viennese cafe afternoon",
+          "placeQuery": "Cafe Central, Vienna, Austria",
+          "displayNameZh": "維也納經典咖啡館午後時光",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Naschmarkt, Vienna, Austria",
+            "toPlaceQuery": "Cafe Central, Vienna, Austria",
+            "line": null,
+            "operator": null,
+            "durationMin": 15,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": null,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "17:30",
+          "end": null,
+          "endNextDay": false,
+          "type": "transit",
+          "title": "Arrive Wien Hauptbahnhof",
+          "placeQuery": "Wien Hauptbahnhof, Vienna, Austria",
+          "displayNameZh": "抵達維也納總車站",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "metro",
+            "fromPlaceQuery": "Cafe Central, Vienna, Austria",
+            "toPlaceQuery": "Wien Hauptbahnhof, Vienna, Austria",
+            "line": null,
+            "operator": null,
+            "durationMin": 15,
+            "cost": {
+              "amount": 4,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": null,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "19:10",
+          "end": null,
+          "endNextDay": false,
+          "type": "transit",
+          "title": "Board OBB Nightjet sleeper to Rome",
+          "placeQuery": "Wien Hauptbahnhof, Vienna, Austria",
+          "displayNameZh": "登上 ÖBB Nightjet 夜間臥鋪火車前往羅馬",
+          "mustSee": true,
+          "notes": "車上過夜。",
+          "transport": {
+            "mode": "night_train",
+            "fromPlaceQuery": "Wien Hauptbahnhof, Vienna, Austria",
+            "toPlaceQuery": "Roma Termini, Rome, Italy",
+            "line": "Nightjet",
+            "operator": "ÖBB",
+            "durationMin": 840,
+            "cost": {
+              "amount": 240,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "Nightjet Vienna-Rome sleeper",
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "day": 9,
+      "date": "2026-12-27",
+      "title": "永恆之城：羅馬帝國經典、真理之口與秘密鑰匙孔",
+      "stayCity": "Rome",
+      "countries": [
+        "Italy"
+      ],
+      "routeLogic": "清晨抵達羅馬 Termini，地鐵與步行市區遊覽。",
+      "tip": "完美結合古羅馬經典，並順遊南部的微觀視覺奇觀鑰匙孔。",
+      "highlights": [
+        {
+          "name": "Colosseum interior tour",
+          "placeQuery": "Colosseum, Rome, Italy",
+          "stars": 5,
+          "bonus": false
+        },
+        {
+          "name": "Roman Forum and Palatine Hill",
+          "placeQuery": "Roman Forum, Rome, Italy",
+          "stars": 5,
+          "bonus": false
+        },
+        {
+          "name": "Bocca della Verita photo stop",
+          "placeQuery": "Bocca della Verita, Rome, Italy",
+          "stars": 5,
+          "bonus": false
+        },
+        {
+          "name": "Aventine Keyhole framed dome view",
+          "placeQuery": "Aventine Keyhole, Rome, Italy",
+          "stars": 5,
+          "bonus": true
+        },
+        {
+          "name": "Piazza Venezia and Trajan's Column",
+          "placeQuery": "Piazza Venezia, Rome, Italy",
+          "stars": 4,
+          "bonus": false
+        }
+      ],
+      "timeline": [
+        {
+          "start": "09:15",
+          "end": null,
+          "endNextDay": false,
+          "type": "transit",
+          "title": "Nightjet arrives Roma Termini, hotel luggage drop",
+          "placeQuery": "Roma Termini, Rome, Italy",
+          "displayNameZh": "火車抵達羅馬 Termini，前往飯店寄放行李",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "night_train",
+            "fromPlaceQuery": "Wien Hauptbahnhof, Vienna, Austria",
+            "toPlaceQuery": "Roma Termini, Rome, Italy",
+            "line": "Nightjet",
+            "operator": "ÖBB",
+            "durationMin": 840,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "Nightjet Vienna-Rome sleeper",
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "10:30",
+          "end": "13:00",
+          "endNextDay": false,
+          "type": "attraction",
+          "title": "Colosseum and Roman Forum with Klook ticket",
+          "placeQuery": "Colosseum, Rome, Italy",
+          "displayNameZh": "Klook 套票羅馬競技場與古羅馬廣場",
+          "mustSee": true,
+          "notes": "",
+          "transport": {
+            "mode": "metro",
+            "fromPlaceQuery": "Roma Termini, Rome, Italy",
+            "toPlaceQuery": "Colosseum, Rome, Italy",
+            "line": "B Colosseo",
+            "operator": "ATAC",
+            "durationMin": 10,
+            "cost": {
+              "amount": 4,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "Colosseum skip-the-line",
+            "cost": {
+              "amount": 90,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "13:00",
+          "end": "14:15",
+          "endNextDay": false,
+          "type": "meal",
+          "title": "Roman trattoria lunch",
+          "placeQuery": "Celio, Rome, Italy",
+          "displayNameZh": "義大利特色小餐館午餐",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Colosseum, Rome, Italy",
+            "toPlaceQuery": "Celio, Rome, Italy",
+            "line": null,
+            "operator": null,
+            "durationMin": 8,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "午餐 x2",
+            "cost": {
+              "amount": 36,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "14:30",
+          "end": "15:15",
+          "endNextDay": false,
+          "type": "attraction",
+          "title": "Bocca della Verita at Santa Maria in Cosmedin",
+          "placeQuery": "Bocca della Verita, Rome, Italy",
+          "displayNameZh": "希臘聖母堂真理之口",
+          "mustSee": true,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Celio, Rome, Italy",
+            "toPlaceQuery": "Bocca della Verita, Rome, Italy",
+            "line": null,
+            "operator": null,
+            "durationMin": 15,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "門票 x2",
+            "cost": {
+              "amount": 48,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "15:30",
+          "end": "16:30",
+          "endNextDay": false,
+          "type": "attraction",
+          "title": "Aventine Keyhole view of St. Peter's dome",
+          "placeQuery": "Aventine Keyhole, Rome, Italy",
+          "displayNameZh": "騎士團秘密鑰匙孔",
+          "mustSee": true,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Bocca della Verita, Rome, Italy",
+            "toPlaceQuery": "Aventine Keyhole, Rome, Italy",
+            "line": null,
+            "operator": null,
+            "durationMin": 15,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "免費",
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "17:00",
+          "end": "18:00",
+          "endNextDay": false,
+          "type": "attraction",
+          "title": "Piazza Venezia and Trajan's Column",
+          "placeQuery": "Piazza Venezia, Rome, Italy",
+          "displayNameZh": "威尼斯廣場與圖拉真柱",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Aventine Keyhole, Rome, Italy",
+            "toPlaceQuery": "Piazza Venezia, Rome, Italy",
+            "line": null,
+            "operator": null,
+            "durationMin": 20,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "門票 x2",
+            "cost": {
+              "amount": 48,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "19:00",
+          "end": null,
+          "endNextDay": false,
+          "type": "meal",
+          "title": "Rome city dinner",
+          "placeQuery": "Historic Centre, Rome, Italy",
+          "displayNameZh": "羅馬市區晚餐",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "metro",
+            "fromPlaceQuery": "Piazza Venezia, Rome, Italy",
+            "toPlaceQuery": "Historic Centre, Rome, Italy",
+            "line": null,
+            "operator": null,
+            "durationMin": 15,
+            "cost": {
+              "amount": 4,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "晚餐 x2",
+            "cost": {
+              "amount": 64,
+              "currency": "EUR"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "day": 10,
+      "date": "2026-12-28",
+      "title": "羅馬：梵蒂岡、教廷藝術與聖天使城堡絕景",
+      "stayCity": "Rome",
+      "countries": [
+        "Italy",
+        "Vatican City"
+      ],
+      "routeLogic": "地鐵 A 線至 Ottaviano 站步行入國。",
+      "tip": "登上聖天使城堡頂端，收穫全羅馬最開闊的台伯河與圓頂全景。梵蒂岡服裝規定嚴格。",
+      "highlights": [
+        {
+          "name": "Vatican Museums and Sistine Chapel",
+          "placeQuery": "Vatican Museums, Vatican City, Vatican City",
+          "stars": 5,
+          "bonus": false
+        },
+        {
+          "name": "St. Peter's Basilica and dome",
+          "placeQuery": "St. Peter's Basilica, Vatican City, Vatican City",
+          "stars": 5,
+          "bonus": false
+        },
+        {
+          "name": "Castel Sant'Angelo terrace panorama",
+          "placeQuery": "Castel Sant'Angelo, Rome, Italy",
+          "stars": 5,
+          "bonus": true
+        },
+        {
+          "name": "Ponte Sant'Angelo night view",
+          "placeQuery": "Ponte Sant'Angelo, Rome, Italy",
+          "stars": 4,
+          "bonus": false
+        }
+      ],
+      "timeline": [
+        {
+          "start": "09:00",
+          "end": "12:30",
+          "endNextDay": false,
+          "type": "attraction",
+          "title": "Vatican Museums and Sistine Chapel skip-the-line tour",
+          "placeQuery": "Vatican Museums, Vatican City, Vatican City",
+          "displayNameZh": "Klook 梵蒂岡博物館與西斯汀禮拜堂免排隊導覽",
+          "mustSee": true,
+          "notes": "",
+          "transport": {
+            "mode": "metro",
+            "fromPlaceQuery": "Historic Centre, Rome, Italy",
+            "toPlaceQuery": "Vatican Museums, Vatican City, Vatican City",
+            "line": "A Ottaviano",
+            "operator": "ATAC",
+            "durationMin": 20,
+            "cost": {
+              "amount": 4,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "Vatican Museums + St. Peter's guided tour",
+            "cost": {
+              "amount": 90,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "12:30",
+          "end": "13:30",
+          "endNextDay": false,
+          "type": "meal",
+          "title": "Lunch near St. Peter's Square",
+          "placeQuery": "St. Peter's Basilica, Vatican City, Vatican City",
+          "displayNameZh": "聖彼得廣場周邊午餐",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Vatican Museums, Vatican City, Vatican City",
+            "toPlaceQuery": "St. Peter's Basilica, Vatican City, Vatican City",
+            "line": null,
+            "operator": null,
+            "durationMin": 10,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "午餐 x2",
+            "cost": {
+              "amount": 36,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "13:30",
+          "end": "15:30",
+          "endNextDay": false,
+          "type": "attraction",
+          "title": "St. Peter's Basilica interior and dome climb",
+          "placeQuery": "St. Peter's Basilica, Vatican City, Vatican City",
+          "displayNameZh": "聖彼得大教堂內部並登頂",
+          "mustSee": true,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "St. Peter's Basilica, Vatican City, Vatican City",
+            "toPlaceQuery": "St. Peter's Basilica, Vatican City, Vatican City",
+            "line": null,
+            "operator": null,
+            "durationMin": 3,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "Dome climb",
+            "cost": {
+              "amount": 48,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "15:45",
+          "end": "17:30",
+          "endNextDay": false,
+          "type": "attraction",
+          "title": "Castel Sant'Angelo terrace views",
+          "placeQuery": "Castel Sant'Angelo, Rome, Italy",
+          "displayNameZh": "聖天使城堡頂樓露臺絕景",
+          "mustSee": true,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "St. Peter's Basilica, Vatican City, Vatican City",
+            "toPlaceQuery": "Castel Sant'Angelo, Rome, Italy",
+            "line": null,
+            "operator": null,
+            "durationMin": 15,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "Castel Sant'Angelo",
+            "cost": {
+              "amount": 48,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "17:45",
+          "end": "18:30",
+          "endNextDay": false,
+          "type": "attraction",
+          "title": "Ponte Sant'Angelo sunset and night view",
+          "placeQuery": "Ponte Sant'Angelo, Rome, Italy",
+          "displayNameZh": "聖天使橋夕陽與夜景",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Castel Sant'Angelo, Rome, Italy",
+            "toPlaceQuery": "Ponte Sant'Angelo, Rome, Italy",
+            "line": null,
+            "operator": null,
+            "durationMin": 3,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "門票 x2",
+            "cost": {
+              "amount": 48,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "19:00",
+          "end": null,
+          "endNextDay": false,
+          "type": "meal",
+          "title": "Dinner and rest",
+          "placeQuery": "Historic Centre, Rome, Italy",
+          "displayNameZh": "晚餐與休息",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Ponte Sant'Angelo, Rome, Italy",
+            "toPlaceQuery": "Historic Centre, Rome, Italy",
+            "line": null,
+            "operator": null,
+            "durationMin": 20,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "晚餐 x2",
+            "cost": {
+              "amount": 64,
+              "currency": "EUR"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "day": 11,
+      "date": "2026-12-29",
+      "title": "羅馬浪漫漫步：噴泉、萬神殿與納沃納廣場",
+      "stayCity": "Rome",
+      "countries": [
+        "Italy"
+      ],
+      "routeLogic": "全城步行漫遊。",
+      "tip": "萬神殿與納沃納廣場僅隔一條街，步行串聯極為絲滑。",
+      "highlights": [
+        {
+          "name": "Trevi Fountain coin toss",
+          "placeQuery": "Trevi Fountain, Rome, Italy",
+          "stars": 5,
+          "bonus": false
+        },
+        {
+          "name": "Pantheon",
+          "placeQuery": "Pantheon, Rome, Italy",
+          "stars": 5,
+          "bonus": false
+        },
+        {
+          "name": "Piazza Navona Four Rivers Fountain",
+          "placeQuery": "Piazza Navona, Rome, Italy",
+          "stars": 5,
+          "bonus": false
+        },
+        {
+          "name": "Spanish Steps and Barcaccia Fountain",
+          "placeQuery": "Spanish Steps, Rome, Italy",
+          "stars": 4,
+          "bonus": false
+        }
+      ],
+      "timeline": [
+        {
+          "start": "09:00",
+          "end": "10:00",
+          "endNextDay": false,
+          "type": "attraction",
+          "title": "Early Trevi Fountain visit",
+          "placeQuery": "Trevi Fountain, Rome, Italy",
+          "displayNameZh": "清晨特萊維噴泉投幣許願",
+          "mustSee": true,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Historic Centre, Rome, Italy",
+            "toPlaceQuery": "Trevi Fountain, Rome, Italy",
+            "line": null,
+            "operator": null,
+            "durationMin": 15,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "免費",
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "10:15",
+          "end": "11:30",
+          "endNextDay": false,
+          "type": "attraction",
+          "title": "Spanish Steps and Barcaccia Fountain",
+          "placeQuery": "Spanish Steps, Rome, Italy",
+          "displayNameZh": "西班牙廣場與破船噴泉",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Trevi Fountain, Rome, Italy",
+            "toPlaceQuery": "Spanish Steps, Rome, Italy",
+            "line": null,
+            "operator": null,
+            "durationMin": 12,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "免費",
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "11:45",
+          "end": "13:00",
+          "endNextDay": false,
+          "type": "attraction",
+          "title": "Pantheon",
+          "placeQuery": "Pantheon, Rome, Italy",
+          "displayNameZh": "萬神殿建築奇蹟",
+          "mustSee": true,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Spanish Steps, Rome, Italy",
+            "toPlaceQuery": "Pantheon, Rome, Italy",
+            "line": null,
+            "operator": null,
+            "durationMin": 12,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "Pantheon admission",
+            "cost": {
+              "amount": 48,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "13:00",
+          "end": "14:30",
+          "endNextDay": false,
+          "type": "meal",
+          "title": "Gelato and lunch near the squares",
+          "placeQuery": "Pantheon, Rome, Italy",
+          "displayNameZh": "廣場周邊 Gelato 與午餐",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Pantheon, Rome, Italy",
+            "toPlaceQuery": "Pantheon, Rome, Italy",
+            "line": null,
+            "operator": null,
+            "durationMin": 3,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "午餐 x2",
+            "cost": {
+              "amount": 36,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "14:45",
+          "end": "16:30",
+          "endNextDay": false,
+          "type": "attraction",
+          "title": "Piazza Navona and winter market atmosphere",
+          "placeQuery": "Piazza Navona, Rome, Italy",
+          "displayNameZh": "納沃納廣場四河噴泉與冬日氣氛",
+          "mustSee": true,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Pantheon, Rome, Italy",
+            "toPlaceQuery": "Piazza Navona, Rome, Italy",
+            "line": null,
+            "operator": null,
+            "durationMin": 5,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "免費",
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "19:00",
+          "end": null,
+          "endNextDay": false,
+          "type": "meal",
+          "title": "Rome farewell dinner",
+          "placeQuery": "Historic Centre, Rome, Italy",
+          "displayNameZh": "羅馬告別晚餐",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Piazza Navona, Rome, Italy",
+            "toPlaceQuery": "Historic Centre, Rome, Italy",
+            "line": null,
+            "operator": null,
+            "durationMin": 15,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "晚餐 x2",
+            "cost": {
+              "amount": 64,
+              "currency": "EUR"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "day": 12,
+      "date": "2026-12-30",
+      "title": "羅馬 ➔ 米蘭（高鐵移動）與拱廊街屋頂漫步",
+      "stayCity": "Milan",
+      "countries": [
+        "Italy"
+      ],
+      "routeLogic": "羅馬 Termini ➔ 米蘭 Centrale，Frecciarossa 約 2 小時 45 分。",
+      "tip": "搭乘頂級高鐵北上，直接解鎖拱廊街屋頂的獨特視角。",
+      "highlights": [
+        {
+          "name": "Milan Duomo rooftop terraces",
+          "placeQuery": "Duomo di Milano, Milan, Italy",
+          "stars": 5,
+          "bonus": false
+        },
+        {
+          "name": "Highline Galleria rooftop walk",
+          "placeQuery": "Highline Galleria, Milan, Italy",
+          "stars": 5,
+          "bonus": false
+        },
+        {
+          "name": "Galleria Vittorio Emanuele II shopping",
+          "placeQuery": "Galleria Vittorio Emanuele II, Milan, Italy",
+          "stars": 5,
+          "bonus": false
+        },
+        {
+          "name": "Piazza del Duomo dusk and night",
+          "placeQuery": "Duomo di Milano, Milan, Italy",
+          "stars": 4,
+          "bonus": false
+        }
+      ],
+      "timeline": [
+        {
+          "start": "09:00",
+          "end": "11:45",
+          "endNextDay": false,
+          "type": "transit",
+          "title": "Frecciarossa from Rome to Milan",
+          "placeQuery": "Milano Centrale, Milan, Italy",
+          "displayNameZh": "Trenitalia 高鐵由羅馬前往米蘭",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "train",
+            "fromPlaceQuery": "Roma Termini, Rome, Italy",
+            "toPlaceQuery": "Milano Centrale, Milan, Italy",
+            "line": "Frecciarossa",
+            "operator": "Trenitalia",
+            "durationMin": 165,
+            "cost": {
+              "amount": 140,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "Frecciarossa Rome-Milan",
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "12:30",
+          "end": null,
+          "endNextDay": false,
+          "type": "hotel",
+          "title": "Arrive Milano Centrale, metro to hotel check-in",
+          "placeQuery": "Duomo, Milan, Italy",
+          "displayNameZh": "抵達米蘭中央車站，地鐵前往飯店入住",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "metro",
+            "fromPlaceQuery": "Milano Centrale, Milan, Italy",
+            "toPlaceQuery": "Duomo, Milan, Italy",
+            "line": "M3 Duomo",
+            "operator": "ATM",
+            "durationMin": 15,
+            "cost": {
+              "amount": 4,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": null,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "13:00",
+          "end": "14:00",
+          "endNextDay": false,
+          "type": "meal",
+          "title": "Milan city centre lunch",
+          "placeQuery": "Duomo di Milano, Milan, Italy",
+          "displayNameZh": "米蘭市中心午餐",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Duomo, Milan, Italy",
+            "toPlaceQuery": "Duomo di Milano, Milan, Italy",
+            "line": null,
+            "operator": null,
+            "durationMin": 5,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "午餐 x2",
+            "cost": {
+              "amount": 36,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "14:15",
+          "end": "16:30",
+          "endNextDay": false,
+          "type": "attraction",
+          "title": "Duomo visit and rooftop with Klook ticket",
+          "placeQuery": "Duomo di Milano, Milan, Italy",
+          "displayNameZh": "Klook 套票米蘭大教堂並登頂",
+          "mustSee": true,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Duomo di Milano, Milan, Italy",
+            "toPlaceQuery": "Duomo di Milano, Milan, Italy",
+            "line": null,
+            "operator": null,
+            "durationMin": 3,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "Duomo skip-the-line and terraces",
+            "cost": {
+              "amount": 90,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "16:45",
+          "end": "18:00",
+          "endNextDay": false,
+          "type": "attraction",
+          "title": "Highline Galleria rooftop walk",
+          "placeQuery": "Highline Galleria, Milan, Italy",
+          "displayNameZh": "艾曼紐二世拱廊街屋頂漫步",
+          "mustSee": true,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Duomo di Milano, Milan, Italy",
+            "toPlaceQuery": "Highline Galleria, Milan, Italy",
+            "line": null,
+            "operator": null,
+            "durationMin": 5,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "Highline Galleria",
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "19:00",
+          "end": null,
+          "endNextDay": false,
+          "type": "meal",
+          "title": "Milan city centre dinner",
+          "placeQuery": "Galleria Vittorio Emanuele II, Milan, Italy",
+          "displayNameZh": "米蘭市中心晚餐",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Highline Galleria, Milan, Italy",
+            "toPlaceQuery": "Galleria Vittorio Emanuele II, Milan, Italy",
+            "line": null,
+            "operator": null,
+            "durationMin": 5,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "晚餐 x2",
+            "cost": {
+              "amount": 64,
+              "currency": "EUR"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "day": 13,
+      "date": "2026-12-31",
+      "title": "米蘭：名作、隱藏壁畫、火烈鳥別墅與跨年夜",
+      "stayCity": "Milan",
+      "countries": [
+        "Italy"
+      ],
+      "routeLogic": "市內地鐵與步行。",
+      "tip": "在時尚街區的巷弄高牆外，竟能意外看見成群漫步的夢幻粉紅火烈鳥。",
+      "highlights": [
+        {
+          "name": "The Last Supper at Santa Maria delle Grazie",
+          "placeQuery": "Santa Maria delle Grazie, Milan, Italy",
+          "stars": 5,
+          "bonus": false
+        },
+        {
+          "name": "San Maurizio frescoes",
+          "placeQuery": "San Maurizio al Monastero Maggiore, Milan, Italy",
+          "stars": 5,
+          "bonus": false
+        },
+        {
+          "name": "Villa Invernizzi flamingos",
+          "placeQuery": "Villa Invernizzi, Milan, Italy",
+          "stars": 5,
+          "bonus": true
+        },
+        {
+          "name": "Sforza Castle and park",
+          "placeQuery": "Sforza Castle, Milan, Italy",
+          "stars": 4,
+          "bonus": false
+        },
+        {
+          "name": "Piazza del Duomo New Year countdown",
+          "placeQuery": "Duomo di Milano, Milan, Italy",
+          "stars": 5,
+          "bonus": false
+        }
+      ],
+      "timeline": [
+        {
+          "start": "09:30",
+          "end": "11:00",
+          "endNextDay": false,
+          "type": "attraction",
+          "title": "The Last Supper reservation tour",
+          "placeQuery": "Santa Maria delle Grazie, Milan, Italy",
+          "displayNameZh": "恩寵聖母修道院《最後的晚餐》",
+          "mustSee": true,
+          "notes": "",
+          "transport": {
+            "mode": "metro",
+            "fromPlaceQuery": "Duomo, Milan, Italy",
+            "toPlaceQuery": "Santa Maria delle Grazie, Milan, Italy",
+            "line": "M1 / M2 Cadorna",
+            "operator": "ATM",
+            "durationMin": 15,
+            "cost": {
+              "amount": 4,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "Last Supper reserved entry",
+            "cost": {
+              "amount": 90,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "11:15",
+          "end": "12:30",
+          "endNextDay": false,
+          "type": "attraction",
+          "title": "Sforza Castle and adjacent park",
+          "placeQuery": "Sforza Castle, Milan, Italy",
+          "displayNameZh": "斯福爾扎城堡與近郊公園",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Santa Maria delle Grazie, Milan, Italy",
+            "toPlaceQuery": "Sforza Castle, Milan, Italy",
+            "line": null,
+            "operator": null,
+            "durationMin": 12,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "Castle courtyard free / museum optional",
+            "cost": {
+              "amount": 48,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "12:45",
+          "end": "14:00",
+          "endNextDay": false,
+          "type": "meal",
+          "title": "Lunch break",
+          "placeQuery": "Sforza Castle, Milan, Italy",
+          "displayNameZh": "午餐休息",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Sforza Castle, Milan, Italy",
+            "toPlaceQuery": "Sforza Castle, Milan, Italy",
+            "line": null,
+            "operator": null,
+            "durationMin": 5,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "午餐 x2",
+            "cost": {
+              "amount": 36,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "14:15",
+          "end": "15:00",
+          "endNextDay": false,
+          "type": "attraction",
+          "title": "San Maurizio al Monastero Maggiore frescoes",
+          "placeQuery": "San Maurizio al Monastero Maggiore, Milan, Italy",
+          "displayNameZh": "聖毛里齊奧教堂壁畫",
+          "mustSee": true,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Sforza Castle, Milan, Italy",
+            "toPlaceQuery": "San Maurizio al Monastero Maggiore, Milan, Italy",
+            "line": null,
+            "operator": null,
+            "durationMin": 8,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "免費",
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "15:15",
+          "end": "16:00",
+          "endNextDay": false,
+          "type": "attraction",
+          "title": "Villa Invernizzi pink flamingos on Via dei Cigni",
+          "placeQuery": "Villa Invernizzi, Milan, Italy",
+          "displayNameZh": "科莫街火烈鳥別墅",
+          "mustSee": true,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "San Maurizio al Monastero Maggiore, Milan, Italy",
+            "toPlaceQuery": "Villa Invernizzi, Milan, Italy",
+            "line": null,
+            "operator": null,
+            "durationMin": 12,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "免費",
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "16:15",
+          "end": "18:00",
+          "endNextDay": false,
+          "type": "free",
+          "title": "Free shopping and New Year dinner prep",
+          "placeQuery": "Via Montenapoleone, Milan, Italy",
+          "displayNameZh": "自由逛街與跨年夜晚餐準備",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Villa Invernizzi, Milan, Italy",
+            "toPlaceQuery": "Via Montenapoleone, Milan, Italy",
+            "line": null,
+            "operator": null,
+            "durationMin": 10,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": null,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "21:30",
+          "end": "00:30",
+          "endNextDay": true,
+          "type": "activity",
+          "title": "Piazza del Duomo outdoor New Year countdown",
+          "placeQuery": "Duomo di Milano, Milan, Italy",
+          "displayNameZh": "大教堂廣場跨年倒數與音樂晚會",
+          "mustSee": true,
+          "notes": "",
+          "transport": {
+            "mode": "metro",
+            "fromPlaceQuery": "Via Montenapoleone, Milan, Italy",
+            "toPlaceQuery": "Duomo di Milano, Milan, Italy",
+            "line": null,
+            "operator": "ATM",
+            "durationMin": 10,
+            "cost": {
+              "amount": 4,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": null,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "day": 14,
+      "date": "2027-01-01",
+      "title": "米蘭元旦：時尚街區漫步",
+      "stayCity": "Milan",
+      "countries": [
+        "Italy"
+      ],
+      "routeLogic": "市內悠閒漫步。",
+      "tip": "元旦當日精品店多數休息，最適合漫步於時尚街區欣賞建築設計。",
+      "highlights": [
+        {
+          "name": "Via Montenapoleone window walk",
+          "placeQuery": "Via Montenapoleone, Milan, Italy",
+          "stars": 4,
+          "bonus": false
+        },
+        {
+          "name": "Brera art district and cafes",
+          "placeQuery": "Brera District, Milan, Italy",
+          "stars": 4,
+          "bonus": false
+        },
+        {
+          "name": "La Scala exterior",
+          "placeQuery": "Teatro alla Scala, Milan, Italy",
+          "stars": 3,
+          "bonus": false
+        }
+      ],
+      "timeline": [
+        {
+          "start": "10:30",
+          "end": "12:00",
+          "endNextDay": false,
+          "type": "attraction",
+          "title": "Via Montenapoleone fashion window walk",
+          "placeQuery": "Via Montenapoleone, Milan, Italy",
+          "displayNameZh": "蒙特拿破崙大街時尚櫥窗漫步",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Duomo, Milan, Italy",
+            "toPlaceQuery": "Via Montenapoleone, Milan, Italy",
+            "line": null,
+            "operator": null,
+            "durationMin": 10,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "免費",
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "12:15",
+          "end": "13:45",
+          "endNextDay": false,
+          "type": "meal",
+          "title": "Leisurely New Year brunch",
+          "placeQuery": "Brera District, Milan, Italy",
+          "displayNameZh": "元旦悠閒早午餐",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Via Montenapoleone, Milan, Italy",
+            "toPlaceQuery": "Brera District, Milan, Italy",
+            "line": null,
+            "operator": null,
+            "durationMin": 10,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "午餐 x2",
+            "cost": {
+              "amount": 36,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "14:00",
+          "end": "16:00",
+          "endNextDay": false,
+          "type": "attraction",
+          "title": "Brera art district and cafes",
+          "placeQuery": "Brera District, Milan, Italy",
+          "displayNameZh": "布雷拉區藝術街區與特色咖啡館",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Brera District, Milan, Italy",
+            "toPlaceQuery": "Brera District, Milan, Italy",
+            "line": null,
+            "operator": null,
+            "durationMin": 5,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "門票 x2",
+            "cost": {
+              "amount": 48,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "16:15",
+          "end": "17:00",
+          "endNextDay": false,
+          "type": "attraction",
+          "title": "Teatro alla Scala exterior",
+          "placeQuery": "Teatro alla Scala, Milan, Italy",
+          "displayNameZh": "斯卡拉歌劇院外觀巡禮",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Brera District, Milan, Italy",
+            "toPlaceQuery": "Teatro alla Scala, Milan, Italy",
+            "line": null,
+            "operator": null,
+            "durationMin": 8,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "免費",
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "19:00",
+          "end": null,
+          "endNextDay": false,
+          "type": "meal",
+          "title": "Final Milan dinner",
+          "placeQuery": "Duomo, Milan, Italy",
+          "displayNameZh": "米蘭最後晚餐",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Teatro alla Scala, Milan, Italy",
+            "toPlaceQuery": "Duomo, Milan, Italy",
+            "line": null,
+            "operator": null,
+            "durationMin": 12,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "晚餐 x2",
+            "cost": {
+              "amount": 64,
+              "currency": "EUR"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "day": 15,
+      "date": "2027-01-02",
+      "title": "米蘭・回程",
+      "stayCity": "in_transit",
+      "countries": [
+        "Italy"
+      ],
+      "routeLogic": "米蘭中央車站搭乘 Malpensa Express（約 51 分鐘）直達 MXP 起飛。",
+      "tip": "預留充足時間退稅與搭乘機場快線。",
+      "highlights": [
+        {
+          "name": "Airport duty free and souvenirs",
+          "placeQuery": "Milano Malpensa Airport, Milan, Italy",
+          "stars": 4,
+          "bonus": false
+        },
+        {
+          "name": "Flight back to Hong Kong",
+          "placeQuery": "Milano Malpensa Airport, Milan, Italy",
+          "stars": 4,
+          "bonus": false
+        }
+      ],
+      "timeline": [
+        {
+          "start": "09:30",
+          "end": "10:30",
+          "endNextDay": false,
+          "type": "hotel",
+          "title": "Hotel checkout and transfer to Milano Centrale",
+          "placeQuery": "Milano Centrale, Milan, Italy",
+          "displayNameZh": "飯店退房，前往米蘭中央車站",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "metro",
+            "fromPlaceQuery": "Duomo, Milan, Italy",
+            "toPlaceQuery": "Milano Centrale, Milan, Italy",
+            "line": "M3",
+            "operator": "ATM",
+            "durationMin": 15,
+            "cost": {
+              "amount": 4,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": null,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "10:55",
+          "end": "11:46",
+          "endNextDay": false,
+          "type": "transit",
+          "title": "Malpensa Express to MXP",
+          "placeQuery": "Milano Malpensa Airport, Milan, Italy",
+          "displayNameZh": "Malpensa Express 機場快線直達 MXP",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "train",
+            "fromPlaceQuery": "Milano Centrale, Milan, Italy",
+            "toPlaceQuery": "Milano Malpensa Airport, Milan, Italy",
+            "line": "Malpensa Express",
+            "operator": "Trenord",
+            "durationMin": 51,
+            "cost": {
+              "amount": 26,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": "Malpensa Express",
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "12:15",
+          "end": "15:00",
+          "endNextDay": false,
+          "type": "free",
+          "title": "Check-in, tax refund and duty free",
+          "placeQuery": "Milano Malpensa Airport, Milan, Italy",
+          "displayNameZh": "辦理登機、退稅與機場免稅店採買",
+          "mustSee": false,
+          "notes": "",
+          "transport": {
+            "mode": "walk",
+            "fromPlaceQuery": "Milano Malpensa Airport, Milan, Italy",
+            "toPlaceQuery": "Milano Malpensa Airport, Milan, Italy",
+            "line": null,
+            "operator": null,
+            "durationMin": 10,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          },
+          "ticket": {
+            "name": null,
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          }
+        },
+        {
+          "start": "15:30",
+          "end": null,
+          "endNextDay": false,
+          "type": "flight",
+          "title": "Depart Milan Malpensa for Hong Kong",
+          "placeQuery": "Milano Malpensa Airport, Milan, Italy",
+          "displayNameZh": "搭機啟程返回香港",
+          "mustSee": true,
+          "notes": "",
+          "transport": {
+            "mode": "flight",
+            "fromPlaceQuery": "Milano Malpensa Airport, Milan, Italy",
+            "toPlaceQuery": "Hong Kong International Airport, Hong Kong, Hong Kong",
+            "line": null,
+            "operator": null,
+            "durationMin": null,
+            "cost": {
+              "amount": 11000,
+              "currency": "HKD"
+            }
+          },
+          "ticket": {
+            "name": "MXP-HKG flight",
+            "cost": {
+              "amount": 0,
+              "currency": "HKD"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "day": 16,
+      "date": "2027-01-03",
+      "title": "安抵香港",
+      "stayCity": "Hong Kong",
+      "countries": [
+        "Hong Kong"
+      ],
+      "routeLogic": "抵達後休整。",
+      "tip": "",
+      "highlights": [],
+      "timeline": [
+        {
+          "start": "08:00",
+          "end": null,
+          "endNextDay": false,
+          "type": "rest",
+          "title": "Arrive Hong Kong and rest",
+          "placeQuery": "Hong Kong International Airport, Hong Kong, Hong Kong",
+          "displayNameZh": "安抵香港，休整",
+          "mustSee": false,
+          "notes": "確切抵達時間視回程航班而定。",
+          "transport": {
+            "mode": "flight",
+            "fromPlaceQuery": "Milano Malpensa Airport, Milan, Italy",
+            "toPlaceQuery": "Hong Kong International Airport, Hong Kong, Hong Kong",
+            "line": null,
+            "operator": null,
+            "durationMin": null,
+            "cost": {
+              "amount": 0,
+              "currency": "HKD"
+            }
+          },
+          "ticket": {
+            "name": "MXP-HKG flight",
+            "cost": {
+              "amount": 0,
+              "currency": "EUR"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "nights": [
+    {
+      "date": "2026-12-19",
+      "city": "Vienna",
+      "country": "Austria",
+      "area": "Innere Stadt",
+      "type": "hotel",
+      "candidates": [
+        {
+          "name": "Motel One Wien-Staatsoper",
+          "placeQuery": "Motel One Wien-Staatsoper, Vienna, Austria",
+          "stars": 3,
+          "cost": {
+            "amount": 140,
+            "currency": "EUR"
+          }
+        },
+        {
+          "name": "Hotel Am Parkring",
+          "placeQuery": "Hotel Am Parkring, Vienna, Austria",
+          "stars": 4,
+          "cost": {
+            "amount": 180,
+            "currency": "EUR"
+          }
+        }
+      ],
+      "transport": null
+    },
+    {
+      "date": "2026-12-20",
+      "city": "Vienna",
+      "country": "Austria",
+      "area": "Innere Stadt",
+      "type": "hotel",
+      "candidates": [
+        {
+          "name": "Motel One Wien-Staatsoper",
+          "placeQuery": "Motel One Wien-Staatsoper, Vienna, Austria",
+          "stars": 3,
+          "cost": {
+            "amount": 140,
+            "currency": "EUR"
+          }
+        },
+        {
+          "name": "Hotel Am Parkring",
+          "placeQuery": "Hotel Am Parkring, Vienna, Austria",
+          "stars": 4,
+          "cost": {
+            "amount": 180,
+            "currency": "EUR"
+          }
+        }
+      ],
+      "transport": null
+    },
+    {
+      "date": "2026-12-21",
+      "city": "Vienna",
+      "country": "Austria",
+      "area": "Innere Stadt",
+      "type": "hotel",
+      "candidates": [
+        {
+          "name": "Motel One Wien-Staatsoper",
+          "placeQuery": "Motel One Wien-Staatsoper, Vienna, Austria",
+          "stars": 3,
+          "cost": {
+            "amount": 140,
+            "currency": "EUR"
+          }
+        },
+        {
+          "name": "Hotel Am Parkring",
+          "placeQuery": "Hotel Am Parkring, Vienna, Austria",
+          "stars": 4,
+          "cost": {
+            "amount": 180,
+            "currency": "EUR"
+          }
+        }
+      ],
+      "transport": null
+    },
+    {
+      "date": "2026-12-22",
+      "city": "Salzburg",
+      "country": "Austria",
+      "area": "Altstadt",
+      "type": "hotel",
+      "candidates": [
+        {
+          "name": "Hotel & Villa Auerhahn",
+          "placeQuery": "Hotel & Villa Auerhahn, Salzburg, Austria",
+          "stars": 4,
+          "cost": {
+            "amount": 150,
+            "currency": "EUR"
+          }
+        },
+        {
+          "name": "NH Collection Salzburg City",
+          "placeQuery": "NH Collection Salzburg City, Salzburg, Austria",
+          "stars": 4,
+          "cost": {
+            "amount": 170,
+            "currency": "EUR"
+          }
+        }
+      ],
+      "transport": null
+    },
+    {
+      "date": "2026-12-23",
+      "city": "Salzburg",
+      "country": "Austria",
+      "area": "Altstadt",
+      "type": "hotel",
+      "candidates": [
+        {
+          "name": "Hotel & Villa Auerhahn",
+          "placeQuery": "Hotel & Villa Auerhahn, Salzburg, Austria",
+          "stars": 4,
+          "cost": {
+            "amount": 150,
+            "currency": "EUR"
+          }
+        },
+        {
+          "name": "NH Collection Salzburg City",
+          "placeQuery": "NH Collection Salzburg City, Salzburg, Austria",
+          "stars": 4,
+          "cost": {
+            "amount": 170,
+            "currency": "EUR"
+          }
+        }
+      ],
+      "transport": null
+    },
+    {
+      "date": "2026-12-24",
+      "city": "Vienna",
+      "country": "Austria",
+      "area": "Innere Stadt",
+      "type": "hotel",
+      "candidates": [
+        {
+          "name": "Motel One Wien-Praterstraße",
+          "placeQuery": "Motel One Wien-Praterstraße, Vienna, Austria",
+          "stars": 3,
+          "cost": {
+            "amount": 160,
+            "currency": "EUR"
+          }
+        },
+        {
+          "name": "Mercure Grand Hotel Biedermeier Wien",
+          "placeQuery": "Mercure Grand Hotel Biedermeier Wien, Vienna, Austria",
+          "stars": 4,
+          "cost": {
+            "amount": 190,
+            "currency": "EUR"
+          }
+        }
+      ],
+      "transport": null
+    },
+    {
+      "date": "2026-12-25",
+      "city": "Vienna",
+      "country": "Austria",
+      "area": "Innere Stadt",
+      "type": "hotel",
+      "candidates": [
+        {
+          "name": "Motel One Wien-Praterstraße",
+          "placeQuery": "Motel One Wien-Praterstraße, Vienna, Austria",
+          "stars": 3,
+          "cost": {
+            "amount": 160,
+            "currency": "EUR"
+          }
+        },
+        {
+          "name": "Mercure Grand Hotel Biedermeier Wien",
+          "placeQuery": "Mercure Grand Hotel Biedermeier Wien, Vienna, Austria",
+          "stars": 4,
+          "cost": {
+            "amount": 190,
+            "currency": "EUR"
+          }
+        }
+      ],
+      "transport": null
+    },
+    {
+      "date": "2026-12-26",
+      "city": "in_transit",
+      "country": "Austria",
+      "area": null,
+      "type": "night_train",
+      "candidates": [],
+      "transport": {
+        "mode": "night_train",
+        "fromPlaceQuery": "Wien Hauptbahnhof, Vienna, Austria",
+        "toPlaceQuery": "Roma Termini, Rome, Italy",
+        "line": "Nightjet",
+        "operator": "ÖBB",
+        "durationMin": 840,
+        "cost": {
+          "amount": 240,
+          "currency": "EUR"
+        }
+      }
+    },
+    {
+      "date": "2026-12-27",
+      "city": "Rome",
+      "country": "Italy",
+      "area": "Historic Centre",
+      "type": "hotel",
+      "candidates": [
+        {
+          "name": "Hotel Artemide",
+          "placeQuery": "Hotel Artemide, Rome, Italy",
+          "stars": 4,
+          "cost": {
+            "amount": 190,
+            "currency": "EUR"
+          }
+        },
+        {
+          "name": "IQ Hotel Roma",
+          "placeQuery": "IQ Hotel Roma, Rome, Italy",
+          "stars": 4,
+          "cost": {
+            "amount": 170,
+            "currency": "EUR"
+          }
+        }
+      ],
+      "transport": null
+    },
+    {
+      "date": "2026-12-28",
+      "city": "Rome",
+      "country": "Italy",
+      "area": "Historic Centre",
+      "type": "hotel",
+      "candidates": [
+        {
+          "name": "Hotel Artemide",
+          "placeQuery": "Hotel Artemide, Rome, Italy",
+          "stars": 4,
+          "cost": {
+            "amount": 190,
+            "currency": "EUR"
+          }
+        },
+        {
+          "name": "IQ Hotel Roma",
+          "placeQuery": "IQ Hotel Roma, Rome, Italy",
+          "stars": 4,
+          "cost": {
+            "amount": 170,
+            "currency": "EUR"
+          }
+        }
+      ],
+      "transport": null
+    },
+    {
+      "date": "2026-12-29",
+      "city": "Rome",
+      "country": "Italy",
+      "area": "Historic Centre",
+      "type": "hotel",
+      "candidates": [
+        {
+          "name": "Hotel Artemide",
+          "placeQuery": "Hotel Artemide, Rome, Italy",
+          "stars": 4,
+          "cost": {
+            "amount": 190,
+            "currency": "EUR"
+          }
+        },
+        {
+          "name": "IQ Hotel Roma",
+          "placeQuery": "IQ Hotel Roma, Rome, Italy",
+          "stars": 4,
+          "cost": {
+            "amount": 170,
+            "currency": "EUR"
+          }
+        }
+      ],
+      "transport": null
+    },
+    {
+      "date": "2026-12-30",
+      "city": "Milan",
+      "country": "Italy",
+      "area": "Duomo",
+      "type": "hotel",
+      "candidates": [
+        {
+          "name": "Rosa Grand Milano",
+          "placeQuery": "Rosa Grand Milano, Milan, Italy",
+          "stars": 4,
+          "cost": {
+            "amount": 200,
+            "currency": "EUR"
+          }
+        },
+        {
+          "name": "Hotel Gran Duca di York",
+          "placeQuery": "Hotel Gran Duca di York, Milan, Italy",
+          "stars": 3,
+          "cost": {
+            "amount": 160,
+            "currency": "EUR"
+          }
+        }
+      ],
+      "transport": null
+    },
+    {
+      "date": "2026-12-31",
+      "city": "Milan",
+      "country": "Italy",
+      "area": "Duomo",
+      "type": "hotel",
+      "candidates": [
+        {
+          "name": "Rosa Grand Milano",
+          "placeQuery": "Rosa Grand Milano, Milan, Italy",
+          "stars": 4,
+          "cost": {
+            "amount": 200,
+            "currency": "EUR"
+          }
+        },
+        {
+          "name": "Hotel Gran Duca di York",
+          "placeQuery": "Hotel Gran Duca di York, Milan, Italy",
+          "stars": 3,
+          "cost": {
+            "amount": 160,
+            "currency": "EUR"
+          }
+        }
+      ],
+      "transport": null
+    },
+    {
+      "date": "2027-01-01",
+      "city": "Milan",
+      "country": "Italy",
+      "area": "Duomo",
+      "type": "hotel",
+      "candidates": [
+        {
+          "name": "Rosa Grand Milano",
+          "placeQuery": "Rosa Grand Milano, Milan, Italy",
+          "stars": 4,
+          "cost": {
+            "amount": 200,
+            "currency": "EUR"
+          }
+        },
+        {
+          "name": "Hotel Gran Duca di York",
+          "placeQuery": "Hotel Gran Duca di York, Milan, Italy",
+          "stars": 3,
+          "cost": {
+            "amount": 160,
+            "currency": "EUR"
+          }
+        }
+      ],
+      "transport": null
+    },
+    {
+      "date": "2027-01-02",
+      "city": "in_transit",
+      "country": "Italy",
+      "area": null,
+      "type": "flight",
+      "candidates": [],
+      "transport": {
+        "mode": "flight",
+        "fromPlaceQuery": "Milano Malpensa Airport, Milan, Italy",
+        "toPlaceQuery": "Hong Kong International Airport, Hong Kong, Hong Kong",
+        "line": null,
+        "operator": null,
+        "durationMin": null,
+        "cost": {
+          "amount": 11000,
+          "currency": "HKD"
+        }
+      }
+    },
+    {
+      "date": "2027-01-03",
+      "city": "Hong Kong",
+      "country": "Hong Kong",
+      "area": null,
+      "type": "none",
+      "candidates": [],
+      "transport": null
+    }
+  ],
+  "klook": [
+    {
+      "date": "2026-12-20",
+      "name": "Vienna court concert",
+      "searchQuery": "Vienna Hofburg Orchestra concert",
+      "placeQuery": "Hofburg, Vienna, Austria",
+      "cost": {
+        "amount": 140,
+        "currency": "EUR"
+      }
+    },
+    {
+      "date": "2026-12-21",
+      "name": "Schonbrunn skip-the-line ticket",
+      "searchQuery": "Schonbrunn Palace skip the line",
+      "placeQuery": "Schonbrunn Palace, Vienna, Austria",
+      "cost": {
+        "amount": 90,
+        "currency": "EUR"
+      }
+    },
+    {
+      "date": "2026-12-22",
+      "name": "Salzburg Mozart dinner concert",
+      "searchQuery": "Salzburg Mozart dinner concert",
+      "placeQuery": "Stiftskeller St. Peter, Salzburg, Austria",
+      "cost": {
+        "amount": 140,
+        "currency": "EUR"
+      }
+    },
+    {
+      "date": "2026-12-23",
+      "name": "Hallstatt day tour with transfer",
+      "searchQuery": "Hallstatt day tour from Salzburg",
+      "placeQuery": "Hallstatt Old Town, Hallstatt, Austria",
+      "cost": {
+        "amount": 180,
+        "currency": "EUR"
+      }
+    },
+    {
+      "date": "2026-12-24",
+      "name": "Christmas special concert",
+      "searchQuery": "Vienna Christmas concert",
+      "placeQuery": "Rathausplatz, Vienna, Austria",
+      "cost": {
+        "amount": 140,
+        "currency": "EUR"
+      }
+    },
+    {
+      "date": "2026-12-25",
+      "name": "Christmas dinner experience",
+      "searchQuery": "Vienna Christmas dinner",
+      "placeQuery": "Innere Stadt, Vienna, Austria",
+      "cost": {
+        "amount": 64,
+        "currency": "EUR"
+      }
+    },
+    {
+      "date": "2026-12-27",
+      "name": "Colosseum skip-the-line ticket",
+      "searchQuery": "Colosseum skip the line",
+      "placeQuery": "Colosseum, Rome, Italy",
+      "cost": {
+        "amount": 90,
+        "currency": "EUR"
+      }
+    },
+    {
+      "date": "2026-12-28",
+      "name": "Vatican Museums and St. Peter's skip-the-line tour",
+      "searchQuery": "Vatican Museums St Peter's skip the line",
+      "placeQuery": "Vatican Museums, Vatican City, Vatican City",
+      "cost": {
+        "amount": 90,
+        "currency": "EUR"
+      }
+    },
+    {
+      "date": "2026-12-30",
+      "name": "Milan Duomo skip-the-line and rooftop",
+      "searchQuery": "Milan Duomo rooftop skip the line",
+      "placeQuery": "Duomo di Milano, Milan, Italy",
+      "cost": {
+        "amount": 90,
+        "currency": "EUR"
+      }
+    },
+    {
+      "date": "2026-12-31",
+      "name": "The Last Supper reserved tour",
+      "searchQuery": "Last Supper Milan reserved ticket",
+      "placeQuery": "Santa Maria delle Grazie, Milan, Italy",
+      "cost": {
+        "amount": 90,
+        "currency": "EUR"
+      }
+    }
+  ]
+}
