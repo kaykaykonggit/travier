@@ -3,20 +3,16 @@ import { MapContainer, Marker, Polyline, Popup, TileLayer, useMap } from "react-
 import L from "leaflet";
 import type { LatLng } from "../lib/geocode";
 import { googleSearchUrl } from "../lib/links";
+import { spreadMarkers } from "../lib/mapLayout";
 
 function numberedIcon(n: number, focused: boolean, color = "#1f1c18") {
+  const wide = n >= 10;
   return L.divIcon({
     className: "pin-wrap",
-    html: `<div class="pin ${focused ? "pin-focus" : ""}" style="background:${color}">${n}</div>`,
-    iconSize: [28, 28],
-    iconAnchor: [14, 14],
+    html: `<div class="pin ${wide ? "pin-wide" : ""} ${focused ? "pin-focus" : ""}" style="background:${color}">${n}</div>`,
+    iconSize: wide ? [32, 28] : [28, 28],
+    iconAnchor: wide ? [16, 14] : [14, 14],
   });
-}
-
-function offsetPoint(point: LatLng, nth: number): LatLng {
-  if (nth <= 0) return point;
-  const step = 0.00024 * nth;
-  return { ...point, lat: point.lat + step * 0.55, lng: point.lng + step };
 }
 
 function ResizeMap() {
@@ -78,20 +74,23 @@ export function DayMap({
 }) {
   const markerRefs = useRef<Map<number, L.Marker>>(new Map());
   const resolved = useMemo(() => {
-    const seen = new Map<string, number>();
-    return stops
+    const raw = stops
       .map((stop) => {
         const point = points.get(stop.query);
         if (!point) return null;
-        const nth = seen.get(stop.query) ?? 0;
-        seen.set(stop.query, nth + 1);
-        return { ...stop, point: offsetPoint(point, nth) };
+        return { ...stop, point };
       })
       .filter((item): item is MapStop & { point: LatLng } => item != null);
+    return spreadMarkers(raw);
   }, [stops, points]);
 
+  const missing = useMemo(
+    () => stops.filter((stop) => stop.query && !points.get(stop.query)).map((stop) => stop.number),
+    [stops, points],
+  );
+
   const line = resolved.map((item) => [item.point.lat, item.point.lng] as [number, number]);
-  const center = resolved[0]?.point ?? { lat: 48.2082, lng: 16.3738 };
+  const center = resolved[0]?.point ?? { lat: 26.2124, lng: 127.6809, label: "Okinawa" };
   const focusPoint = resolved.find((item) => item.number === focusNumber)?.point ?? null;
 
   useEffect(() => {
@@ -106,13 +105,15 @@ export function DayMap({
   return (
     <div className="map-shell">
       {loading && <div className="map-status">正在把地點放到地圖上…</div>}
-      {!loading && resolved.length === 0 && <div className="map-status">暫時找不到座標，可用下方連結在 Google Maps 開啟。</div>}
-      <MapContainer
-        center={[center.lat, center.lng]}
-        zoom={13}
-        scrollWheelZoom={false}
-        className="day-map"
-      >
+      {!loading && resolved.length === 0 && (
+        <div className="map-status">暫時找不到座標，可用下方連結在 Google Maps 開啟。</div>
+      )}
+      {!loading && missing.length > 0 && (
+        <div className="map-missing">
+          地圖暫時找不到第 {missing.join("、")} 點座標（常見於英文地名）。時間軸編號仍在，可點該站開 Google 地圖。
+        </div>
+      )}
+      <MapContainer center={[center.lat, center.lng]} zoom={13} scrollWheelZoom={false} className="day-map">
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -126,6 +127,7 @@ export function DayMap({
             key={`${item.query}-${item.number}`}
             position={[item.point.lat, item.point.lng]}
             icon={numberedIcon(item.number, item.number === focusNumber, color)}
+            zIndexOffset={item.number === focusNumber ? 1000 : item.number}
             ref={(marker) => {
               if (marker) markerRefs.current.set(item.number, marker);
               else markerRefs.current.delete(item.number);
@@ -136,7 +138,7 @@ export function DayMap({
           >
             <Popup>
               <strong>
-                第 {item.number} 項 · {item.name}
+                第 {item.number} 點 · {item.name}
                 {item.mustSee ? " · 必看" : ""}
               </strong>
               <br />

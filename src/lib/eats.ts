@@ -243,7 +243,7 @@ export function buildEatSlots(
 
   const sights = anchors.filter((item) => !item.meal);
   const first = sights[0] ?? null;
-  const lastSight = [...sights].reverse().find((item) => item.name !== "今晚酒店") ?? sights.at(-1) ?? null;
+  const lastSight = [...sights].reverse().find((item) => item.name !== "今晚酒店") ?? sights[sights.length - 1] ?? null;
   const cityFallback: Anchor = {
     name: day.stayCity === "in_transit" ? "今日停留" : day.stayCity || "今日停留",
     query: day.stayCity === "in_transit" ? lastSight?.query || day.stayCity : day.stayCity,

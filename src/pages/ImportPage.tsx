@@ -3,14 +3,17 @@ import { PlannerForm } from "../components/PlannerForm";
 import { parseTripDoc, parseTripJson } from "../lib/parse";
 import { buildPlannerPrompt, loadBrief, saveBrief, type TripBrief } from "../lib/planner";
 import { AI_TEMPLATE } from "../lib/template";
+import { deleteSavedTrip, listSavedTrips, loadSavedTrip, type SavedTripMeta } from "../lib/storage";
 import type { TripDoc } from "../types";
-import sample from "../../examples/austria-italy-christmas-2026.json";
+import austriaSample from "../../examples/austria-italy-christmas-2026.json";
+import okinawaSample from "../../examples/okinawa-6d5n-2026.json";
 
 export function ImportPage({ onImport }: { onImport: (doc: TripDoc) => void }) {
   const [brief, setBrief] = useState<TripBrief>(() => loadBrief());
   const [text, setText] = useState("");
   const [errors, setErrors] = useState<string[]>([]);
   const [copied, setCopied] = useState<"plan" | "spec" | null>(null);
+  const [saved, setSaved] = useState<SavedTripMeta[]>(() => listSavedTrips());
 
   useEffect(() => {
     saveBrief(brief);
@@ -32,14 +35,30 @@ export function ImportPage({ onImport }: { onImport: (doc: TripDoc) => void }) {
     window.setTimeout(() => setCopied(null), 2000);
   }
 
-  function loadSample() {
-    const result = parseTripDoc(sample as unknown);
+  function loadSample(data: unknown) {
+    const result = parseTripDoc(data);
     if (!result.ok) {
       setErrors(result.errors);
       return;
     }
     setErrors([]);
     onImport(result.doc);
+  }
+
+  function openSaved(id: string) {
+    const doc = loadSavedTrip(id);
+    if (!doc) {
+      setErrors(["搵唔到呢份已封存行程。"]);
+      setSaved(listSavedTrips());
+      return;
+    }
+    setErrors([]);
+    onImport(doc);
+  }
+
+  function removeSaved(id: string) {
+    deleteSavedTrip(id);
+    setSaved(listSavedTrips());
   }
 
   return (
@@ -53,11 +72,45 @@ export function ImportPage({ onImport }: { onImport: (doc: TripDoc) => void }) {
           <li>今晚酒店一卡睇晒</li>
           <li>同一帶早餐、午餐、下午茶、晚餐提早訂</li>
         </ul>
-        <button type="button" className="btn btn-primary btn-block import-go" onClick={loadSample}>
-          即刻睇一份真行程
-        </button>
-        <p className="import-sample">奧地利 × 意大利聖誕範例，撳完就可以行完成程。</p>
+        <div className="sample-actions">
+          <button type="button" className="btn btn-primary" onClick={() => loadSample(okinawaSample)}>
+            沖繩 6天5夜範本
+          </button>
+          <button type="button" className="btn btn-secondary" onClick={() => loadSample(austriaSample)}>
+            奧地利 × 意大利聖誕範本
+          </button>
+        </div>
+        <p className="import-sample">範本撳完就可以行完成程；沖繩版已用日文地名，減少地圖缺號。</p>
       </header>
+
+      {saved.length > 0 && (
+        <section className="saved-trips panel">
+          <div className="panel-head">
+            <h2>本機已封存</h2>
+            <span>未有後端，暫存在呢部裝置／瀏覽器</span>
+          </div>
+          <ul className="saved-list">
+            {saved.map((item) => (
+              <li key={item.id}>
+                <div>
+                  <strong>{item.title}</strong>
+                  <small>
+                    {item.startDate} – {item.endDate} · 封存於 {item.savedAt.slice(0, 16).replace("T", " ")}
+                  </small>
+                </div>
+                <div className="saved-actions">
+                  <button type="button" className="btn btn-primary" onClick={() => openSaved(item.id)}>
+                    打開
+                  </button>
+                  <button type="button" className="text-btn" onClick={() => removeSaved(item.id)}>
+                    刪除
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       <details className="quiet-details plan-later" {...(errors.length > 0 ? { open: true } : {})}>
         <summary>自己規劃／貼 JSON</summary>
