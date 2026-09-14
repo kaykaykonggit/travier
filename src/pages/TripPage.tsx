@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { BookingBox } from "../components/BookingBox";
+import { TripTabs } from "../components/LifeIcons";
 import { LifeLedger } from "../components/LifeLedger";
 import { DayEats } from "../components/DayEats";
 import { DayMap, type MapStop } from "../components/DayMap";
@@ -350,16 +351,7 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
       {mainTab === "life" ? (
         <>
           <LifeLedger doc={doc} rates={rates} onChange={onChange} />
-          <nav className="trip-tabs" aria-label="主分頁">
-            <button type="button" onClick={() => setMainTab("trip")}>
-              <span className="tab-icon">日</span>
-              行程
-            </button>
-            <button type="button" className="on" onClick={() => setMainTab("life")}>
-              <span className="tab-icon">用</span>
-              衣食住行玩
-            </button>
-          </nav>
+          <TripTabs tab="life" onChange={setMainTab} />
         </>
       ) : (
         <>
@@ -385,6 +377,10 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
           </div>
         </div>
         <p className="trip-title-line">{doc.trip.title}</p>
+        <p className="trip-meta-desk">
+          {formatDateZh(doc.trip.startDate)} – {formatDateZh(doc.trip.endDate)} · {doc.days.length} 日 · {adults} 大人
+          {children ? ` ${children} 小孩` : ""} · {labelOf(PACE_LABEL, doc.trip.pace)}
+        </p>
         {archivedMsg ? <p className="archive-toast">{archivedMsg}</p> : null}
         <details className="quiet-details trip-plan-tools">
           <summary>
@@ -963,16 +959,7 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
       </section>
       )}
       </details>
-          <nav className="trip-tabs" aria-label="主分頁">
-            <button type="button" className="on" onClick={() => setMainTab("trip")}>
-              <span className="tab-icon">日</span>
-              行程
-            </button>
-            <button type="button" onClick={() => setMainTab("life")}>
-              <span className="tab-icon">用</span>
-              衣食住行玩
-            </button>
-          </nav>
+          <TripTabs tab="trip" onChange={setMainTab} />
         </>
       )}
     </div>
