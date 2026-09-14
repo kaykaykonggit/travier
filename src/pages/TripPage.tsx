@@ -359,13 +359,14 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
             <span className="import-label">用法</span>
             <InfoTip title="點樣微改行程">
               <ol>
-                <li>解鎖想改嘅站（鎖住嘅會保留）。</li>
-                <li>寫一句想點改，撳「複製微改」。</li>
-                <li>貼去會搜網嘅 AI；佢而家只交細份 <strong>patch</strong>（唔使成份行程 JSON），手機會快好多。</li>
-                <li>將 AI 回覆貼返下面「套用」。打勾進度會留住。</li>
+                <li>時間軸解鎖想改嘅站；鎖住嘅站 AI 唔准郁。</li>
+                <li>喺「想點改」寫清楚日子同動作，例如「第三日下午唔好去美泉宮」。</li>
+                <li>撳「複製微改」→ 貼去會搜網嘅 AI（ChatGPT／Gemini 等）。</li>
+                <li>AI 只應交細份 <strong>patch</strong>（<code>schemaVersion: "1.0.0-patch"</code>），唔使成份行程，手機生成會快好多。</li>
+                <li>將 AI 回覆貼返「貼上 AI 回覆」→「套用」。已打勾去過嘅進度會留住。</li>
               </ol>
-              <p>亦都接受完整行程 JSON（會整份取代）。由零規劃請去「換一份行程」匯入頁。</p>
-              <p>小改（換後備、刪站、貼地圖加站、改酒店）可直接喺當日時間軸改，唔使開 AI。</p>
+              <p>換後備、刪站、貼地圖加站、改酒店：直接喺當日時間軸改就得，唔使開 AI。</p>
+              <p>由零重新規劃：去「換一份行程」匯入頁。</p>
             </InfoTip>
           </div>
           <div className="tweak-row">
@@ -373,8 +374,13 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
               想點改
             </label>
             <InfoTip title="想點改點寫">
-              <p>寫具體日子同動作，例如：「第三日下午唔好去美泉宮」「酒店改近車站」。</p>
-              <p>留空＝只准改明顯錯誤（重複景點、離譜交通／時間）。</p>
+              <p>呢格會寫入複製俾 AI 嘅 prompt。愈具體愈穩。</p>
+              <ul>
+                <li>改景點：「12月20日下午唔好去美泉宮，改近市區步行景點」</li>
+                <li>改酒店：「維也納嗰晚改近火車站」</li>
+                <li>改節奏：「第三日唔好咁密，刪一個下午景點」</li>
+              </ul>
+              <p>留空＝只准 AI 改明顯錯誤（重複景點、離譜交通／時間），其他幾乎原樣。</p>
             </InfoTip>
           </div>
           <textarea
@@ -393,11 +399,14 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
             </label>
             <InfoTip title="貼上邊種 JSON">
               <p>
-                <strong>首選 patch</strong>（<code>schemaVersion: "1.0.0-patch"</code>）：只含改過嘅 days／nights／klook，App 會合併入而家行程。
+                <strong>首選 patch</strong>：AI 應回類似
+                <code>{`{"schemaVersion":"1.0.0-patch","days":[...],"nights":[],"klook":[]}`}</code>
+                。只放有改過嘅日子；App 會合併，鎖住站同已選酒店會保留。
               </p>
               <p>
-                <strong>完整行程</strong>亦得：有 <code>trip</code>＋全日 <code>days</code> 就會整份取代（進度仍保留）。
+                <strong>完整行程</strong>：若 AI 交返有 <code>trip</code>＋全日 <code>days</code> 嘅大 JSON，會整份取代而家行程（打勾進度仍保留）。
               </p>
+              <p>貼完撳「套用」。若報錯，多數係 JSON 唔完整或 AI 加咗 Markdown 說明——叫佢淨係輸出 JSON 再試。</p>
             </InfoTip>
           </div>
           <textarea
