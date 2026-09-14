@@ -1264,6 +1264,115 @@ summary.with-info::after { margin-left: auto; }
   color: var(--ink);
 }
 
+.budget-panel {
+  margin: 8px 0 0;
+  padding: 0 0 4px;
+}
+.budget-panel > summary {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.budget-board {
+  margin-top: 10px;
+}
+.budget-lead {
+  margin: 0 0 12px;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+.budget-section {
+  margin: 0 0 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+}
+.budget-section:last-of-type { border-bottom: 0; margin-bottom: 4px; }
+.budget-section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.budget-section-head h3 {
+  margin: 0;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+}
+.budget-section-head span {
+  font-size: 12px;
+  color: var(--muted);
+}
+.budget-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-top: 1px dashed color-mix(in srgb, var(--line) 85%, transparent);
+}
+.budget-row:first-of-type { border-top: 0; }
+.budget-row-copy {
+  flex: 1 1 140px;
+  min-width: 0;
+}
+.budget-row-copy strong {
+  display: block;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.budget-row-copy small {
+  display: block;
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 12px;
+}
+.budget-row-edit {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+.budget-amount {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  border-radius: 8px;
+}
+.budget-amount span {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 600;
+}
+.budget-amount input {
+  width: 7.5rem;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+.budget-shown {
+  min-width: 5.5rem;
+  text-align: right;
+  font-size: 12px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.budget-totals {
+  margin-top: 4px;
+}
+
 @media (min-width: 700px) {
   .trip-page.trip-outing {
     max-width: 520px;

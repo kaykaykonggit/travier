@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { BookingBox } from "../components/BookingBox";
+import { BudgetBoard } from "../components/BudgetBoard";
 import { DayEats } from "../components/DayEats";
 import { DayMap, type MapStop } from "../components/DayMap";
 import { InfoTip } from "../components/InfoTip";
@@ -9,6 +10,7 @@ import { StopEats } from "../components/StopEats";
 import { TimelineEdit } from "../components/TimelineEdit";
 import { TransitBox, TransitStops } from "../components/TransitBox";
 import { TripMap, type TripMapStop } from "../components/TripMap";
+import { listFlightBudgets, listHotelBudgets } from "../lib/budget";
 import { geocodeMany, mergePoints, pointsFromCache, rememberPoint, type GeocodeQuery, type LatLng } from "../lib/geocode";
 import { chosenHotel, collectCurrencies, fetchRates, formatMoney, itemCost, partySize, priceNote, summarizeCosts, summarizeDay, type RateTable } from "../lib/costs";
 import { dayHeadline, dayPlace, shortPlace } from "../lib/dayLead";
@@ -110,6 +112,17 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
   const local = doc.trip.currencies.local;
 
   const summary = useMemo(() => summarizeCosts(doc, rates, heads), [doc, rates, heads]);
+  const flightBudgets = useMemo(() => listFlightBudgets(doc), [doc]);
+  const hotelBudgets = useMemo(() => listHotelBudgets(doc), [doc]);
+  const budgetMissLabel = useMemo(() => {
+    const flightMiss = flightBudgets.filter((row) => row.cost.amount == null || row.cost.amount <= 0).length;
+    const hotelMiss = hotelBudgets.filter((row) => row.cost.amount == null || row.cost.amount <= 0).length;
+    if (!flightMiss && !hotelMiss) return " · 已齊";
+    const bits: string[] = [];
+    if (flightMiss) bits.push(`機票欠 ${flightMiss}`);
+    if (hotelMiss) bits.push(`酒店欠 ${hotelMiss}`);
+    return bits.length ? ` · ${bits.join("、")}` : "";
+  }, [flightBudgets, hotelBudgets]);
   const dayTotals = useMemo(
     () =>
       doc.days.map((item) => summarizeDay(item, nightForDay(doc, item), local, display, rates, heads)),
@@ -368,27 +381,23 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
         </div>
         <p className="trip-title-line">{doc.trip.title}</p>
         {archivedMsg ? <p className="archive-toast">{archivedMsg}</p> : null}
-        <details className="quiet-details trip-plan-tools">
+        <details className="quiet-details budget-panel" open>
           <summary>
-            行程設定 · 人均 {formatMoney(summary.perPersonDisplay, display)} · {doc.days.length} 日
+            酒店／機票實價 · 人均 {formatMoney(summary.perPersonDisplay, display)}
+            {budgetMissLabel}
           </summary>
-          <p className="trip-meta trip-meta-inline">
-            {formatDateZh(doc.trip.startDate)} – {formatDateZh(doc.trip.endDate)} · {adults} 大人
-            {doc.trip.travelers.children ? ` ${doc.trip.travelers.children} 小孩` : ""} · {labelOf(PACE_LABEL, doc.trip.pace)}
-          </p>
-          <details className="quiet-details trip-cost-details">
-          <summary>花費明細</summary>
-          <div className="cost-bar">
+          <BudgetBoard doc={doc} onChange={onChange} />
+          <div className="cost-bar budget-totals">
             <div>
-              <span className="cost-label">全團已填（估算）</span>
+              <span className="cost-label">全團已填</span>
               <strong>{formatMoney(summary.totalDisplay, display)}</strong>
             </div>
             <div>
-              <span className="cost-label">人均消費（{heads} 人）</span>
+              <span className="cost-label">人均（{heads} 人）</span>
               <strong>{formatMoney(summary.perPersonDisplay, display)}</strong>
             </div>
             <div>
-              <span className="cost-label">住宿人均（一房除人數）</span>
+              <span className="cost-label">住宿人均</span>
               <strong>
                 {summary.hotelPerPersonDisplay == null
                   ? "未提供"
@@ -397,10 +406,18 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
             </div>
           </div>
           <p className="cost-note">
-            機票與交通按全團合計。酒店是一房一晚再除人數；餐飲也按人均看。已填 {summary.knownCount} · 未填 {summary.unknownCount}
+            機票＝全團總額；酒店＝一房一晚再除人數。改完即時入預算。已填 {summary.knownCount} · 未填 {summary.unknownCount}
+          </p>
+        </details>
+        <details className="quiet-details trip-plan-tools">
+          <summary>
+            行程設定 · {doc.days.length} 日 · {labelOf(PACE_LABEL, doc.trip.pace)}
+          </summary>
+          <p className="trip-meta trip-meta-inline">
+            {formatDateZh(doc.trip.startDate)} – {formatDateZh(doc.trip.endDate)} · {adults} 大人
+            {doc.trip.travelers.children ? ` ${doc.trip.travelers.children} 小孩` : ""}
           </p>
           {doc.trip.notes && <p className="trip-notes">{doc.trip.notes}</p>}
-        </details>
         <details className="quiet-details trip-cost-details tweak-panel">
           <summary>微改行程</summary>
           <div className="tweak-row">
