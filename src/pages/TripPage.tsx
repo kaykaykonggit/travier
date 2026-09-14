@@ -1,17 +1,18 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { BookingBox } from "../components/BookingBox";
 import { DayEats } from "../components/DayEats";
 import { DayMap, type MapStop } from "../components/DayMap";
-import { StopEats } from "../components/StopEats";
+import { InfoTip } from "../components/InfoTip";
 import { LockButton } from "../components/LockButton";
 import { PlacePhoto } from "../components/PlacePhoto";
+import { StopEats } from "../components/StopEats";
 import { TimelineEdit } from "../components/TimelineEdit";
+import { TransitBox, TransitStops } from "../components/TransitBox";
 import { TripMap, type TripMapStop } from "../components/TripMap";
 import { geocodeMany, mergePoints, pointsFromCache, type GeocodeQuery } from "../lib/geocode";
 import { chosenHotel, collectCurrencies, fetchRates, formatMoney, itemCost, partySize, priceNote, summarizeCosts, summarizeDay, type RateTable } from "../lib/costs";
 import { dayHeadline, dayPlace, shortPlace } from "../lib/dayLead";
 import { addDays, formatDateZh, labelOf, MODE_LABEL, NIGHT_LABEL, PACE_LABEL, starsText, TYPE_LABEL, weekdayZh } from "../lib/labels";
-import { BookingBox } from "../components/BookingBox";
-import { TransitBox, TransitStops } from "../components/TransitBox";
 import { dayKlookItems, isKlookable, klookHref, matchKlook } from "../lib/klook";
 import { skipStopEats, tripEatKey } from "../lib/eats";
 import { googleDirUrl, googleHotelsLiveUrl, googleHotelStayUrl, googleSearchUrl, klookUrl, parseHotelPaste, placeLabel, tripHotelUrl, withKlookDate } from "../lib/links";
@@ -22,7 +23,7 @@ import { isBareUrl, isShortMapsUrl, resolvePlaceInput } from "../lib/resolvePlac
 import { dayColor, tripStopNumbers } from "../lib/stops";
 import { doneKey, loadDone, saveDone, toggleDone } from "../lib/progress";
 import { initialDayIndex, leadOfDay } from "../lib/leadStop";
-import { parseTripJson } from "../lib/parse";
+import { applyTripUpdate } from "../lib/patch";
 import { buildTweakPrompt } from "../lib/tweakPrompt";
 import { needsBooking, bookingFallbackUrl } from "../lib/booking";
 import type { Day, HotelCandidate, Night, TripDoc } from "../types";
@@ -71,6 +72,7 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
   const [jsonErrors, setJsonErrors] = useState<string[]>([]);
   const [tweakWish, setTweakWish] = useState("");
   const [tweakCopied, setTweakCopied] = useState(false);
+  const [applyNote, setApplyNote] = useState<string | null>(null);
   const mapPanelRef = useRef<HTMLElement | null>(null);
   const dayBarRef = useRef<HTMLElement | null>(null);
   const jumpRef = useRef<HTMLDivElement | null>(null);
@@ -190,13 +192,16 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
   }
 
   function applyJson() {
-    const result = parseTripJson(jsonDraft);
+    const result = applyTripUpdate(doc, jsonDraft);
     if (!result.ok) {
       setJsonErrors(result.errors);
+      setApplyNote(null);
       return;
     }
     setJsonErrors([]);
     setJsonDraft("");
+    setApplyNote(result.mode === "patch" ? "已合併 patch" : "已用完整 JSON 取代");
+    window.setTimeout(() => setApplyNote(null), 2500);
     onChange(result.doc);
   }
 
@@ -348,28 +353,58 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
           </p>
           {doc.trip.notes && <p className="trip-notes">{doc.trip.notes}</p>}
         </details>
-        <details className="quiet-details trip-cost-details">
-          <summary>微改呢份行程（複製俾 AI）</summary>
-          <p className="cost-note">
-            由零規劃喺匯入頁。而家呢粒係微改：會連而家份 JSON、已打勾去過、鎖住要留、同下面你想改嘅嘢一齊複製。AI 要交返完整 JSON，喺下面貼上更新。
-          </p>
+        <details className="quiet-details trip-cost-details tweak-panel">
+          <summary className="with-info">
+            <span>微改行程</span>
+            <InfoTip title="點樣微改行程">
+              <ol>
+                <li>解鎖想改嘅站（鎖住嘅會保留）。</li>
+                <li>寫一句想點改，撳「複製微改」。</li>
+                <li>貼去會搜網嘅 AI；佢而家只交細份 <strong>patch</strong>（唔使成份行程 JSON），手機會快好多。</li>
+                <li>將 AI 回覆貼返下面「套用」。打勾進度會留住。</li>
+              </ol>
+              <p>亦都接受完整行程 JSON（會整份取代）。由零規劃請去「換一份行程」匯入頁。</p>
+              <p>小改（換後備、刪站、貼地圖加站、改酒店）可直接喺當日時間軸改，唔使開 AI。</p>
+            </InfoTip>
+          </summary>
+          <div className="tweak-row">
+            <label className="import-label" htmlFor="tweak-wish">
+              想點改
+            </label>
+            <InfoTip title="想點改點寫">
+              <p>寫具體日子同動作，例如：「第三日下午唔好去美泉宮」「酒店改近車站」。</p>
+              <p>留空＝只准改明顯錯誤（重複景點、離譜交通／時間）。</p>
+            </InfoTip>
+          </div>
           <textarea
+            id="tweak-wish"
             className="json-update"
             value={tweakWish}
             onChange={(event) => setTweakWish(event.target.value)}
-            placeholder="想點改？例如：第三日下午唔好去美泉宮；酒店改近車站。唔寫就只准改明顯錯誤。"
+            placeholder="例如：呢日下午換近啲嘅景點"
           />
           <button type="button" className="btn btn-primary" onClick={() => void copyTweak()}>
-            {tweakCopied ? "已複製微改 prompt" : "複製微改俾 AI"}
+            {tweakCopied ? "已複製" : "複製微改"}
           </button>
-        </details>
-        <details className="quiet-details trip-cost-details">
-          <summary>用新 JSON 更新這份（不會先清空）</summary>
+          <div className="tweak-row tweak-paste-label">
+            <label className="import-label" htmlFor="tweak-json">
+              貼上 AI 回覆
+            </label>
+            <InfoTip title="貼上邊種 JSON">
+              <p>
+                <strong>首選 patch</strong>（<code>schemaVersion: "1.0.0-patch"</code>）：只含改過嘅 days／nights／klook，App 會合併入而家行程。
+              </p>
+              <p>
+                <strong>完整行程</strong>亦得：有 <code>trip</code>＋全日 <code>days</code> 就會整份取代（進度仍保留）。
+              </p>
+            </InfoTip>
+          </div>
           <textarea
+            id="tweak-json"
             className="json-update"
             value={jsonDraft}
             onChange={(event) => setJsonDraft(event.target.value)}
-            placeholder="貼上 AI 交回的 JSON，取代目前行程。打勾進度會留著。"
+            placeholder='{"schemaVersion":"1.0.0-patch","days":[...]}'
             spellCheck={false}
           />
           {jsonErrors.length > 0 && (
@@ -379,8 +414,9 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
               ))}
             </ul>
           )}
-          <button type="button" className="text-btn" disabled={!jsonDraft.trim()} onClick={applyJson}>
-            套用更新
+          {applyNote && <p className="cost-note">{applyNote}</p>}
+          <button type="button" className="btn btn-primary" disabled={!jsonDraft.trim()} onClick={applyJson}>
+            套用
           </button>
         </details>
       </header>

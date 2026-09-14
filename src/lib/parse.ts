@@ -120,7 +120,7 @@ function timelineItem(value: unknown): TimelineItem | null {
   };
 }
 
-function day(value: unknown): Day | null {
+export function parseDay(value: unknown): Day | null {
   if (!isRecord(value)) return null;
   const dayNum = typeof value.day === "number" ? value.day : Number(value.day);
   const date = asString(value.date);
@@ -160,7 +160,7 @@ function hotel(value: unknown): HotelCandidate | null {
   };
 }
 
-function night(value: unknown): Night | null {
+export function parseNight(value: unknown): Night | null {
   if (!isRecord(value)) return null;
   const date = asString(value.date);
   if (!date) return null;
@@ -180,7 +180,7 @@ function night(value: unknown): Night | null {
   };
 }
 
-function klook(value: unknown): KlookItem | null {
+export function parseKlook(value: unknown): KlookItem | null {
   if (!isRecord(value)) return null;
   const name = asString(value.name);
   const date = asString(value.date);
@@ -227,7 +227,7 @@ export function parseTripDoc(data: unknown): ParseResult {
   const travelers = isRecord(tripRec.travelers) ? tripRec.travelers : {};
   const currencies = isRecord(tripRec.currencies) ? tripRec.currencies : {};
   const rawDays = data.days as unknown[];
-  const days = rawDays.map(day).filter((d): d is Day => d != null);
+  const days = rawDays.map(parseDay).filter((d): d is Day => d != null);
   if (!days.length) return { ok: false, errors: ["days 裡沒有可讀的一天。"] };
 
   const doc: TripDoc = {
@@ -254,8 +254,8 @@ export function parseTripDoc(data: unknown): ParseResult {
       notes: asString(tripRec.notes),
     },
     days,
-    nights: Array.isArray(data.nights) ? data.nights.map(night).filter((n): n is Night => n != null) : [],
-    klook: Array.isArray(data.klook) ? data.klook.map(klook).filter((k): k is KlookItem => k != null) : [],
+    nights: Array.isArray(data.nights) ? data.nights.map(parseNight).filter((n): n is Night => n != null) : [],
+    klook: Array.isArray(data.klook) ? data.klook.map(parseKlook).filter((k): k is KlookItem => k != null) : [],
   };
 
   return { ok: true, doc };
