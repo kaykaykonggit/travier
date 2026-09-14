@@ -39,9 +39,11 @@ export function StopEats({
   const [places, setPlaces] = useState<NearbyEat[]>(() =>
     slot.lat != null && slot.lng != null ? nearbyFromCache(slot.lat, slot.lng) ?? [] : [],
   );
-  const [loading, setLoading] = useState(() => slot.lat != null && slot.lng != null && !nearbyFromCache(slot.lat, slot.lng));
+  const [loading, setLoading] = useState(
+    () => slot.lat != null && slot.lng != null && !nearbyFromCache(slot.lat, slot.lng),
+  );
   const [pins, setPins] = useState(() => loadEatPins(tripKey, day.date));
-  const [open, setOpen] = useState(false);
+  const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     if (slot.lat == null || slot.lng == null) {
@@ -78,11 +80,8 @@ export function StopEats({
 
   const ranked = rankEats(places, slot, 8);
   const pinIds = new Set(pins.filter((pin) => pin.slot === slot.id).map((pin) => pin.id));
-  const shown = [
-    ...pins.filter((pin) => pin.slot === slot.id),
-    ...ranked.filter((place) => !pinIds.has(place.id)),
-  ];
-  const visible = open ? shown : shown.slice(0, 3);
+  const shown = [...pins.filter((pin) => pin.slot === slot.id), ...ranked.filter((place) => !pinIds.has(place.id))];
+  const visible = expanded ? shown : shown.slice(0, 3);
   const area = city && city !== "in_transit" ? city : slot.nearName;
   const mapsKind = slot.id === "snack" || slot.id === "breakfast" ? "cafes" : slot.id === "late" ? "bars" : "restaurants";
   const nearMaps =
@@ -98,17 +97,22 @@ export function StopEats({
     slot.lat,
     slot.lng,
   );
+  const meta = [
+    slot.label,
+    slot.plannedTitle ? "行程已有呢餐" : null,
+    !loading && shown.length ? `${shown.length} 間` : loading ? "搜緊…" : null,
+  ]
+    .filter(Boolean)
+    .join(" · ");
 
   return (
-    <div className="stop-eats" onClick={(event) => event.stopPropagation()}>
-      <p className="stop-eats-label">
-        呢度附近食 · {slot.label}
-        {slot.plannedTitle ? " · 行程已有呢餐" : ""}
-      </p>
+    <details className="stop-eats" onClick={(event) => event.stopPropagation()}>
+      <summary>
+        附近美食與訂位
+        {meta ? <span className="stop-eats-meta">{meta}</span> : null}
+      </summary>
       {loading && <p className="empty">緊搵呢個景點附近…</p>}
-      {!loading && shown.length === 0 && (
-        <p className="empty">未列到店名。用下面喺呢個景點旁邊先訂。</p>
-      )}
+      {!loading && shown.length === 0 && <p className="empty">未列到店名。用下面喺呢個景點旁邊先訂。</p>}
       {visible.length > 0 && (
         <ul className="stop-eats-list">
           {visible.map((place) => {
@@ -119,7 +123,7 @@ export function StopEats({
             const extras = place.website ? books : books.slice(1);
             return (
               <li key={place.id} className={isPinned(pins, place.id) ? "pinned" : undefined}>
-                <div>
+                <div className="eat-main">
                   <strong>{place.name}</strong>
                   <span>
                     {[amenityLabel(place.amenity), cuisineLabel(place.cuisine)].filter(Boolean).join(" · ")}
@@ -132,7 +136,7 @@ export function StopEats({
                   </a>
                   {bookHref && (
                     <a href={bookHref} target="_blank" rel="noreferrer">
-                      {place.website ? "官網／訂位" : books[0]?.label || "訂位"}
+                      {place.website ? "官網" : books[0]?.label || "訂位"}
                     </a>
                   )}
                   {extras.map((link) => (
@@ -163,8 +167,8 @@ export function StopEats({
         </ul>
       )}
       {shown.length > 3 && (
-        <button type="button" className="text-btn stop-eats-more" onClick={() => setOpen((value) => !value)}>
-          {open ? "收起" : `再睇 ${shown.length - 3} 間呢度附近`}
+        <button type="button" className="text-btn stop-eats-more" onClick={() => setExpanded((value) => !value)}>
+          {expanded ? "收起" : `再睇 ${shown.length - 3} 間`}
         </button>
       )}
       <div className="more-links">
@@ -177,6 +181,6 @@ export function StopEats({
           </a>
         ))}
       </div>
-    </div>
+    </details>
   );
 }

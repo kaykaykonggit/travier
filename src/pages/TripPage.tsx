@@ -634,7 +634,7 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
                         {item.displayNameZh || item.title}
                         {item.mustSee ? <em className="must-tag">必看</em> : null}
                       </h4>
-                      <strong className="item-price">{formatMoney(lineTotal, display)}</strong>
+                      <strong className={`item-price${lineTotal ? "" : " is-zero"}`}>{lineTotal ? formatMoney(lineTotal, display) : "—"}</strong>
                     </div>
                     {item.displayNameZh && item.title !== item.displayNameZh && <p className="en">{item.title}</p>}
                     <p className="move">
@@ -664,19 +664,37 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
                       </p>
                     )}
                     {item.notes && <p className="notes">{item.notes}</p>}
-                    <div className="links" onClick={(e) => e.stopPropagation()}>
-                      <a href={googleSearchUrl(item.placeQuery)} target="_blank" rel="noreferrer">
+                    <div className="stop-tools" onClick={(e) => e.stopPropagation()}>
+                      <a className="tool-chip" href={googleSearchUrl(item.placeQuery)} target="_blank" rel="noreferrer">
                         地圖
                       </a>
                       {isKlookable(item) && (
-                        <a href={klookHref(item, matchKlook(listedKlooks, item), day.date, adults)} target="_blank" rel="noreferrer">
-                          Klook 搜門票
+                        <a
+                          className="tool-chip"
+                          href={klookHref(item, matchKlook(listedKlooks, item), day.date, adults)}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          門票
                         </a>
                       )}
                       {bookUrl && (
-                        <a href={bookUrl} target="_blank" rel="noreferrer">
+                        <a className="tool-chip" href={bookUrl} target="_blank" rel="noreferrer">
                           預約
                         </a>
+                      )}
+                      <TransitBox transport={item.transport} title={item.displayNameZh || item.title} />
+                      {(needsBooking(item.transport) || !item.locked) && (
+                        <details className="tool-details">
+                          <summary>{item.locked ? "訂票" : "修改"}</summary>
+                          <BookingBox transport={item.transport} title={item.displayNameZh || item.title} date={day.date} adults={adults} />
+                          <TimelineEdit
+                            item={item}
+                            onBackup={(backup) => onChange(applyBackup(doc, dayIndex, index, backup, local))}
+                            onDelete={() => onChange(deleteTimelineItem(doc, dayIndex, index))}
+                            onAddPlace={(place) => onChange(insertPlaceAfter(doc, dayIndex, index, place, local))}
+                          />
+                        </details>
                       )}
                     </div>
                   </div>
@@ -690,19 +708,6 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
                     tripKey={tripEatKey(doc.trip.title, doc.trip.startDate, doc.trip.endDate)}
                     covers={heads}
                   />
-                )}
-                <TransitBox transport={item.transport} title={item.displayNameZh || item.title} />
-                {(needsBooking(item.transport) || !item.locked) && (
-                  <details className="quiet-details" onClick={(event) => event.stopPropagation()}>
-                    <summary>{item.locked ? "訂票說明" : "修改此站"}</summary>
-                    <BookingBox transport={item.transport} title={item.displayNameZh || item.title} date={day.date} adults={adults} />
-                    <TimelineEdit
-                      item={item}
-                      onBackup={(backup) => onChange(applyBackup(doc, dayIndex, index, backup, local))}
-                      onDelete={() => onChange(deleteTimelineItem(doc, dayIndex, index))}
-                      onAddPlace={(place) => onChange(insertPlaceAfter(doc, dayIndex, index, place, local))}
-                    />
-                  </details>
                 )}
               </div>
             </li>
