@@ -1,7 +1,7 @@
 import { useEffect, useId, useRef, useState, type PointerEvent as ReactPointerEvent, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 
-const HOLD_MS = 420;
+const HOLD_MS = 320;
 
 type InfoTipProps = {
   label?: string;
