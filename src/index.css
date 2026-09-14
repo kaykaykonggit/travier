@@ -462,20 +462,6 @@ summary.with-info::after { margin-left: auto; }
   flex: 0 0 auto;
 }
 .info-tip-btn:active { color: var(--ink); border-color: var(--ink); }
-.info-tip-hint {
-  position: absolute;
-  left: 50%;
-  top: calc(100% + 6px);
-  transform: translateX(-50%);
-  white-space: nowrap;
-  font-size: 12px;
-  color: var(--muted);
-  pointer-events: none;
-  background: var(--paper, #fffaf3);
-  padding: 2px 6px;
-  border: 1px solid var(--line);
-  z-index: 6;
-}
 .info-tip-layer {
   position: fixed;
   inset: 0;
@@ -514,7 +500,8 @@ summary.with-info::after { margin-left: auto; }
   line-height: 1.55;
 }
 .info-tip-body p { margin: 0 0 10px; color: var(--muted); }
-.info-tip-body ol {
+.info-tip-body ol,
+.info-tip-body ul {
   margin: 0 0 12px;
   padding-left: 1.2em;
   color: var(--muted);
