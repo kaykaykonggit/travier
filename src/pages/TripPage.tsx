@@ -26,6 +26,7 @@ import { initialDayIndex, leadOfDay } from "../lib/leadStop";
 import { applyTripUpdate } from "../lib/patch";
 import { buildTweakPrompt } from "../lib/tweakPrompt";
 import { needsBooking, bookingFallbackUrl } from "../lib/booking";
+import { archiveTrip } from "../lib/storage";
 import type { Day, HotelCandidate, Night, TripDoc } from "../types";
 
 function nightForDay(doc: TripDoc, day: Day): Night | undefined {
@@ -73,6 +74,7 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
   const [tweakWish, setTweakWish] = useState("");
   const [tweakCopied, setTweakCopied] = useState(false);
   const [applyNote, setApplyNote] = useState<string | null>(null);
+  const [archivedMsg, setArchivedMsg] = useState<string | null>(null);
   const mapPanelRef = useRef<HTMLElement | null>(null);
   const dayBarRef = useRef<HTMLElement | null>(null);
   const jumpRef = useRef<HTMLDivElement | null>(null);
@@ -319,11 +321,25 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
       <header className="trip-top compact">
         <div className="trip-top-row">
           <p className="brand sm">Travier</p>
-          <button type="button" className="text-btn" onClick={onReset}>
-            換一份行程
-          </button>
+          <div className="trip-top-actions">
+            <button
+              type="button"
+              className="text-btn"
+              onClick={() => {
+                const saved = archiveTrip(doc);
+                setArchivedMsg(`已封存「${saved.title}」到本機（${saved.savedAt.slice(0, 16).replace("T", " ")}）`);
+                window.setTimeout(() => setArchivedMsg(null), 4000);
+              }}
+            >
+              封存呢份行程
+            </button>
+            <button type="button" className="text-btn" onClick={onReset}>
+              換一份行程
+            </button>
+          </div>
         </div>
         <h1>{doc.trip.title}</h1>
+        {archivedMsg ? <p className="archive-toast">{archivedMsg}</p> : null}
         <p className="trip-meta">
           {formatDateZh(doc.trip.startDate)} – {formatDateZh(doc.trip.endDate)} · {doc.days.length} 日 · 人均{" "}
           {formatMoney(summary.perPersonDisplay, display)}
