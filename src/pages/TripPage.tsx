@@ -135,7 +135,11 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
   const stopNumbers = numbersByDay[dayIndex] ?? [];
   const focusQuery = focusIndex != null ? day.timeline[focusIndex]?.placeQuery.trim() || null : null;
   const focusNumber =
-    focusIndex != null ? stopNumbers[focusIndex] ?? null : lead ? stopNumbers[lead.index] ?? null : null;
+    focusIndex != null
+      ? stopNumbers[focusIndex] || null
+      : lead
+        ? stopNumbers[lead.index] || null
+        : null;
 
   const stops: MapStop[] = useMemo(() => {
     const list: MapStop[] = [];
@@ -314,8 +318,22 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
     setFocusIndex(index);
     setFocusToken(Date.now());
     if (!scroll) return;
+    // Wait for the expanded stop detail to layout, then scroll it into view
+    // (timeline may live inside an overflow panel on desktop).
     window.requestAnimationFrame(() => {
-      document.getElementById(`stop-${day.date}-${index}`)?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      window.requestAnimationFrame(() => {
+        const el = document.getElementById(`stop-${day.date}-${index}`);
+        if (!el) return;
+        const panel = timelineRef.current;
+        if (panel && panel.scrollHeight > panel.clientHeight + 4) {
+          const panelRect = panel.getBoundingClientRect();
+          const elRect = el.getBoundingClientRect();
+          const nextTop = panel.scrollTop + (elRect.top - panelRect.top) - 12;
+          panel.scrollTo({ top: Math.max(0, nextTop), behavior: "smooth" });
+          return;
+        }
+        el.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
+      });
     });
   }
 
