@@ -15,17 +15,27 @@ export function InfoTip({ label = "教學", title, children }: InfoTipProps) {
   const [hint, setHint] = useState(false);
   const timer = useRef<number | null>(null);
   const held = useRef(false);
+  const hintTimer = useRef<number | null>(null);
 
-  function clearTimer() {
+  function clearHoldTimer() {
     if (timer.current != null) {
       window.clearTimeout(timer.current);
       timer.current = null;
     }
   }
 
+  function clearHintTimer() {
+    if (hintTimer.current != null) {
+      window.clearTimeout(hintTimer.current);
+      hintTimer.current = null;
+    }
+  }
+
   function startHold(event: ReactPointerEvent<HTMLButtonElement>) {
     held.current = false;
-    clearTimer();
+    clearHoldTimer();
+    clearHintTimer();
+    setHint(false);
     try {
       event.currentTarget.setPointerCapture(event.pointerId);
     } catch {
@@ -33,20 +43,29 @@ export function InfoTip({ label = "教學", title, children }: InfoTipProps) {
     }
     timer.current = window.setTimeout(() => {
       held.current = true;
+      timer.current = null;
       setHint(false);
       setOpen(true);
     }, HOLD_MS);
   }
 
   function endHold() {
-    clearTimer();
-    if (!held.current) {
+    const wasHolding = timer.current != null;
+    clearHoldTimer();
+    if (!held.current && wasHolding) {
       setHint(true);
-      window.setTimeout(() => setHint(false), 1600);
+      clearHintTimer();
+      hintTimer.current = window.setTimeout(() => setHint(false), 1600);
     }
   }
 
-  useEffect(() => () => clearTimer(), []);
+  useEffect(
+    () => () => {
+      clearHoldTimer();
+      clearHintTimer();
+    },
+    [],
+  );
 
   useEffect(() => {
     if (!open) return;
@@ -57,8 +76,18 @@ export function InfoTip({ label = "教學", title, children }: InfoTipProps) {
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
+  function block(event: { preventDefault(): void; stopPropagation(): void }) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
   return (
-    <span className="info-tip">
+    <span
+      className="info-tip"
+      onClick={block}
+      onMouseDown={block}
+      onPointerDown={(event) => event.stopPropagation()}
+    >
       <button
         type="button"
         className="info-tip-btn"
@@ -68,21 +97,18 @@ export function InfoTip({ label = "教學", title, children }: InfoTipProps) {
         aria-controls={open ? `${tipId}-panel` : undefined}
         onPointerDown={(event) => {
           if (event.button !== 0) return;
-          event.preventDefault();
-          event.stopPropagation();
+          block(event);
           startHold(event);
         }}
         onPointerUp={(event) => {
-          event.preventDefault();
-          event.stopPropagation();
+          block(event);
           endHold();
         }}
         onPointerCancel={endHold}
-        onLostPointerCapture={clearTimer}
-        onClick={(event) => {
-          event.preventDefault();
-          event.stopPropagation();
+        onLostPointerCapture={() => {
+          if (timer.current != null) endHold();
         }}
+        onClick={block}
         onContextMenu={(event) => event.preventDefault()}
       >
         i

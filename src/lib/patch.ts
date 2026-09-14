@@ -46,6 +46,18 @@ function mergeTimelinePreserveLocked(oldItems: TimelineItem[], nextItems: Timeli
 }
 
 function mergeDay(oldDay: Day, nextDay: Day): Day {
+  // Empty timeline = metadata-only tweak (title/tip/etc); keep existing stops.
+  if (!nextDay.timeline.length) {
+    return {
+      ...oldDay,
+      title: nextDay.title || oldDay.title,
+      stayCity: nextDay.stayCity || oldDay.stayCity,
+      countries: nextDay.countries.length ? nextDay.countries : oldDay.countries,
+      routeLogic: nextDay.routeLogic || oldDay.routeLogic,
+      tip: nextDay.tip || oldDay.tip,
+      highlights: nextDay.highlights.length ? nextDay.highlights : oldDay.highlights,
+    };
+  }
   return {
     ...nextDay,
     day: oldDay.day,
