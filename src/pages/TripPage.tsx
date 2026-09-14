@@ -93,6 +93,7 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
   const mapPanelRef = useRef<HTMLElement | null>(null);
   const dayBarRef = useRef<HTMLElement | null>(null);
   const jumpRef = useRef<HTMLDivElement | null>(null);
+  const timelineRef = useRef<HTMLElement | null>(null);
   const failedLinks = useRef(new Set<string>());
   const swipeX = useRef<number | null>(null);
 
@@ -231,15 +232,17 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
   function goToDay(index: number) {
     if (index < 0 || index >= doc.days.length) return;
     setDayIndex(index);
-    setFocusIndex(null);
     setFocusToken(0);
-    dayBarRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    dayBarRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }
 
   function focusItem(index: number, scroll = true) {
     setFocusIndex(index);
     setFocusToken(Date.now());
-    if (scroll) mapPanelRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (!scroll) return;
+    window.requestAnimationFrame(() => {
+      document.getElementById(`stop-${day.date}-${index}`)?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    });
   }
 
   useEffect(() => {
@@ -255,6 +258,15 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
   useEffect(() => {
     jumpRef.current?.querySelector(".on")?.scrollIntoView({ inline: "center", block: "nearest", behavior: "smooth" });
   }, [dayIndex]);
+
+  useEffect(() => {
+    if (lead) {
+      setFocusIndex(lead.index);
+      setFocusToken(Date.now());
+    } else {
+      setFocusIndex(null);
+    }
+  }, [day.date, lead?.index]);
 
   useEffect(() => {
     let cancelled = false;
@@ -333,7 +345,7 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
   }, [doc]);
 
   return (
-    <div className="trip-page">
+    <div className="trip-page trip-outing">
       <header className="trip-top compact">
         <div className="trip-top-row">
           <p className="brand sm">Travier</p>
@@ -354,14 +366,18 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
             </button>
           </div>
         </div>
-        <h1>{doc.trip.title}</h1>
+        <p className="trip-title-line">{doc.trip.title}</p>
         {archivedMsg ? <p className="archive-toast">{archivedMsg}</p> : null}
-        <p className="trip-meta">
-          {formatDateZh(doc.trip.startDate)} – {formatDateZh(doc.trip.endDate)} · {doc.days.length} 日 · 人均{" "}
-          {formatMoney(summary.perPersonDisplay, display)}
-        </p>
-        <details className="quiet-details trip-cost-details">
-          <summary>花費明細 · {adults} 大人{doc.trip.travelers.children ? ` ${doc.trip.travelers.children} 小孩` : ""} · {labelOf(PACE_LABEL, doc.trip.pace)}</summary>
+        <details className="quiet-details trip-plan-tools">
+          <summary>
+            行程設定 · 人均 {formatMoney(summary.perPersonDisplay, display)} · {doc.days.length} 日
+          </summary>
+          <p className="trip-meta trip-meta-inline">
+            {formatDateZh(doc.trip.startDate)} – {formatDateZh(doc.trip.endDate)} · {adults} 大人
+            {doc.trip.travelers.children ? ` ${doc.trip.travelers.children} 小孩` : ""} · {labelOf(PACE_LABEL, doc.trip.pace)}
+          </p>
+          <details className="quiet-details trip-cost-details">
+          <summary>花費明細</summary>
           <div className="cost-bar">
             <div>
               <span className="cost-label">全團已填（估算）</span>
@@ -461,8 +477,10 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
             套用
           </button>
         </details>
+        </details>
       </header>
 
+      <div className="trip-chrome">
       <nav
         ref={dayBarRef}
         className="day-bar"
@@ -517,7 +535,7 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
       </div>
 
       {lead ? (
-        <button type="button" className="next-card" onClick={() => focusItem(lead.index, false)}>
+        <button type="button" className="next-dock" onClick={() => focusItem(lead.index, true)}>
           <span className="kicker">{lead.kind === "now" ? "現在" : "下一站"}</span>
           <strong>{lead.item.displayNameZh || lead.item.title}</strong>
           <small>
@@ -525,17 +543,18 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
             {lead.item.end ? `–${lead.item.end}` : ""}
             {" · "}
             {labelOf(TYPE_LABEL, lead.item.type)}
-            {lead.item.transport.line ? ` · ${lead.item.transport.line}` : ` · ${labelOf(MODE_LABEL, lead.item.transport.mode)}`}
           </small>
         </button>
       ) : (
-        <p className="next-card">
+        <p className="next-dock next-dock-done">
           <span className="kicker">這天</span>
           <strong>已走完</strong>
           <small>{pickedHotel ? `今晚 ${pickedHotel.name}` : "可以休息了"}</small>
         </p>
       )}
+      </div>
 
+      <div className="trip-workspace">
       <section className="day-stage" ref={mapPanelRef} id="day-map">
         <div className="panel-head">
           <div className="map-switch">
@@ -574,7 +593,7 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
             focusNumber={focusNumber}
             focusToken={focusToken}
             color={dayColor(dayIndex)}
-            onSelect={(index) => focusItem(index, false)}
+            onSelect={(index) => focusItem(index, true)}
           />
         )}
         <p className="day-spend">
@@ -583,36 +602,7 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
         </p>
       </section>
 
-      {(day.routeLogic || day.tip || day.highlights.length > 0) && (
-        <details className="quiet-details day-notes">
-          <summary>當天怎麼走 · 叮嚀</summary>
-          {day.routeLogic && <p className="route">{day.routeLogic}</p>}
-          {day.tip && <p className="tip">叮嚀：{day.tip}</p>}
-          <p className="day-spend-break">
-            交通／機票 {formatMoney(todayCost.transportDisplay, display)}（全團）
-            {" · "}
-            餐飲人均 {formatMoney(todayCost.mealPerPersonDisplay, display)}
-            {" · "}
-            門票 {formatMoney(todayCost.ticketDisplay, display)}
-            {todayCost.hotelPerPersonDisplay != null
-              ? ` · 住宿人均 ${formatMoney(todayCost.hotelPerPersonDisplay, display)}${chosenHotel(night) ? `（${chosenHotel(night)?.name}）` : "（未選則用最平參考）"}`
-              : " · 當晚無酒店"}
-          </p>
-          {day.highlights.length > 0 && (
-            <ul className="highlights">
-              {day.highlights.map((item) => (
-                <li key={`${item.name}-${item.placeQuery}`}>
-                  <span className="stars">{starsText(item.stars)}</span>
-                  <span>{item.name}</span>
-                  {item.bonus && <em>加料</em>}
-                </li>
-              ))}
-            </ul>
-          )}
-        </details>
-      )}
-
-      <section className="panel timeline-panel">
+      <section className="panel timeline-panel" ref={timelineRef}>
         <ol className="timeline">
           {day.timeline.map((item, index) => {
             const lineTotal = itemCost(item, display, rates);
@@ -623,13 +613,25 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
             const bookUrl = needsBooking(item.transport) ? bookingFallbackUrl(item.transport, day.date, adults) : null;
             return (
             <li
+              id={`stop-${day.date}-${index}`}
               key={`${item.start}-${item.title}-${index}`}
-              className={`${item.mustSee ? "must" : ""} ${focused ? "on" : ""} ${finished ? "is-done" : ""}`.trim()}
-              onClick={() => focusItem(index)}
+              className={`timeline-stop ${item.mustSee ? "must" : ""} ${focused ? "on" : ""} ${finished ? "is-done" : ""}`.trim()}
             >
-              <div className="time">
-                <div className="stop-row">
-                  <label className="done-check" onClick={(event) => event.stopPropagation()}>
+              <div className="stop-compact-row">
+                <button type="button" className="stop-compact" onClick={() => focusItem(index, true)}>
+                  {stopNo > 0 ? <span className="stop-num">{stopNo}</span> : <span className="stop-num">·</span>}
+                  <span className="stop-time">
+                    {item.start}
+                    {item.end ? `–${item.end}` : ""}
+                  </span>
+                  <span className="stop-name">
+                    {item.displayNameZh || item.title}
+                    {item.mustSee ? <em className="must-tag">必看</em> : null}
+                  </span>
+                  <span className="stop-meta">{labelOf(TYPE_LABEL, item.type)}</span>
+                </button>
+                <div className="stop-compact-actions">
+                  <label className="done-check">
                     <input
                       type="checkbox"
                       checked={finished}
@@ -641,16 +643,10 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
                     locked={item.locked}
                     onToggle={() => onChange(setItemLocked(doc, dayIndex, index, !item.locked))}
                   />
-                  {stopNo > 0 && <span className="stop-order">第 {stopNo} 點</span>}
                 </div>
-                <strong>
-                  {item.start}
-                  {item.end ? `–${item.end}` : ""}
-                </strong>
-                {item.endNextDay && <small>跨日</small>}
-                <span>{labelOf(TYPE_LABEL, item.type)}</span>
               </div>
-              <div className="body">
+              {focused ? (
+              <div className="stop-detail body">
                 <div className="spot-main">
                   <PlacePhoto
                     imageUrl={item.imageUrl}
@@ -662,10 +658,7 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
                   />
                   <div className="spot-copy">
                     <div className="item-head">
-                      <h4>
-                        {item.displayNameZh || item.title}
-                        {item.mustSee ? <em className="must-tag">必看</em> : null}
-                      </h4>
+                      <h4>{item.displayNameZh || item.title}</h4>
                       <strong className={`item-price${lineTotal ? "" : " is-zero"}`}>{lineTotal ? formatMoney(lineTotal, display) : "—"}</strong>
                     </div>
                     {item.displayNameZh && item.title !== item.displayNameZh && <p className="en">{item.title}</p>}
@@ -742,12 +735,44 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
                   />
                 )}
               </div>
+              ) : null}
             </li>
             );
           })}
         </ol>
       </section>
+      </div>
 
+      <details className="quiet-details trip-extras">
+        <summary>更多 · 訂餐 · 酒店 · 門票</summary>
+      {(day.routeLogic || day.tip || day.highlights.length > 0) && (
+        <details className="quiet-details day-notes">
+          <summary>當天怎麼走 · 叮嚀</summary>
+          {day.routeLogic && <p className="route">{day.routeLogic}</p>}
+          {day.tip && <p className="tip">叮嚀：{day.tip}</p>}
+          <p className="day-spend-break">
+            交通／機票 {formatMoney(todayCost.transportDisplay, display)}（全團）
+            {" · "}
+            餐飲人均 {formatMoney(todayCost.mealPerPersonDisplay, display)}
+            {" · "}
+            門票 {formatMoney(todayCost.ticketDisplay, display)}
+            {todayCost.hotelPerPersonDisplay != null
+              ? ` · 住宿人均 ${formatMoney(todayCost.hotelPerPersonDisplay, display)}${chosenHotel(night) ? `（${chosenHotel(night)?.name}）` : "（未選則用最平參考）"}`
+              : " · 當晚無酒店"}
+          </p>
+          {day.highlights.length > 0 && (
+            <ul className="highlights">
+              {day.highlights.map((item) => (
+                <li key={`${item.name}-${item.placeQuery}`}>
+                  <span className="stars">{starsText(item.stars)}</span>
+                  <span>{item.name}</span>
+                  {item.bonus && <em>加料</em>}
+                </li>
+              ))}
+            </ul>
+          )}
+        </details>
+      )}
       <details className="quiet-details day-eats-later">
         <summary>按時段訂午餐晚餐</summary>
         <DayEats
@@ -943,6 +968,7 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
           </ul>
       </section>
       )}
+      </details>
     </div>
   );
 }
