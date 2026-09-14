@@ -5,6 +5,16 @@ export type RateTable = Record<string, number>;
 export async function fetchRates(display: string, extras: string[]): Promise<RateTable> {
   const unique = [...new Set(extras.filter((c) => c && c !== display))];
   const table: RateTable = { [display]: 1 };
+  // Seed common fallbacks first so totals never stay blank while network is slow.
+  if (display === "HKD") {
+    table.EUR = 8.5;
+    table.USD = 7.8;
+    table.JPY = 0.052;
+  } else if (display === "JPY") {
+    table.HKD = 19.2;
+    table.USD = 150;
+    table.EUR = 162;
+  }
   await Promise.all(
     unique.map(async (from) => {
       try {
@@ -18,10 +28,6 @@ export async function fetchRates(display: string, extras: string[]): Promise<Rat
       }
     }),
   );
-  if (display === "HKD") {
-    if (!table.EUR) table.EUR = 8.5;
-    if (!table.USD) table.USD = 7.8;
-  }
   return table;
 }
 
