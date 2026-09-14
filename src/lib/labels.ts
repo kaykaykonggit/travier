@@ -47,6 +47,49 @@ export function weekdayZh(isoDate: string): string {
   return days[new Date(Date.UTC(y, m - 1, d)).getUTCDay()];
 }
 
+export function cityZh(name: string): string {
+  const key = name.trim().toLowerCase();
+  if (!key || key === "in_transit") return "移動中";
+  return CITY_ZH[key] ?? name.trim();
+}
+
+const CITY_ZH: Record<string, string> = {
+  vienna: "維也納",
+  wien: "維也納",
+  schwechat: "維也納機場",
+  salzburg: "薩爾斯堡",
+  hallstatt: "哈修塔特",
+  innsbruck: "因斯布魯克",
+  rome: "羅馬",
+  roma: "羅馬",
+  milan: "米蘭",
+  milano: "米蘭",
+  florence: "佛羅倫斯",
+  firenze: "佛羅倫斯",
+  venice: "威尼斯",
+  venezia: "威尼斯",
+  verona: "維羅納",
+  naples: "拿坡里",
+  napoli: "拿坡里",
+  "hong kong": "香港",
+  香港: "香港",
+  tokyo: "東京",
+  kyoto: "京都",
+  osaka: "大阪",
+  naha: "那霸",
+  nago: "名護",
+  onna: "恩納",
+  uruma: "うるま",
+  chatan: "北谷",
+  okinawa: "沖繩",
+  ishigaki: "石垣",
+  "innere stadt": "內城",
+  altstadt: "老城",
+  duomo: "大教堂區",
+  "historic centre": "歷史中心",
+  prater: "普拉特",
+};
+
 export function formatDateZh(isoDate: string): string {
   const [, m, d] = isoDate.split("-");
   return `${Number(m)}月${Number(d)}日`;

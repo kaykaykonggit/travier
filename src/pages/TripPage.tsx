@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { BookingBox } from "../components/BookingBox";
+import { EditBar } from "../components/EditBar";
 import { TripTabs } from "../components/LifeIcons";
 import { LifeLedger } from "../components/LifeLedger";
 import { DayEats } from "../components/DayEats";
@@ -19,17 +20,20 @@ import { dayKlookItems, isKlookable, klookHref, matchKlook } from "../lib/klook"
 import { skipStopEats, tripEatKey } from "../lib/eats";
 import { googleDirUrl, googleHotelsLiveUrl, googleHotelStayUrl, googleSearchUrl, klookUrl, parseHotelPaste, placeLabel, tripHotelUrl, withKlookDate } from "../lib/links";
 import { hotelAccessTransport, lastSightOfDay, nightRestPoint } from "../lib/restPoint";
-import { applyBackup, deleteTimelineItem, insertPlaceAfter, repairTimelinePlace, setItemLocked } from "../lib/editTrip";
+import { applyBackup, deleteTimelineItem, insertPlaceAfter, repairTimelinePlace, replaceDayTimeline, setItemLocked, setTicketSource } from "../lib/editTrip";
+import { normalizeExpenseUrl } from "../lib/life";
 import { isHomeAirportStop } from "../lib/homeStop";
 import { isBareUrl, isShortMapsUrl, resolvePlaceInput } from "../lib/resolvePlace";
 import { dayColor, tripStopNumbers } from "../lib/stops";
 import { doneKey, loadDone, saveDone, toggleDone } from "../lib/progress";
 import { initialDayIndex, leadOfDay } from "../lib/leadStop";
 import { applyTripUpdate } from "../lib/patch";
+import { stopPlaceOf, placeBreakLabel } from "../lib/stopPlace";
 import { buildTweakPrompt } from "../lib/tweakPrompt";
+import { buildSampleEditPrompt } from "../lib/template";
 import { needsBooking, bookingFallbackUrl } from "../lib/booking";
 import { archiveTrip } from "../lib/storage";
-import type { Day, HotelCandidate, Night, TripDoc } from "../types";
+import type { Day, HotelCandidate, Night, TimelineItem, TripDoc } from "../types";
 
 function nightForDay(doc: TripDoc, day: Day): Night | undefined {
   return doc.nights.find((night) => night.date === day.date);
@@ -89,10 +93,14 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
   const [jsonDraft, setJsonDraft] = useState("");
   const [jsonErrors, setJsonErrors] = useState<string[]>([]);
   const [tweakWish, setTweakWish] = useState("");
-  const [tweakCopied, setTweakCopied] = useState(false);
+  const [tweakCopied, setTweakCopied] = useState<"day" | "full" | null>(null);
   const [applyNote, setApplyNote] = useState<string | null>(null);
   const [archivedMsg, setArchivedMsg] = useState<string | null>(null);
   const [mainTab, setMainTab] = useState<"trip" | "life">("trip");
+  const [stopEdit, setStopEdit] = useState<{ dayIndex: number; itemIndex: number; snapshot: TimelineItem[] } | null>(null);
+  const [stopTicketUrl, setStopTicketUrl] = useState("");
+  const [hotelEditing, setHotelEditing] = useState(false);
+  const [hotelSnapshot, setHotelSnapshot] = useState<Night | null>(null);
   const mapPanelRef = useRef<HTMLElement | null>(null);
   const dayBarRef = useRef<HTMLElement | null>(null);
   const jumpRef = useRef<HTMLDivElement | null>(null);
@@ -176,6 +184,63 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
     });
   }
 
+  function startStopEdit(index: number) {
+    const item = day.timeline[index];
+    if (!item) return;
+    setStopEdit({ dayIndex, itemIndex: index, snapshot: structuredClone(day.timeline) });
+    setStopTicketUrl(item.ticket.cost.source ?? "");
+    setFocusIndex(index);
+    if (item.locked) onChange(setItemLocked(doc, dayIndex, index, false));
+  }
+
+  function saveStopEdit() {
+    const index = stopEdit?.itemIndex ?? focusIndex;
+    const di = stopEdit?.dayIndex ?? dayIndex;
+    if (index == null) return;
+    let next = setTicketSource(doc, di, index, normalizeExpenseUrl(stopTicketUrl));
+    next = setItemLocked(next, di, index, true);
+    onChange(next);
+    setStopEdit(null);
+    setStopTicketUrl("");
+  }
+
+  function cancelStopEdit() {
+    if (stopEdit) {
+      const restored = stopEdit.snapshot.map((item, index) =>
+        index === stopEdit.itemIndex ? { ...item, locked: true } : item,
+      );
+      onChange(replaceDayTimeline(doc, stopEdit.dayIndex, restored));
+    } else if (focusIndex != null) {
+      onChange(setItemLocked(doc, dayIndex, focusIndex, true));
+    }
+    setStopEdit(null);
+    setStopTicketUrl("");
+  }
+
+  function startHotelEdit() {
+    if (!night || night.type !== "hotel") return;
+    setHotelSnapshot(structuredClone(night));
+    setHotelEditing(true);
+  }
+
+  function saveHotelEdit() {
+    setHotelEditing(false);
+    setHotelSnapshot(null);
+    setCustomHotel({ name: "", amount: "" });
+  }
+
+  function cancelHotelEdit() {
+    if (hotelSnapshot) {
+      onChange({
+        ...doc,
+        nights: doc.nights.map((item) => (item.date === hotelSnapshot.date ? hotelSnapshot : item)),
+      });
+    }
+    setHotelEditing(false);
+    setHotelSnapshot(null);
+    setCustomHotel({ name: "", amount: "" });
+  }
+
   function selectHotel(nightDate: string, hotel: HotelCandidate) {
     const current = doc.nights.find((item) => item.date === nightDate);
     if (!current) return;
@@ -228,8 +293,14 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
 
   async function copyTweak() {
     await navigator.clipboard.writeText(buildTweakPrompt(doc, done, tweakWish, day.date));
-    setTweakCopied(true);
-    window.setTimeout(() => setTweakCopied(false), 2000);
+    setTweakCopied("day");
+    window.setTimeout(() => setTweakCopied(null), 2000);
+  }
+
+  async function copyFull() {
+    await navigator.clipboard.writeText(buildSampleEditPrompt(doc.trip.title, doc));
+    setTweakCopied("full");
+    window.setTimeout(() => setTweakCopied(null), 2000);
   }
 
   function goToDay(index: number) {
@@ -373,7 +444,8 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
                 <li>先切到要改的那一天。</li>
                 <li>小改（換後備、刪站、貼地圖加站、換酒店）直接在時間軸操作，不必找 AI。</li>
                 <li>要重排整天：解鎖想改的站 → 寫「想怎麼改」→「複製當日」貼到 ChatGPT／Gemini。</li>
-                <li>AI 只會拿到這一天的 JSON 範本，回傳 <strong>patch</strong>（<code>schemaVersion: "1.0.0-patch"</code>），不會整份行程重寫。</li>
+                <li>要改日期、人數或整份大翻：用「複製全程」，AI 會拿到完整行程 JSON。</li>
+                <li>AI 只改當天時回傳 <strong>patch</strong>（<code>schemaVersion: "1.0.0-patch"</code>）。整份大改則回傳完整行程 JSON。</li>
                 <li>把回復貼回「貼上 AI 回復」→「套用」。其他日子與已打勾進度會保留。</li>
               </ol>
               <p>從零重新規劃：用「換行程」回到匯入頁。</p>
@@ -401,7 +473,10 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
             placeholder="例如：下午換成步行可到的景點"
           />
           <button type="button" className="btn btn-primary" onClick={() => void copyTweak()}>
-            {tweakCopied ? "已複製當日" : "複製當日"}
+            {tweakCopied === "day" ? "已複製當日" : "複製當日"}
+          </button>
+          <button type="button" className="text-btn" onClick={() => void copyFull()}>
+            {tweakCopied === "full" ? "已複製全程" : "複製全程"}
           </button>
           <div className="tweak-row tweak-paste-label">
             <label className="import-label" htmlFor="tweak-json">
@@ -454,7 +529,7 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
               className="text-btn"
               onClick={() => {
                 const saved = archiveTrip(doc);
-                setArchivedMsg(`已將「${saved.title}」封存至本機（${saved.savedAt.slice(0, 16).replace("T", " ")}）`);
+                setArchivedMsg(`已存「${saved.title}」。按「換行程」可再打開。`);
                 window.setTimeout(() => setArchivedMsg(null), 4000);
               }}
             >
@@ -494,9 +569,6 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
           </span>
           <strong>{dayHeadline(day)}</strong>
           <small>{dayPlace(day)}</small>
-          <button type="button" className="text-btn day-copy" onClick={() => void copyTweak()}>
-            {tweakCopied ? "已複製當日" : "複製當日"}
-          </button>
         </div>
         <button
           type="button"
@@ -582,8 +654,10 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
           <small>
             {lead.item.start}
             {lead.item.end ? `–${lead.item.end}` : ""}
-            {" · "}
-            {labelOf(TYPE_LABEL, lead.item.type)}
+            {(() => {
+              const place = stopPlaceOf(lead.item, day.stayCity);
+              return place.label ? ` · ${place.label}` : "";
+            })()}
           </small>
         </button>
       ) : (
@@ -600,15 +674,25 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
             const ticketLabel = item.type === "meal" ? "餐費" : "門票";
             const stopNo = stopNumbers[index] ?? 0;
             const focused = focusIndex === index;
+            const editingThis = stopEdit?.dayIndex === dayIndex && stopEdit?.itemIndex === index;
             const isLead = lead?.index === index;
             const finished = done.has(doneKey(day.date, index, item.start));
             const bookUrl = needsBooking(item.transport) ? bookingFallbackUrl(item.transport, day.date, adults) : null;
+            const place = stopPlaceOf(item, day.stayCity);
+            const prevPlace = index > 0 ? stopPlaceOf(day.timeline[index - 1], day.stayCity) : null;
+            const cityBreak = Boolean(place.key && prevPlace && prevPlace.key && prevPlace.key !== place.key);
+            const away = Boolean(place.city && day.stayCity !== "in_transit" && place.city.toLowerCase() !== day.stayCity.toLowerCase());
             return (
             <li
               id={`stop-${day.date}-${index}`}
               key={`${item.start}-${item.title}-${index}`}
               className={`timeline-stop ${item.mustSee ? "must" : ""} ${focused ? "on" : ""} ${isLead ? "is-lead" : ""} ${finished ? "is-done" : ""}`.trim()}
             >
+              {cityBreak ? (
+                <p className="place-break">
+                  <span>{placeBreakLabel(place)}</span>
+                </p>
+              ) : null}
               <div className="stop-compact-row">
                 <button type="button" className="stop-compact" onClick={() => focusItem(index, true)}>
                   {stopNo > 0 ? <span className="stop-num">{stopNo}</span> : <span className="stop-num">·</span>}
@@ -616,9 +700,14 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
                     {item.start}
                     {item.end ? `–${item.end}` : ""}
                   </span>
-                  <span className="stop-name">
-                    {item.displayNameZh || item.title}
-                    {item.mustSee ? <em className="must-tag">必看</em> : null}
+                  <span className="stop-copy">
+                    <span className="stop-name">
+                      {item.displayNameZh || item.title}
+                      {item.mustSee ? <em className="must-tag">必看</em> : null}
+                    </span>
+                    {place.label ? (
+                      <span className={`stop-place${away ? " is-away" : ""}`}>{place.label}</span>
+                    ) : null}
                   </span>
                   <span className="stop-meta">{labelOf(TYPE_LABEL, item.type)}</span>
                 </button>
@@ -632,8 +721,11 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
                     />
                   </label>
                   <LockButton
-                    locked={item.locked}
-                    onToggle={() => onChange(setItemLocked(doc, dayIndex, index, !item.locked))}
+                    locked={item.locked && !editingThis}
+                    onToggle={() => {
+                      if (item.locked && !editingThis) startStopEdit(index);
+                      else saveStopEdit();
+                    }}
                   />
                 </div>
               </div>
@@ -654,6 +746,7 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
                       <strong className={`item-price${lineTotal ? "" : " is-zero"}`}>{lineTotal ? formatMoney(lineTotal, display) : "—"}</strong>
                     </div>
                     {item.displayNameZh && item.title !== item.displayNameZh && <p className="en">{item.title}</p>}
+                    {place.label ? <p className="stop-place-detail">{place.label}</p> : null}
                     <p className="move">
                       {labelOf(MODE_LABEL, item.transport.mode)}
                       {item.transport.line ? ` · ${item.transport.line}` : ""}
@@ -701,19 +794,29 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
                         </a>
                       )}
                       <TransitBox transport={item.transport} title={item.displayNameZh || item.title} />
-                      {(needsBooking(item.transport) || !item.locked) && (
+                      {needsBooking(item.transport) && (
                         <details className="tool-details">
-                          <summary>{item.locked ? "訂票" : "修改"}</summary>
+                          <summary>訂票</summary>
                           <BookingBox transport={item.transport} title={item.displayNameZh || item.title} date={day.date} adults={adults} />
-                          <TimelineEdit
-                            item={item}
-                            onBackup={(backup) => onChange(applyBackup(doc, dayIndex, index, backup, local))}
-                            onDelete={() => onChange(deleteTimelineItem(doc, dayIndex, index))}
-                            onAddPlace={(place) => onChange(insertPlaceAfter(doc, dayIndex, index, place, local))}
-                          />
                         </details>
                       )}
+                      <EditBar
+                        editing={editingThis}
+                        onEdit={() => startStopEdit(index)}
+                        onSave={saveStopEdit}
+                        onCancel={cancelStopEdit}
+                      />
                     </div>
+                    {editingThis ? (
+                      <TimelineEdit
+                        item={item}
+                        ticketUrl={stopTicketUrl}
+                        onTicketUrl={setStopTicketUrl}
+                        onBackup={(backup) => onChange(applyBackup(doc, dayIndex, index, backup, local))}
+                        onDelete={() => onChange(deleteTimelineItem(doc, dayIndex, index))}
+                        onAddPlace={(place) => onChange(insertPlaceAfter(doc, dayIndex, index, place, local))}
+                      />
+                    ) : null}
                   </div>
                 </div>
                 {!skipStopEats(item.type) && (
@@ -750,6 +853,9 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
         <div className="panel-head">
           <h3>今晚</h3>
           <span>{night ? labelOf(NIGHT_LABEL, night.type) : "沒有對應的夜晚"}</span>
+          {night?.type === "hotel" ? (
+            <EditBar editing={hotelEditing} onEdit={startHotelEdit} onSave={saveHotelEdit} onCancel={cancelHotelEdit} />
+          ) : null}
         </div>
         {!night && <p className="empty">這天沒有 nights 資料。</p>}
         {night && night.type !== "hotel" && (
@@ -800,10 +906,10 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
                 </div>
               </div>
             ) : (
-              <p className="empty">尚未選擇今晚酒店。打開下方貼上連結或從參考名單中選擇。</p>
+              <p className="empty">尚未選擇今晚酒店。請按「修改」貼上連結或從參考名單中選擇。</p>
             )}
-            <details className="quiet-details stay-extra">
-              <summary>{pickedHotel ? "更改酒店／貼上連結" : "選擇酒店或貼連結"}</summary>
+            {hotelEditing ? (
+              <div className="stay-edit">
               {rest.reason && <p className="stay-why">{rest.reason}</p>}
               <div className="more-links">
                 <a
@@ -900,7 +1006,8 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
                 })}
                 </ul>
               )}
-            </details>
+              </div>
+            ) : null}
           </div>
         )}
       </section>

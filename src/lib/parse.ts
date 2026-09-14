@@ -233,6 +233,7 @@ function parseExpense(value: unknown): ExpenseItem | null {
     amount: asNumberOrNull(value.amount),
     currency: asString(value.currency, "HKD") || "HKD",
     notes: asString(value.notes),
+    url: asString(value.url) || asString(value.bookingUrl) || asString(value.klookUrl),
     link,
   };
 }

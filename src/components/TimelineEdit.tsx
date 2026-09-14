@@ -1,16 +1,20 @@
 import { useEffect, useState } from "react";
 import { formatMoney } from "../lib/costs";
-import { googleDirExploreUrl, looksLikeMapsLink } from "../lib/links";
+import { googleDirExploreUrl, klookUrl, looksLikeMapsLink } from "../lib/links";
 import { resolvePlaceInput } from "../lib/resolvePlace";
 import type { BackupPlace, TimelineItem } from "../types";
 
 export function TimelineEdit({
   item,
+  ticketUrl,
+  onTicketUrl,
   onBackup,
   onDelete,
   onAddPlace,
 }: {
   item: TimelineItem;
+  ticketUrl: string;
+  onTicketUrl: (url: string) => void;
   onBackup: (backup: BackupPlace) => void;
   onDelete: () => void;
   onAddPlace: (place: { name: string; placeQuery: string; source?: string | null; imageUrl?: string | null }) => void;
@@ -24,7 +28,7 @@ export function TimelineEdit({
     function readClip() {
       if (!navigator.clipboard?.readText) return;
       navigator.clipboard.readText().then((text) => {
-        if (looksLikeMapsLink(text) || text.trim().startsWith("http")) setPaste(text.trim());
+      if (looksLikeMapsLink(text)) setPaste(text.trim());
       }).catch(() => {
         /* 瀏覽器未准讀剪貼簿 */
       });
@@ -60,6 +64,25 @@ export function TimelineEdit({
   return (
     <div className="spot-edit" onClick={(event) => event.stopPropagation()}>
       <div className="spot-tools">
+        <label className="life-field is-main">
+          <span>Klook／門票／其他連結</span>
+          <div className="life-link-row">
+            <input
+              inputMode="url"
+              value={ticketUrl}
+              placeholder="貼上 Klook、官方或其他連結"
+              onChange={(event) => onTicketUrl(event.target.value)}
+            />
+            <a
+              className="life-klook-hint"
+              href={klookUrl(item.displayNameZh || item.title || item.placeQuery)}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Klook
+            </a>
+          </div>
+        </label>
         {item.backups.length > 0 && (
           <div className="backups">
             <p>備用景點</p>

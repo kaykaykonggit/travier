@@ -26,6 +26,30 @@ function patchDay(doc: TripDoc, dayIndex: number, timeline: TimelineItem[]): Tri
   };
 }
 
+export function replaceDayTimeline(doc: TripDoc, dayIndex: number, timeline: TimelineItem[]): TripDoc {
+  return patchDay(doc, dayIndex, timeline);
+}
+
+export function setTicketSource(doc: TripDoc, dayIndex: number, itemIndex: number, url: string): TripDoc {
+  const day = doc.days[dayIndex];
+  if (!day) return doc;
+  return patchDay(
+    doc,
+    dayIndex,
+    day.timeline.map((item, index) =>
+      index === itemIndex
+        ? {
+            ...item,
+            ticket: {
+              ...item.ticket,
+              cost: { ...item.ticket.cost, source: url || null },
+            },
+          }
+        : item,
+    ),
+  );
+}
+
 export function setItemLocked(doc: TripDoc, dayIndex: number, itemIndex: number, locked: boolean): TripDoc {
   const day = doc.days[dayIndex];
   if (!day) return doc;

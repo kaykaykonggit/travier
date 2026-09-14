@@ -148,6 +148,8 @@ export type ExpenseItem = {
   amount: number | null;
   currency: string;
   notes: string;
+  /** Klook / booking / maps / any booking or reference link. */
+  url: string;
   link: ExpenseLink | null;
 };
 

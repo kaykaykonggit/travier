@@ -4,16 +4,31 @@ import { PlannerForm } from "../components/PlannerForm";
 import { parseTripDoc, parseTripJson } from "../lib/parse";
 import { buildPlannerPrompt, loadBrief, saveBrief, type TripBrief } from "../lib/planner";
 import { AI_TEMPLATE, buildSampleEditPrompt } from "../lib/template";
+import { formatDateZh } from "../lib/labels";
 import { deleteSavedTrip, listSavedTrips, loadSavedTrip, type SavedTripMeta } from "../lib/storage";
 import type { TripDoc } from "../types";
 import austriaSample from "../../examples/austria-italy-christmas-2026.json";
 import okinawaSample from "../../examples/okinawa-6d5n-2026.json";
 
-export function ImportPage({ onImport }: { onImport: (doc: TripDoc) => void }) {
+function savedWhen(iso: string): string {
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return "";
+  const hh = String(date.getHours()).padStart(2, "0");
+  const mm = String(date.getMinutes()).padStart(2, "0");
+  return `${date.getMonth() + 1}月${date.getDate()}日 ${hh}:${mm} 存入`;
+}
+
+export function ImportPage({
+  onImport,
+  onOpenSaved,
+}: {
+  onImport: (doc: TripDoc) => void;
+  onOpenSaved: (doc: TripDoc) => void;
+}) {
   const [brief, setBrief] = useState<TripBrief>(() => loadBrief());
   const [text, setText] = useState("");
   const [errors, setErrors] = useState<string[]>([]);
-  const [copied, setCopied] = useState<"plan" | "spec" | "okinawa" | "austria" | null>(null);
+  const [copied, setCopied] = useState<string | null>(null);
   const [saved, setSaved] = useState<SavedTripMeta[]>(() => listSavedTrips());
 
   useEffect(() => {
@@ -30,7 +45,7 @@ export function ImportPage({ onImport }: { onImport: (doc: TripDoc) => void }) {
     onImport(result.doc);
   }
 
-  async function copyText(value: string, kind: "plan" | "spec" | "okinawa" | "austria") {
+  async function copyText(value: string, kind: string) {
     await navigator.clipboard.writeText(value);
     setCopied(kind);
     window.setTimeout(() => setCopied(null), 2000);
@@ -49,12 +64,22 @@ export function ImportPage({ onImport }: { onImport: (doc: TripDoc) => void }) {
   function openSaved(id: string) {
     const doc = loadSavedTrip(id);
     if (!doc) {
-      setErrors(["找不到這份已封存行程。"]);
+      setErrors(["找不到這份行程。"]);
       setSaved(listSavedTrips());
       return;
     }
     setErrors([]);
-    onImport(doc);
+    onOpenSaved(doc);
+  }
+
+  async function copySaved(id: string) {
+    const doc = loadSavedTrip(id, false);
+    if (!doc) {
+      setErrors(["找不到這份行程。"]);
+      setSaved(listSavedTrips());
+      return;
+    }
+    await copyText(buildSampleEditPrompt(doc.trip.title, doc), `saved:${id}`);
   }
 
   function removeSaved(id: string) {
@@ -73,6 +98,49 @@ export function ImportPage({ onImport }: { onImport: (doc: TripDoc) => void }) {
           <li>今晚酒店一目了然</li>
           <li>同一帶的早餐、午餐、下午茶、晚餐提早預訂</li>
         </ul>
+      </header>
+
+      {saved.length > 0 && (
+        <section className="home-block">
+          <div className="home-block-head">
+            <h2>你的行程</h2>
+            <p>存在這個瀏覽器。打開即可繼續改；改完會寫回這張卡片。</p>
+          </div>
+          <div className="sample-list">
+            {saved.map((item) => (
+              <article key={item.id} className="saved-card">
+                <button type="button" className="saved-card-main" onClick={() => openSaved(item.id)}>
+                  <p className="cover-kicker">
+                    {item.dayCount} 天{item.places ? ` · ${item.places}` : ""}
+                  </p>
+                  <h2>{item.title}</h2>
+                  <p>
+                    {formatDateZh(item.startDate)} – {formatDateZh(item.endDate)}
+                  </p>
+                  <small>{savedWhen(item.savedAt)}</small>
+                </button>
+                <div className="saved-card-actions">
+                  <button type="button" className="btn btn-primary" onClick={() => openSaved(item.id)}>
+                    打開
+                  </button>
+                  <button type="button" className="btn btn-secondary" onClick={() => void copySaved(item.id)}>
+                    {copied === `saved:${item.id}` ? "已複製" : "複製給 AI"}
+                  </button>
+                  <button type="button" className="text-btn" onClick={() => removeSaved(item.id)}>
+                    刪除
+                  </button>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <section className="home-block">
+        <div className="home-block-head">
+          <h2>範本</h2>
+          <p>打開預覽，或複製給 AI 改日期、人數、不想去的地方。</p>
+        </div>
         <div className="sample-list">
           <article className="cover-card">
             <img
@@ -131,39 +199,7 @@ export function ImportPage({ onImport }: { onImport: (doc: TripDoc) => void }) {
             </div>
           </article>
         </div>
-        <p className="import-sample">
-          「打開」即可查看行程。「複製給 AI」會連同完整 JSON 一齊複製；貼到 ChatGPT／Gemini 後，下一則訊息輸入你想修改的內容（日期、人數、不想去的地方）。
-        </p>
-      </header>
-
-      {saved.length > 0 && (
-        <section className="saved-trips panel">
-          <div className="panel-head">
-            <h2>本機已封存</h2>
-            <span>尚無後端，暫存於此裝置／瀏覽器中</span>
-          </div>
-          <ul className="saved-list">
-            {saved.map((item) => (
-              <li key={item.id}>
-                <div>
-                  <strong>{item.title}</strong>
-                  <small>
-                    {item.startDate} – {item.endDate} · 封存於 {item.savedAt.slice(0, 16).replace("T", " ")}
-                  </small>
-                </div>
-                <div className="saved-actions">
-                  <button type="button" className="btn btn-primary" onClick={() => openSaved(item.id)}>
-                    打開
-                  </button>
-                  <button type="button" className="text-btn" onClick={() => removeSaved(item.id)}>
-                    刪除
-                  </button>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
+      </section>
 
       <details className="quiet-details plan-later" {...(errors.length > 0 ? { open: true } : {})}>
         <summary>自行規劃／貼上 JSON</summary>
@@ -175,7 +211,7 @@ export function ImportPage({ onImport }: { onImport: (doc: TripDoc) => void }) {
               <li>填好下方行程條件 → 點擊「複製計劃」。</li>
               <li>貼到 AI，請其根據規格僅輸出一個完整行程 JSON（不要使用 Markdown）。</li>
               <li>將 JSON 貼回最底部的「貼上 AI JSON」→「匯入行程」。</li>
-              <li>後續若需改某一天：前往行程頁切到那天，點「複製當日」（AI 只回傳當天 patch）。</li>
+              <li>已有行程要改某一天：行程頁「複製當日」。要整份大改：行程頁「複製全程」。</li>
             </ol>
             <p>手上已有行程文字：使用「只複製規格」，再請 AI 轉為 Travier JSON。</p>
           </InfoTip>

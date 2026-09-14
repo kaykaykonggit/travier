@@ -1,4 +1,5 @@
 import type { ExpenseItem, LifeCategory, Money, TripDoc } from "../types";
+import { cleanSourceUrl } from "./sanitize";
 
 export type { ExpenseItem, LifeCategory } from "../types";
 
@@ -14,14 +15,56 @@ function todayIso(): string {
   return new Date().toISOString().slice(0, 10);
 }
 
-function money(amount: number | null, currency: string, previous?: Money | null): Money {
+function money(amount: number | null, currency: string, previous?: Money | null, source?: string | null): Money {
   return {
     amount,
     currency,
     estimated: false,
-    source: previous?.source ?? null,
+    source: source !== undefined ? source : previous?.source ?? null,
     asOf: todayIso(),
   };
+}
+
+export function normalizeExpenseUrl(raw: string): string {
+  const cleaned = cleanSourceUrl(raw) ?? raw.trim();
+  if (!cleaned) return "";
+  if (/^https?:\/\//i.test(cleaned)) return cleaned;
+  if (/^[\w.-]+\.[a-z]{2,}([/?#].*)?$/i.test(cleaned)) return `https://${cleaned}`;
+  return cleaned;
+}
+
+export function expenseLinkHref(url: string): string {
+  return normalizeExpenseUrl(url) || url.trim();
+}
+
+export function expenseLinkLabel(url: string): string {
+  const href = expenseLinkHref(url).toLowerCase();
+  if (!href) return "開啟連結";
+  if (href.includes("klook.")) return "Klook";
+  if (href.includes("trip.com") || href.includes("ctrip.")) return "Trip.com";
+  if (href.includes("booking.com")) return "Booking.com";
+  if (href.includes("airbnb.")) return "Airbnb";
+  if (href.includes("agoda.")) return "Agoda";
+  if (href.includes("google.") && href.includes("map")) return "地圖";
+  try {
+    return new URL(expenseLinkHref(url)).hostname.replace(/^www\./, "");
+  } catch {
+    return "開啟連結";
+  }
+}
+
+export function expenseUrlPlaceholder(category: LifeCategory): string {
+  if (category === "wan") return "貼上 Klook／門票／其他連結";
+  if (category === "zhu") return "貼上訂房連結（Klook／Trip.com／其他）";
+  if (category === "xing") return "貼上機票／車票連結";
+  if (category === "shi") return "貼上訂位／店舖連結";
+  return "貼上商品／店舖連結";
+}
+
+function inheritedUrl(prevUrl: string | undefined, source: string | null | undefined): string {
+  if (prevUrl?.trim()) return prevUrl;
+  if (source && /^https?:\/\//i.test(source)) return source;
+  return "";
 }
 
 function newId(prefix: string): string {
@@ -35,7 +78,9 @@ export function isFlightStop(item: { type: string; transport: { mode: string } }
 /** Keep linked hotel/flight rows in sync without wiping manual expenses. */
 export function ensureLifeExpenses(doc: TripDoc): TripDoc {
   const existing = doc.expenses ?? [];
-  const manual = existing.filter((item) => !item.link);
+  const manual = existing
+    .filter((item) => !item.link)
+    .map((item) => ({ ...item, url: item.url ?? "" }));
   const next: ExpenseItem[] = [...manual];
 
   for (const night of doc.nights) {
@@ -58,6 +103,7 @@ export function ensureLifeExpenses(doc: TripDoc): TripDoc {
       amount,
       currency: prev?.currency || picked?.cost.currency || doc.trip.currencies.local,
       notes: prev?.notes ?? "一房一晚",
+      url: inheritedUrl(prev?.url, picked?.cost.source),
       link: { kind: "hotel", nightDate: night.date },
     });
   }
@@ -84,6 +130,7 @@ export function ensureLifeExpenses(doc: TripDoc): TripDoc {
         amount,
         currency: prev?.currency || item.ticket.cost.currency || doc.trip.currencies.display,
         notes: prev?.notes ?? "全團機票",
+        url: inheritedUrl(prev?.url, item.ticket.cost.source),
         link: { kind: "flight", dayIndex, itemIndex },
       });
     });
@@ -105,6 +152,7 @@ export function addExpense(doc: TripDoc, category: LifeCategory): TripDoc {
     amount: null,
     currency,
     notes: "",
+    url: "",
     link: null,
   };
   return { ...base, expenses: [item, ...(base.expenses ?? [])] };
@@ -126,7 +174,7 @@ export function updateExpense(doc: TripDoc, id: string, patch: Partial<Omit<Expe
         const targetName = updated.title.trim() || night.chosenName || night.candidates[0]?.name || "已訂酒店";
         const currency = updated.currency || doc.trip.currencies.local;
         const previous = night.candidates.find((hotel) => hotel.name === targetName)?.cost;
-        const nextCost = money(updated.amount, currency, previous);
+        const nextCost = money(updated.amount, currency, previous, normalizeExpenseUrl(updated.url) || null);
         const exists = night.candidates.some((hotel) => hotel.name === targetName);
         const candidates = exists
           ? night.candidates.map((hotel) => (hotel.name === targetName ? { ...hotel, cost: nextCost } : hotel))
@@ -154,6 +202,7 @@ export function updateExpense(doc: TripDoc, id: string, patch: Partial<Omit<Expe
                   updated.amount,
                   updated.currency || item.ticket.cost.currency || doc.trip.currencies.display,
                   item.ticket.cost,
+                  normalizeExpenseUrl(updated.url) || null,
                 ),
               },
             };
