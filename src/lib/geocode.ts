@@ -6,8 +6,24 @@ export type GeocodeQuery = {
 };
 
 const cache = new Map<string, LatLng | null>();
-const CACHE_KEY = "travier.geocode.v3";
+const CACHE_KEY = "travier.geocode.v4";
 const cityCache = new Map<string, LatLng | null>();
+
+/** Latin city names ↔ local spellings so Photon/Nominatim Japanese cities still match. */
+const CITY_ALIASES: Record<string, string[]> = {
+  naha: ["那覇", "那霸", "なは"],
+  nago: ["名護", "なご"],
+  onna: ["恩納", "おんな"],
+  motobu: ["本部", "もとぶ"],
+  nakijin: ["今帰仁", "なきじん"],
+  ginoza: ["宜野座", "ぎのざ"],
+  kin: ["金武", "きん"],
+  uruma: ["うるま"],
+  nanjo: ["南城", "なんじょう", "南城市"],
+  ginowan: ["宜野湾", "ぎのわん"],
+  urasoe: ["浦添", "うらそえ"],
+  okinawa: ["沖縄", "おきなわ"],
+};
 
 type PhotonHit = {
   lat: number;
@@ -117,12 +133,20 @@ function parsePlace(query: string): { name: string; city: string | null; country
 }
 
 function norm(value: string): string {
-  return value.toLowerCase().replace(/[市県府都區区]/g, "").replace(/\s+/g, "");
+  return value
+    .toLowerCase()
+    .replace(/[市県府都區区]/g, "")
+    .replace(/[・･·.\s_-]+/g, "")
+    .replace(/\s+/g, "");
 }
 
 function foldQuery(input: string | GeocodeQuery): GeocodeQuery {
   if (typeof input === "string") return { query: input.trim() };
   return { query: input.query.trim(), aliases: input.aliases?.map((item) => item.trim()).filter(Boolean) };
+}
+
+function looksChineseOnly(value: string): boolean {
+  return /[\u4e00-\u9fff]/.test(value) && !/[\u3040-\u30ff]/.test(value);
 }
 
 function expandAliases(input: GeocodeQuery): string[] {
@@ -134,8 +158,12 @@ function expandAliases(input: GeocodeQuery): string[] {
       const stripped = alias.replace(/(展望台|公園|遺址|遺跡)$/u, "").trim();
       if (stripped.length >= 2 && stripped !== alias) aliases.push(stripped);
     }
+    // Ambiguous JP beach name: bare ホワイトビーチ often hits Hokkaido or city hall.
+    if (/ホワイトビーチ/.test(parsed.name) && !/ホワイト・ビーチ/.test(parsed.name)) {
+      aliases.push("ホワイト・ビーチ地区", "North White Beach", "北ホワイトビーチ");
+    }
   }
-  return aliases;
+  return aliases.filter((alias) => !(parsed.countryCode === "jp" && looksChineseOnly(alias)));
 }
 
 function searchVariants(input: GeocodeQuery): string[] {
@@ -148,13 +176,20 @@ function searchVariants(input: GeocodeQuery): string[] {
     if (parsed.city && parsed.country) full.push(`${name}, ${parsed.city}, ${parsed.country}`);
     else if (parsed.country) full.push(`${name}, ${parsed.country}`);
     else full.push(name);
-    if (name !== parsed.name) short.push(name);
+    // Avoid bare Chinese display names as short JP searches (e.g. 白色海灘).
+    if (name !== parsed.name && !(parsed.countryCode === "jp" && looksChineseOnly(name))) short.push(name);
   }
   const unique = [...new Set([input.query, ...full, ...short].map((item) => item.trim()).filter(Boolean))];
   if (parsed.countryCode !== "jp") return unique.slice(0, 5);
   const cjk = unique.filter((item) => /[\u3040-\u30ff\u4e00-\u9fff]/.test(item));
   const latin = unique.filter((item) => !/[\u3040-\u30ff\u4e00-\u9fff]/.test(item));
   return [...cjk, ...latin].slice(0, 5);
+}
+
+function cityTokens(city: string | null): string[] {
+  if (!city) return [];
+  const key = city.toLowerCase().replace(/\s+/g, "");
+  return [...new Set([norm(city), key, ...(CITY_ALIASES[key] ?? []).map(norm)].filter(Boolean))];
 }
 
 function kmBetween(a: LatLng, lat: number, lng: number): number {
@@ -173,17 +208,22 @@ function scoreHit(hit: PhotonHit, parsed: ReturnType<typeof parsePlace>, bias: L
   const km = bias ? kmBetween(bias, hit.lat, hit.lng) : Infinity;
   if (parsed.city && bias && km > 120) return -500;
 
-  const city = parsed.city ? norm(parsed.city) : "";
-  const cityHit = Boolean(city && [hit.city, hit.state, hit.label].some((part) => part && norm(part).includes(city)));
+  const tokens = cityTokens(parsed.city);
+  const cityBlob = [hit.city, hit.state, hit.label].map((part) => (part ? norm(part) : "")).join("|");
+  const cityHit = tokens.some((token) => token && cityBlob.includes(token));
   const names = [parsed.name, ...aliases].map(norm).filter(Boolean);
   const hitName = norm(hit.name || hit.label);
   const named = nameMatches(hitName, names);
   if (parsed.city && !cityHit && !named && !(bias && km < 120)) return -500;
 
+  // Specific place name must match — otherwise "Country + near city" pins city hall / wrong beach.
+  const specificName = Boolean(parsed.name && norm(parsed.name) && norm(parsed.name) !== (parsed.city ? norm(parsed.city) : ""));
+  if (specificName && !named) return -400;
+
   let score = 0;
-  if (parsed.countryCode && (hit.countryCode === parsed.countryCode || !hit.countryCode)) score += 100;
+  if (parsed.countryCode && (hit.countryCode === parsed.countryCode || !hit.countryCode)) score += 50;
   if (cityHit) score += 40;
-  if (named) score += 30;
+  if (named) score += 60;
   if (bias) {
     if (km < 80) score += 25;
     else if (km < 250) score += 10;
@@ -196,7 +236,11 @@ function pickHit(hits: PhotonHit[], parsed: ReturnType<typeof parsePlace>, bias:
     .map((hit) => ({ hit, score: scoreHit(hit, parsed, bias, aliases) }))
     .filter((row) => row.score >= 80)
     .sort((a, b) => b.score - a.score);
-  return ranked[0]?.hit ?? null;
+  const named = ranked.filter((row) => {
+    const names = [parsed.name, ...aliases].map(norm).filter(Boolean);
+    return nameMatches(norm(row.hit.name || row.hit.label), names);
+  });
+  return (named[0] ?? ranked[0])?.hit ?? null;
 }
 
 async function fetchJson(url: string, init?: RequestInit, ms = 8000): Promise<Response> {

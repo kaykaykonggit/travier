@@ -8,8 +8,11 @@ export const AI_TEMPLATE = `你是行程資料轉換器，不是聊天機器人�
 2. 必須符合 schemaVersion "1.0.0"。
 3. 缺文字時用 ""，缺列表用 []。必填 key 不准省略。
 4. 不准發明經緯度。
-5. placeQuery 格式永遠是：Official English name, City, Country
-   例：Stephansdom, Vienna, Austria
+5. placeQuery 格式永遠是：Official local map name, City, Country（用地圖／OSM 找得到嘅正式名，唔好用翻譯暱稱）。
+   歐洲例：Stephansdom, Vienna, Austria
+   日本例：用日文官方地名＋城市＋Japan。例：ホワイト・ビーチ地区, Uruma, Japan；勝連城跡, Uruma, Japan。
+   唔好寫含糊英文如 White Beach（日本多處重名，地圖會指錯／指去北海道）。
+   displayNameZh 只係畫面顯示，唔會用嚟定位。
 6. displayNameZh、title、routeLogic、tip 可以用繁體中文。
 6a. day.title 必須是當天重頭戲一句話，讓人掃日子軸就不會記錯。例：「聖彼得教堂管風琴與宮廷音樂會」，不准只寫「維也納第二天」。
 6b. highlights[0] 必須是當天最重要的一項（音樂會、美泉宮、最後的晚餐）。mustSee=true 只給當天不能錯過的 1 到 2 項。
