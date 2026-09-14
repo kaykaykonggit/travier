@@ -1,4 +1,5 @@
 import type { Day, Money, Night, TimelineItem, TripDoc } from "../types";
+import { manualExpenseTotal } from "./life";
 
 export type RateTable = Record<string, number>;
 
@@ -265,16 +266,17 @@ export function summarizeCosts(doc: TripDoc, rates: RateTable, heads = 1): CostS
     }
   }
 
-  const total = (hasTransport ? transport : 0) + (hasTickets ? tickets : 0) + (hasHotels ? hotelMin : 0);
+  const extras = manualExpenseTotal(doc, display, rates);
+  const total = (hasTransport ? transport : 0) + (hasTickets ? tickets : 0) + (hasHotels ? hotelMin : 0) + extras.total;
   const size = Math.max(1, heads);
-  const totalDisplay = hasTransport || hasTickets || hasHotels ? total : null;
+  const totalDisplay = hasTransport || hasTickets || hasHotels || extras.known > 0 ? total : null;
   return {
     totalDisplay,
     perPersonDisplay: totalDisplay == null ? null : totalDisplay / size,
     hotelMinDisplay: hasHotels ? hotelMin : null,
     hotelMaxDisplay: hasHotels ? hotelMax : null,
     hotelPerPersonDisplay: hasHotels ? hotelMin / size : null,
-    knownCount: known,
-    unknownCount: unknown,
+    knownCount: known + extras.known,
+    unknownCount: unknown + extras.unknown,
   };
 }

@@ -1,4 +1,4 @@
-import type { BackupPlace, Day, HotelCandidate, KlookItem, Money, Night, Ticket, TimelineItem, Transport, TripDoc } from "../types";
+import type { BackupPlace, Day, ExpenseItem, HotelCandidate, KlookItem, LifeCategory, Money, Night, Ticket, TimelineItem, Transport, TripDoc } from "../types";
 import { cleanSourceUrl, sanitizeTripJson } from "./sanitize";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -204,6 +204,39 @@ export function parseKlook(value: unknown): KlookItem | null {
   };
 }
 
+const LIFE_CATS = new Set(["yi", "shi", "zhu", "xing", "wan"]);
+
+function parseExpense(value: unknown): ExpenseItem | null {
+  if (!isRecord(value)) return null;
+  const id = asString(value.id);
+  const category = asString(value.category);
+  if (!id || !LIFE_CATS.has(category)) return null;
+  let link: ExpenseItem["link"] = null;
+  if (isRecord(value.link)) {
+    if (value.link.kind === "hotel" && typeof value.link.nightDate === "string") {
+      link = { kind: "hotel", nightDate: value.link.nightDate };
+    } else if (
+      value.link.kind === "flight" &&
+      typeof value.link.dayIndex === "number" &&
+      typeof value.link.itemIndex === "number"
+    ) {
+      link = { kind: "flight", dayIndex: value.link.dayIndex, itemIndex: value.link.itemIndex };
+    }
+  }
+  return {
+    id,
+    category: category as LifeCategory,
+    title: asString(value.title),
+    place: asString(value.place),
+    date: asString(value.date),
+    time: typeof value.time === "string" && value.time.trim() ? value.time.trim() : null,
+    amount: asNumberOrNull(value.amount),
+    currency: asString(value.currency, "HKD") || "HKD",
+    notes: asString(value.notes),
+    link,
+  };
+}
+
 export type ParseResult =
   | { ok: true; doc: TripDoc }
   | { ok: false; errors: string[] };
@@ -266,6 +299,9 @@ export function parseTripDoc(data: unknown): ParseResult {
     days,
     nights: Array.isArray(data.nights) ? data.nights.map(parseNight).filter((n): n is Night => n != null) : [],
     klook: Array.isArray(data.klook) ? data.klook.map(parseKlook).filter((k): k is KlookItem => k != null) : [],
+    expenses: Array.isArray(data.expenses)
+      ? data.expenses.map(parseExpense).filter((item): item is ExpenseItem => item != null)
+      : undefined,
   };
 
   return { ok: true, doc };

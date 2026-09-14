@@ -131,10 +131,32 @@ export type Trip = {
   notes: string;
 };
 
+export type LifeCategory = "yi" | "shi" | "zhu" | "xing" | "wan";
+
+export type ExpenseLink =
+  | { kind: "hotel"; nightDate: string }
+  | { kind: "flight"; dayIndex: number; itemIndex: number };
+
+/** User-controlled spend ledger (衣食住行玩), separate from the outing timeline. */
+export type ExpenseItem = {
+  id: string;
+  category: LifeCategory;
+  title: string;
+  place: string;
+  date: string;
+  time: string | null;
+  amount: number | null;
+  currency: string;
+  notes: string;
+  link: ExpenseLink | null;
+};
+
 export type TripDoc = {
   schemaVersion: string;
   trip: Trip;
   days: Day[];
   nights: Night[];
   klook: KlookItem[];
+  /** Optional; older saves may omit this. */
+  expenses?: ExpenseItem[];
 };

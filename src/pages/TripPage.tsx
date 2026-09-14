@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { BookingBox } from "../components/BookingBox";
-import { BudgetBoard } from "../components/BudgetBoard";
+import { LifeLedger } from "../components/LifeLedger";
 import { DayEats } from "../components/DayEats";
 import { DayMap, type MapStop } from "../components/DayMap";
 import { InfoTip } from "../components/InfoTip";
@@ -10,9 +10,8 @@ import { StopEats } from "../components/StopEats";
 import { TimelineEdit } from "../components/TimelineEdit";
 import { TransitBox, TransitStops } from "../components/TransitBox";
 import { TripMap, type TripMapStop } from "../components/TripMap";
-import { listFlightBudgets, listHotelBudgets } from "../lib/budget";
 import { geocodeMany, mergePoints, pointsFromCache, rememberPoint, type GeocodeQuery, type LatLng } from "../lib/geocode";
-import { chosenHotel, collectCurrencies, fetchRates, formatMoney, itemCost, partySize, priceNote, summarizeCosts, summarizeDay, type RateTable } from "../lib/costs";
+import { chosenHotel, collectCurrencies, fetchRates, formatMoney, itemCost, partySize, priceNote, summarizeDay, type RateTable } from "../lib/costs";
 import { dayHeadline, dayPlace, shortPlace } from "../lib/dayLead";
 import { addDays, formatDateZh, labelOf, MODE_LABEL, NIGHT_LABEL, PACE_LABEL, starsText, TYPE_LABEL, weekdayZh } from "../lib/labels";
 import { dayKlookItems, isKlookable, klookHref, matchKlook } from "../lib/klook";
@@ -92,6 +91,7 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
   const [tweakCopied, setTweakCopied] = useState(false);
   const [applyNote, setApplyNote] = useState<string | null>(null);
   const [archivedMsg, setArchivedMsg] = useState<string | null>(null);
+  const [mainTab, setMainTab] = useState<"trip" | "life">("trip");
   const mapPanelRef = useRef<HTMLElement | null>(null);
   const dayBarRef = useRef<HTMLElement | null>(null);
   const jumpRef = useRef<HTMLDivElement | null>(null);
@@ -111,18 +111,6 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
   const display = doc.trip.currencies.display;
   const local = doc.trip.currencies.local;
 
-  const summary = useMemo(() => summarizeCosts(doc, rates, heads), [doc, rates, heads]);
-  const flightBudgets = useMemo(() => listFlightBudgets(doc), [doc]);
-  const hotelBudgets = useMemo(() => listHotelBudgets(doc), [doc]);
-  const budgetMissLabel = useMemo(() => {
-    const flightMiss = flightBudgets.filter((row) => row.cost.amount == null || row.cost.amount <= 0).length;
-    const hotelMiss = hotelBudgets.filter((row) => row.cost.amount == null || row.cost.amount <= 0).length;
-    if (!flightMiss && !hotelMiss) return " · 已齊";
-    const bits: string[] = [];
-    if (flightMiss) bits.push(`機票欠 ${flightMiss}`);
-    if (hotelMiss) bits.push(`酒店欠 ${hotelMiss}`);
-    return bits.length ? ` · ${bits.join("、")}` : "";
-  }, [flightBudgets, hotelBudgets]);
   const dayTotals = useMemo(
     () =>
       doc.days.map((item) => summarizeDay(item, nightForDay(doc, item), local, display, rates, heads)),
@@ -358,7 +346,24 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
   }, [doc]);
 
   return (
-    <div className="trip-page trip-outing">
+    <div className={`trip-page trip-outing${mainTab === "life" ? " tab-life" : " tab-trip"}`}>
+      {mainTab === "life" ? (
+        <>
+          <LifeLedger doc={doc} rates={rates} onChange={onChange} />
+          <nav className="trip-tabs" aria-label="主分頁">
+            <button type="button" onClick={() => setMainTab("trip")}>
+              <span className="tab-icon">日</span>
+              行程
+            </button>
+            <button type="button" className="on" onClick={() => setMainTab("life")}>
+              <span className="tab-icon">用</span>
+              衣食住行玩
+            </button>
+          </nav>
+        </>
+      ) : (
+        <>
+
       <header className="trip-top compact">
         <div className="trip-top-row">
           <p className="brand sm">Travier</p>
@@ -381,34 +386,6 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
         </div>
         <p className="trip-title-line">{doc.trip.title}</p>
         {archivedMsg ? <p className="archive-toast">{archivedMsg}</p> : null}
-        <details className="quiet-details budget-panel" open>
-          <summary>
-            酒店／機票實價 · 人均 {formatMoney(summary.perPersonDisplay, display)}
-            {budgetMissLabel}
-          </summary>
-          <BudgetBoard doc={doc} onChange={onChange} />
-          <div className="cost-bar budget-totals">
-            <div>
-              <span className="cost-label">全團已填</span>
-              <strong>{formatMoney(summary.totalDisplay, display)}</strong>
-            </div>
-            <div>
-              <span className="cost-label">人均（{heads} 人）</span>
-              <strong>{formatMoney(summary.perPersonDisplay, display)}</strong>
-            </div>
-            <div>
-              <span className="cost-label">住宿人均</span>
-              <strong>
-                {summary.hotelPerPersonDisplay == null
-                  ? "未提供"
-                  : formatMoney(summary.hotelPerPersonDisplay, display)}
-              </strong>
-            </div>
-          </div>
-          <p className="cost-note">
-            機票＝全團總額；酒店＝一房一晚再除人數。改完即時入預算。已填 {summary.knownCount} · 未填 {summary.unknownCount}
-          </p>
-        </details>
         <details className="quiet-details trip-plan-tools">
           <summary>
             行程設定 · {doc.days.length} 日 · {labelOf(PACE_LABEL, doc.trip.pace)}
@@ -986,6 +963,18 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
       </section>
       )}
       </details>
+          <nav className="trip-tabs" aria-label="主分頁">
+            <button type="button" className="on" onClick={() => setMainTab("trip")}>
+              <span className="tab-icon">日</span>
+              行程
+            </button>
+            <button type="button" onClick={() => setMainTab("life")}>
+              <span className="tab-icon">用</span>
+              衣食住行玩
+            </button>
+          </nav>
+        </>
+      )}
     </div>
   );
 }
