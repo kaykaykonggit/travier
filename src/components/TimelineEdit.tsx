@@ -48,7 +48,7 @@ export function TimelineEdit({
     const resolved = await resolvePlaceInput(paste, cityHint);
     setBusy(false);
     if (!resolved) {
-      setError("讀不到地名。請改貼完整 Google 地圖網址，或直接打英文景點名。");
+      setError("讀取不到地名。請改貼完整的 Google 地圖網址，或直接輸入英文景點名稱。");
       return;
     }
     onAddPlace(resolved);
@@ -62,7 +62,7 @@ export function TimelineEdit({
       <div className="spot-tools">
         {item.backups.length > 0 && (
           <div className="backups">
-            <p>後備景點</p>
+            <p>備用景點</p>
             {item.backups.map((backup) => (
               <button type="button" key={backup.placeQuery} onClick={() => onBackup(backup)}>
                 <strong>{backup.displayNameZh || backup.title}</strong>
@@ -76,13 +76,13 @@ export function TimelineEdit({
         )}
         <div className="spot-actions">
           <a href={googleDirExploreUrl(item.placeQuery || item.title)} target="_blank" rel="noreferrer" className="add-spot">
-            ＋ 在 Google 地圖找下一站
+            ＋ 在 Google 地圖尋找下一站
           </a>
           <button type="button" className="text-btn danger" onClick={onDelete}>
             刪除此點
           </button>
         </div>
-        <p className="empty">在地圖選好地點後複製連結，回到這裡會試着自動貼上並讀出地名。</p>
+        <p className="empty">在地圖選好地點後複製連結，回到這裡將會嘗試自動貼上並讀取地名。</p>
         <form
           className="hotel-pick"
           onSubmit={(event) => {
@@ -93,14 +93,14 @@ export function TimelineEdit({
           <input
             value={paste}
             onChange={(event) => setPaste(event.target.value)}
-            placeholder="貼 Google 地圖連結或下一站英文名"
+            placeholder="貼上 Google 地圖連結或下一站英文名稱"
           />
           <button type="submit" className="text-btn" disabled={!paste.trim() || busy}>
             {busy ? "正在讀取地名…" : "加入行程"}
           </button>
         </form>
         {error ? <p className="import-errors">{error}</p> : null}
-        <p className="empty">加入後會補步行路線。票價與車資未搜，可之後再讓 AI 補。</p>
+        <p className="empty">加入後會補上步行路線。票價與車資尚未搜尋，可之後再讓 AI 補上。</p>
       </div>
     </div>
   );

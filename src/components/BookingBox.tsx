@@ -15,7 +15,7 @@ export function BookingBox({
   const url = bookingFallbackUrl(transport, date, adults);
   return (
     <div className="booking-box" onClick={(event) => event.stopPropagation()}>
-      <strong>要預約</strong>
+      <strong>需要預約</strong>
       <p>{bookingWhy(transport)} {bookingHow(transport)}</p>
       {url && (
         <a href={url} target="_blank" rel="noreferrer">

@@ -81,7 +81,7 @@ export function parseTripPatch(data: unknown): { ok: true; patch: TripPatch } | 
   const nights = Array.isArray(data.nights) ? data.nights.map(parseNight).filter((n): n is Night => n != null) : [];
   const klook = Array.isArray(data.klook) ? data.klook.map(parseKlook).filter((k): k is KlookItem => k != null) : [];
   if (!days.length && !nights.length && !klook.length) {
-    return { ok: false, errors: ["patch 至少要有 days、nights 或 klook 其中一項。"] };
+    return { ok: false, errors: ["patch 至少須包含 days、nights 或 klook 其中一項。"] };
   }
   return {
     ok: true,
@@ -108,7 +108,7 @@ export function applyTripPatch(doc: TripDoc, patch: TripPatch): ParseResult {
     });
     for (const next of patch.days) {
       if (byDate.has(next.date)) continue;
-      errors.push(`patch 有未知日期 days：${next.date}（唔會新增日，只可改現有日）`);
+      errors.push(`patch 包含未知日期的 days：${next.date}（不會新增天數，僅可修改現有天數）`);
     }
   }
 
@@ -121,7 +121,7 @@ export function applyTripPatch(doc: TripDoc, patch: TripPatch): ParseResult {
     for (const next of patch.nights) {
       if (existing.has(next.date)) continue;
       if (!doc.days.some((day) => day.date === next.date)) {
-        errors.push(`patch 有未知日期 nights：${next.date}`);
+        errors.push(`patch 包含未知日期的 nights：${next.date}`);
         continue;
       }
       nights = [...nights, mergeNight(undefined, next)];
@@ -131,7 +131,7 @@ export function applyTripPatch(doc: TripDoc, patch: TripPatch): ParseResult {
   if (patch.klook.length) {
     const dates = new Set(patch.klook.map((item) => item.date));
     const unknown = [...dates].filter((date) => !doc.days.some((day) => day.date === date));
-    for (const date of unknown) errors.push(`patch 有未知日期 klook：${date}`);
+    for (const date of unknown) errors.push(`patch 包含未知日期的 klook：${date}`);
     klook = [...doc.klook.filter((item) => !dates.has(item.date)), ...patch.klook.filter((item) => !unknown.includes(item.date))];
   }
 
@@ -157,7 +157,7 @@ export function applyTripUpdate(current: TripDoc, raw: string): ApplyUpdateResul
     return {
       ok: false,
       errors: [
-        "這不是合法 JSON。常見原因是 AI 在 true/false 後面多打了字，或 source 寫成 Markdown 連結。",
+        "這不是合法的 JSON。常見原因是 AI 在 true/false 後面多打了字，或將 source 寫成 Markdown 連結。",
         detail,
       ].filter(Boolean),
     };

@@ -102,6 +102,7 @@ export function TripTabs({
 }) {
   return (
     <nav className="trip-tabs" aria-label="主分頁">
+      <p className="tabs-brand">Travier</p>
       <button type="button" className={tab === "trip" ? "on" : ""} onClick={() => onChange("trip")}>
         <span className="tab-icon" aria-hidden="true">
           <LifeGlyph id="day" />

@@ -36,7 +36,7 @@ export function PlannerForm({
 
   return (
     <div className="plan-table">
-      <Field wide label="想去的地方" hint="城市或地區，建議按順路順序，用逗號分開">
+      <Field wide label="想去的地方" hint="城市或地區，建議按順路順序，以逗號分隔">
         <input
           value={brief.destinations}
           onChange={(event) => set("destinations", event.target.value)}
@@ -52,14 +52,14 @@ export function PlannerForm({
       <Field label="常住／出發城市">
         <input value={brief.origin} onChange={(event) => set("origin", event.target.value)} placeholder="香港" />
       </Field>
-      <Field label="出發點" hint="機場或車站，可空">
+      <Field label="出發點" hint="機場或車站，可留空">
         <input
           value={brief.departurePoint}
           onChange={(event) => set("departurePoint", event.target.value)}
           placeholder="香港國際機場 HKG"
         />
       </Field>
-      <Field label="回程點" hint="空則當與出發點相同">
+      <Field label="回程點" hint="留空則視為與出發點相同">
         <input
           value={brief.returnPoint}
           onChange={(event) => set("returnPoint", event.target.value)}
@@ -126,7 +126,7 @@ export function PlannerForm({
           <option value="boutique">精品設計</option>
         </select>
       </Field>
-      <Field label="餐飲人均／日" hint="可空，AI 會估">
+      <Field label="餐飲人均／日" hint="可留空，由 AI 估算">
         <input
           inputMode="decimal"
           value={brief.mealBudget}
@@ -134,7 +134,7 @@ export function PlannerForm({
           placeholder="40"
         />
       </Field>
-      <Field label="最早出門" hint="可空">
+      <Field label="最早出門" hint="可留空">
         <input type="time" value={brief.earliestStart} onChange={(event) => set("earliestStart", event.target.value)} />
       </Field>
       <Field wide label="必去／必看">

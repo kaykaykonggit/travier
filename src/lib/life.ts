@@ -2,12 +2,12 @@ import type { ExpenseItem, LifeCategory, Money, TripDoc } from "../types";
 
 export type { ExpenseItem, LifeCategory } from "../types";
 
-export const LIFE_CATEGORIES: { id: LifeCategory; label: string; hint: string }[] = [
-  { id: "yi", label: "衣", hint: "購物／裝備" },
-  { id: "shi", label: "食", hint: "餐飲" },
-  { id: "zhu", label: "住", hint: "酒店／民宿" },
-  { id: "xing", label: "行", hint: "機票／交通" },
-  { id: "wan", label: "玩", hint: "門票／體驗" },
+export const LIFE_CATEGORIES: { id: LifeCategory; label: string; hint: string; addLabel: string }[] = [
+  { id: "yi", label: "衣", hint: "購物／裝備", addLabel: "新增一筆衣物" },
+  { id: "shi", label: "食", hint: "餐飲", addLabel: "新增一筆餐飲" },
+  { id: "zhu", label: "住", hint: "酒店／民宿", addLabel: "新增一筆住宿" },
+  { id: "xing", label: "行", hint: "機票／交通", addLabel: "新增一筆交通" },
+  { id: "wan", label: "玩", hint: "門票／體驗", addLabel: "新增一筆遊玩" },
 ];
 
 function todayIso(): string {

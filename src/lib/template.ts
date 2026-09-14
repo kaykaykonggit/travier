@@ -178,3 +178,19 @@ night candidate:
 nights.type: hotel | night_train | flight | none
 
 現在根據上方條件或用戶貼上的行程，先搜尋價格，再只輸出 JSON。`;
+
+export function buildSampleEditPrompt(title: string, data: unknown): string {
+  return `這是一份 Travier 行程範本「${title}」的完整 JSON（schemaVersion 1.0.0）。
+請等我下一則訊息寫「想怎麼改」之後，按那些要求改這份行程。
+
+硬性規則：
+1. 只輸出一個完整 JSON 物件。不要 Markdown、不要 \`\`\`、不要前言、不要解釋。
+2. 必須符合 schemaVersion "1.0.0"，保留 trip、days、nights、klook 等結構。
+3. 可改日期、人數、景點、酒店、節奏；不要由零另寫一份無關行程。
+4. placeQuery 用當地正式地圖名（Official local map name, City, Country）。不要發明經緯度。
+5. 改過的門票／交通／酒店請用網頁搜尋該日現價。
+
+--- 範本 JSON ---
+${JSON.stringify(data, null, 2)}
+`;
+}

@@ -307,7 +307,7 @@ export function walkMeters(fromLat: number, fromLng: number, toLat: number, toLn
 }
 
 export function formatWalk(meters: number): string {
-  if (meters < 80) return "就喺隔離";
+  if (meters < 80) return "就在隔壁";
   if (meters < 1000) return `步行約 ${meters} 米`;
   return `步行約 ${(meters / 1000).toFixed(1)} 公里`;
 }

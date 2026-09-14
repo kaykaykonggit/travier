@@ -99,8 +99,8 @@ export function StopEats({
   );
   const meta = [
     slot.label,
-    slot.plannedTitle ? "行程已有呢餐" : null,
-    !loading && shown.length ? `${shown.length} 間` : loading ? "搜緊…" : null,
+    slot.plannedTitle ? "行程已有此餐" : null,
+    !loading && shown.length ? `${shown.length} 間` : loading ? "搜尋中…" : null,
   ]
     .filter(Boolean)
     .join(" · ");
@@ -111,8 +111,8 @@ export function StopEats({
         附近美食與訂位
         {meta ? <span className="stop-eats-meta">{meta}</span> : null}
       </summary>
-      {loading && <p className="empty">緊搵呢個景點附近…</p>}
-      {!loading && shown.length === 0 && <p className="empty">未列到店名。用下面喺呢個景點旁邊先訂。</p>}
+      {loading && <p className="empty">正在尋找此景點附近…</p>}
+      {!loading && shown.length === 0 && <p className="empty">未列出店名。請使用下方連結在此景點旁先行預訂。</p>}
       {visible.length > 0 && (
         <ul className="stop-eats-list">
           {visible.map((place) => {
@@ -158,7 +158,7 @@ export function StopEats({
                       )
                     }
                   >
-                    {isPinned(pins, place.id) ? "唔想食" : "想食"}
+                    {isPinned(pins, place.id) ? "不想吃" : "想吃"}
                   </button>
                 </div>
               </li>
@@ -168,12 +168,12 @@ export function StopEats({
       )}
       {shown.length > 3 && (
         <button type="button" className="text-btn stop-eats-more" onClick={() => setExpanded((value) => !value)}>
-          {expanded ? "收起" : `再睇 ${shown.length - 3} 間`}
+          {expanded ? "收起" : `查看另外 ${shown.length - 3} 間`}
         </button>
       )}
       <div className="more-links">
         <a href={nearMaps} target="_blank" rel="noreferrer">
-          Google 呢度
+          Google 這裡
         </a>
         {areaLinks.map((link) => (
           <a key={link.label} href={link.href} target="_blank" rel="noreferrer">

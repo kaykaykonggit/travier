@@ -30,6 +30,7 @@ type PhotonHit = {
   lng: number;
   label: string;
   countryCode: string;
+  country: string;
   city: string;
   state: string;
   name: string;
@@ -294,6 +295,7 @@ async function photonSearch(q: string, bias?: LatLng | null): Promise<PhotonHit[
         lng: coords[0],
         label: props.name ?? q,
         countryCode: (props.countrycode ?? "").toLowerCase(),
+        country: props.country || "",
         city: props.city || props.locality || "",
         state: props.state || "",
         name: props.name || "",
@@ -319,7 +321,7 @@ async function nominatimSearch(q: string, countryCode: string | null): Promise<P
     lon?: string;
     name?: string;
     display_name?: string;
-    address?: { country_code?: string; city?: string; town?: string; village?: string; county?: string; state?: string };
+    address?: { country?: string; country_code?: string; city?: string; town?: string; village?: string; county?: string; state?: string };
   }[];
   return json.flatMap((item) => {
     const lat = Number(item.lat);
@@ -331,6 +333,7 @@ async function nominatimSearch(q: string, countryCode: string | null): Promise<P
         lng,
         label: item.name || item.display_name || q,
         countryCode: (item.address?.country_code ?? "").toLowerCase(),
+        country: item.address?.country || "",
         city: item.address?.city || item.address?.town || item.address?.village || item.address?.county || "",
         state: item.address?.state || "",
         name: item.name || "",
@@ -449,4 +452,53 @@ export async function geocodeMany(
   }
   if (workers > 0) await Promise.all(Array.from({ length: workers }, () => worker()));
   return result;
+}
+
+export type PlaceSuggestion = {
+  key: string;
+  name: string;
+  place: string;
+  detail: string;
+  lat: number;
+  lng: number;
+};
+
+function suggestionFromHit(hit: PhotonHit): PlaceSuggestion | null {
+  const name = hit.name || hit.label;
+  if (!name) return null;
+  const detail = [...new Set([hit.city, hit.state, hit.country].filter(Boolean))].join(" · ");
+  const place = [...new Set([name, hit.city, hit.country].filter(Boolean))].join(", ");
+  return {
+    key: `${hit.lat.toFixed(5)},${hit.lng.toFixed(5)}`,
+    name,
+    place,
+    detail,
+    lat: hit.lat,
+    lng: hit.lng,
+  };
+}
+
+/** Typeahead for place fields. Uses Photon (same map stack); Nominatim as fallback. */
+export async function searchPlaceSuggestions(q: string, bias?: LatLng | null): Promise<PlaceSuggestion[]> {
+  const text = q.trim();
+  if (text.length < 2) return [];
+  let hits: PhotonHit[] = [];
+  try {
+    hits = await photonSearch(text, bias);
+  } catch {
+    try {
+      hits = await nominatimSearch(text, null);
+    } catch {
+      return [];
+    }
+  }
+  const seen = new Set<string>();
+  const out: PlaceSuggestion[] = [];
+  for (const hit of hits) {
+    const row = suggestionFromHit(hit);
+    if (!row || seen.has(row.key)) continue;
+    seen.add(row.key);
+    out.push(row);
+  }
+  return out.slice(0, 8);
 }

@@ -78,7 +78,7 @@ export function areaBookLinks(
 ): BookLink[] {
   if (region === "japan") {
     return [
-      { label: "Tabelog 呢帶", href: tabelogSearchUrl(query, lat, lng) },
+      { label: "Tabelog 這一帶", href: tabelogSearchUrl(query, lat, lng) },
       { label: "ホットペッパー", href: hotPepperSearchUrl(query) },
       { label: "ぐるなび", href: gurunaviSearchUrl(query) },
       { label: "一休", href: ikyuSearchUrl(query) },

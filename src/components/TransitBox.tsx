@@ -20,7 +20,7 @@ export function TransitBox({ transport, title }: { transport: Transport; title: 
     <details className="tool-details transit-tool" onClick={(event) => event.stopPropagation()}>
       <summary>路線</summary>
       <a href={googleDirUrl(transport)} target="_blank" rel="noreferrer">
-        在 Google 地圖打開
+        在 Google 地圖中打開
       </a>
       <iframe title={`${title} 交通`} src={googleDirEmbedUrl(transport)} loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
     </details>

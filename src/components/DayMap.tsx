@@ -22,8 +22,17 @@ function offsetPoint(point: LatLng, nth: number): LatLng {
 function ResizeMap() {
   const map = useMap();
   useEffect(() => {
-    const id = window.setTimeout(() => map.invalidateSize(), 60);
-    return () => window.clearTimeout(id);
+    const container = map.getContainer();
+    const invalidate = () => map.invalidateSize();
+    const id = window.setTimeout(invalidate, 80);
+    const observer = new ResizeObserver(invalidate);
+    observer.observe(container.parentElement ?? container);
+    window.addEventListener("resize", invalidate);
+    return () => {
+      window.clearTimeout(id);
+      observer.disconnect();
+      window.removeEventListener("resize", invalidate);
+    };
   }, [map]);
   return null;
 }
@@ -105,8 +114,8 @@ export function DayMap({
 
   return (
     <div className="map-shell">
-      {loading && <div className="map-status">正在把地點放到地圖上…</div>}
-      {!loading && resolved.length === 0 && <div className="map-status">暫時找不到座標，可用下方連結在 Google Maps 開啟。</div>}
+      {loading && <div className="map-status">正在將地點放上地圖…</div>}
+      {!loading && resolved.length === 0 && <div className="map-status">暫時找不到座標，可利用下方連結在 Google Maps 中開啟。</div>}
       <MapContainer
         center={[center.lat, center.lng]}
         zoom={13}

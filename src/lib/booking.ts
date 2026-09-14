@@ -24,16 +24,16 @@ export function bookingFallbackUrl(transport: Transport, date?: string | null, a
 
 export function bookingHow(transport: Transport): string {
   if (transport.booking?.how) return transport.booking.how;
-  if (transport.mode === "night_train") return "上官方網站選日期與車次，先訂臥鋪或 Couchette，再下載電子票。旺季和跨年要提早訂，現場常沒位。";
-  if (transport.mode === "flight") return "用 Google Flights 或航空公司搜該日出發、該航線、該人數的經濟艙，確認行李額後付款出票。不准憑印象填舊價錢。";
-  if (transport.mode === "train") return "在鐵路官網或 Trainline 選該日車次與座位，長途高鐵多數要先預約。";
-  return "先到官方或票務網站選日期，確認有位再付款。";
+  if (transport.mode === "night_train") return "前往官方網站選擇日期與車次，先預訂臥鋪或 Couchette，再下載電子票。旺季和跨年需提早預訂，現場通常沒位子。";
+  if (transport.mode === "flight") return "利用 Google Flights 或航空公司搜尋該日出發、該航線、該人數的經濟艙，確認行李額度後付款出票。不得憑印象填寫舊價錢。";
+  if (transport.mode === "train") return "在鐵路官網或 Trainline 選擇該日車次與座位，長途高鐵多數需要先預約。";
+  return "先到官方或票務網站選擇日期，確認有位後再付款。";
 }
 
 export function bookingWhy(transport: Transport): string {
   if (transport.booking?.why) return transport.booking.why;
-  if (transport.mode === "night_train") return "夜火車臥鋪有限，不預約可能只剩無座或整班賣完，跨年更易滿。";
-  if (transport.mode === "flight") return "機票數量和價錢隨時變，不定位就不能登機。";
-  if (transport.mode === "train") return "這類長途或指定車次通常要對號入座，未預約可能無法上車。";
-  return "這段交通可能額滿或需要對號票。";
+  if (transport.mode === "night_train") return "夜火車臥鋪有限，不預約可能只剩無座票或整班售罄，跨年更容易客滿。";
+  if (transport.mode === "flight") return "機票數量和價錢隨時變動，不預訂就無法登機。";
+  if (transport.mode === "train") return "這類長途或指定車次通常需要對號入座，未預約可能無法上車。";
+  return "這段交通可能已客滿或需要對號票。";
 }

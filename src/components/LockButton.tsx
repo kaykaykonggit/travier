@@ -7,8 +7,8 @@ export function LockButton({ locked, onToggle }: { locked: boolean; onToggle: ()
         event.stopPropagation();
         onToggle();
       }}
-      aria-label={locked ? "解鎖此點" : "鎖住此點"}
-      title={locked ? "解鎖後可改後備或加入下一站" : "再按一次鎖住"}
+      aria-label={locked ? "解除鎖定此點" : "鎖定此點"}
+      title={locked ? "解鎖後可修改備用方案或加入下一站" : "再次按以鎖定"}
     >
       {locked ? (
         <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden>

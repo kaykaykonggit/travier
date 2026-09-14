@@ -250,7 +250,7 @@ export function parseTripJson(raw: string): ParseResult {
     return {
       ok: false,
       errors: [
-        "這不是合法 JSON。常見原因是 AI 在 true/false 後面多打了字，或 source 寫成 Markdown 連結。",
+        "這不是合法的 JSON。常見原因是 AI 在 true/false 後面多打了字，或將 source 寫成 Markdown 連結。",
         detail,
       ].filter(Boolean),
     };

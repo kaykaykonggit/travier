@@ -107,8 +107,8 @@ export function DayEats({
   return (
     <section className="panel eats-panel" id="day-eats">
       <div className="panel-head">
-        <h3>按時段訂午餐晚餐</h3>
-        <span>景點下面已有附近食；呢度係按早餐／午餐／晚餐一齊睇</span>
+        <h3>按時段預訂午餐晚餐</h3>
+        <span>景點下方已有附近餐廳；此處可將早餐／午餐／晚餐一同檢視</span>
       </div>
       <div className="eats-slots" role="tablist" aria-label="用餐時段">
         {slots.map((item) => (
@@ -127,11 +127,11 @@ export function DayEats({
       </div>
       <p className="eats-near">
         {slot.timeLabel} · {slot.nearName} 一帶
-        {slot.plannedTitle ? ` · 行程已寫「${slot.plannedTitle}」` : ""}
+        {slot.plannedTitle ? ` · 行程已記載「${slot.plannedTitle}」` : ""}
       </p>
-      {loading && <p className="empty">緊搵呢帶食店…</p>}
+      {loading && <p className="empty">正在尋找這一帶的餐廳…</p>}
       {!loading && shown.length === 0 && (
-        <p className="empty">未列到店名。用下面連結喺地圖同訂位網先睇，熱門餐廳愈早訂愈穩。</p>
+        <p className="empty">未列出店名。請使用下方連結在地圖和訂位網站先查看，熱門餐廳越早預訂越穩妥。</p>
       )}
       {shown.length > 0 && (
         <ul className="eats-list">
@@ -152,7 +152,7 @@ export function DayEats({
       )}
       <div className="more-links">
         <a href={nearMaps} target="_blank" rel="noreferrer">
-          Google 地圖呢帶
+          Google 地圖這一帶
         </a>
         {areaLinks.map((link) => (
           <a key={link.label} href={link.href} target="_blank" rel="noreferrer">
@@ -213,7 +213,7 @@ function EatRow({
           </a>
         ))}
         <button type="button" className="text-btn" onClick={onPin}>
-          {pinned ? "唔想食" : "想食"}
+          {pinned ? "不想吃" : "想吃"}
         </button>
       </div>
     </li>

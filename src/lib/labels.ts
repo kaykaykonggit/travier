@@ -16,7 +16,7 @@ export const MODE_LABEL: Record<string, string> = {
   train: "火車",
   bus: "巴士",
   tram: "電車",
-  taxi: "的士",
+  taxi: "計程車",
   flight: "飛機",
   cable_car: "纜車",
   private_car: "專車",
@@ -32,7 +32,7 @@ export const NIGHT_LABEL: Record<string, string> = {
 };
 
 export const PACE_LABEL: Record<string, string> = {
-  relaxed: "悠閒",
+  relaxed: "休閒",
   normal: "一般",
   packed: "緊湊",
 };
@@ -50,6 +50,21 @@ export function weekdayZh(isoDate: string): string {
 export function formatDateZh(isoDate: string): string {
   const [, m, d] = isoDate.split("-");
   return `${Number(m)}月${Number(d)}日`;
+}
+
+/** Calendar day of month, e.g. 19 from 2026-12-19. */
+export function dateDayNumber(isoDate: string): number {
+  const day = Number(isoDate.split("-")[2]);
+  return Number.isFinite(day) && day > 0 ? day : 0;
+}
+
+export function tripDayNumber(isoDate: string, startDate: string): number {
+  const [y, m, d] = isoDate.split("-").map(Number);
+  const [sy, sm, sd] = startDate.split("-").map(Number);
+  const a = Date.UTC(y, m - 1, d);
+  const b = Date.UTC(sy, sm - 1, sd);
+  if (!Number.isFinite(a) || !Number.isFinite(b)) return 0;
+  return Math.round((a - b) / 86_400_000) + 1;
 }
 
 export function addDays(isoDate: string, days: number): string {

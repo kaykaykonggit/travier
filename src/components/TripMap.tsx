@@ -29,8 +29,17 @@ function numberedIcon(n: number, color: string, focused: boolean) {
 function ResizeMap() {
   const map = useMap();
   useEffect(() => {
-    const id = window.setTimeout(() => map.invalidateSize(), 60);
-    return () => window.clearTimeout(id);
+    const container = map.getContainer();
+    const invalidate = () => map.invalidateSize();
+    const id = window.setTimeout(invalidate, 80);
+    const observer = new ResizeObserver(invalidate);
+    observer.observe(container.parentElement ?? container);
+    window.addEventListener("resize", invalidate);
+    return () => {
+      window.clearTimeout(id);
+      observer.disconnect();
+      window.removeEventListener("resize", invalidate);
+    };
   }, [map]);
   return null;
 }
@@ -124,18 +133,18 @@ export function TripMap({
     onSelect(index, 0);
   }
 
-  if (!stops.length) return <div className="map-empty">這行程還沒有可顯示的地點。</div>;
+  if (!stops.length) return <div className="map-empty">這個行程還沒有可顯示的地點。</div>;
 
   return (
     <div className="map-shell">
-      {loading && <div className="map-status">正在把全程地點放到地圖上…</div>}
+      {loading && <div className="map-status">正在將全程地點放上地圖…</div>}
       {showLegend && (
         <ol className="map-legend">
           {Array.from({ length: dayCount }, (_, index) => (
             <li key={index}>
               <button type="button" className={index === activeDay ? "on" : ""} onClick={() => goToDay(index)}>
                 <i style={{ background: dayColor(index) }} />
-                第 {index + 1} 日
+                第 {index + 1} 天
               </button>
             </li>
           ))}

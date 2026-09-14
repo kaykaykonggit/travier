@@ -107,7 +107,7 @@ export function insertPlaceAfter(
     lat: null,
     lng: null,
     mustSee: false,
-    notes: "從 Google 地圖加入，交通與票價未搜。",
+    notes: "從 Google 地圖加入，交通與票價尚未搜尋。",
     locked: false,
     imageUrl: place.imageUrl ?? null,
     transport: walkTransport(from, place.placeQuery, currency),
@@ -148,7 +148,7 @@ export function repairTimelinePlace(
       placeQuery: place.placeQuery,
       imageUrl: place.imageUrl ?? item.imageUrl,
       transport: { ...item.transport, toPlaceQuery: place.placeQuery },
-      notes: item.notes.includes("未搜") ? item.notes : item.notes,
+      notes: item.notes,
     };
   });
   return patchDay(doc, dayIndex, timeline);

@@ -68,7 +68,7 @@ export function listHotelBudgets(doc: TripDoc): HotelBudgetRow[] {
         key: night.date,
         nightIndex,
         date: night.date,
-        label: hotel?.name || night.area || night.city || "未選酒店",
+        label: hotel?.name || night.area || night.city || "未選擇酒店",
         city: night.city,
         cost: hotel?.cost ?? { amount: null, currency: doc.trip.currencies.local, estimated: true, source: null, asOf: null },
         chosen: Boolean(picked),

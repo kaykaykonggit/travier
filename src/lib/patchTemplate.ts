@@ -13,7 +13,7 @@ schemaVersion 必須係 "1.0.0-patch"。
 }
 
 硬性規則：
-1. days[].date / nights[].date 必須係現有行程入面已有嘅日子。
+1. days[].date / nights[].date 必須係現有行程入面已有嘅日子；若 prompt 指定 focusDate，只准交嗰一日。
 2. 交 day 就要交齊嗰日完整 timeline（含 transport、ticket、backups）。
 3. locked=true、已去過、已選酒店（chosenName）要原樣保留。
 4. 只改用戶點名、或者已解鎖、或者明顯錯誤嘅時段。

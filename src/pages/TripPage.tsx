@@ -126,7 +126,8 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
   const numbersByDay = useMemo(() => tripStopNumbers(doc.days), [doc.days]);
   const stopNumbers = numbersByDay[dayIndex] ?? [];
   const focusQuery = focusIndex != null ? day.timeline[focusIndex]?.placeQuery.trim() || null : null;
-  const focusNumber = focusIndex != null ? stopNumbers[focusIndex] ?? null : null;
+  const focusNumber =
+    focusIndex != null ? stopNumbers[focusIndex] ?? null : lead ? stopNumbers[lead.index] ?? null : null;
 
   const stops: MapStop[] = useMemo(() => {
     const list: MapStop[] = [];
@@ -262,13 +263,9 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
   }, [dayIndex]);
 
   useEffect(() => {
-    if (lead) {
-      setFocusIndex(lead.index);
-      setFocusToken(Date.now());
-    } else {
-      setFocusIndex(null);
-    }
-  }, [day.date, lead?.index]);
+    setFocusIndex(null);
+    setFocusToken(0);
+  }, [day.date]);
 
   useEffect(() => {
     let cancelled = false;
@@ -358,67 +355,42 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
 
       <header className="trip-top compact">
         <div className="trip-top-row">
-          <p className="brand sm">Travier</p>
-          <div className="trip-top-actions">
-            <button
-              type="button"
-              className="text-btn"
-              onClick={() => {
-                const saved = archiveTrip(doc);
-                setArchivedMsg(`已封存「${saved.title}」到本機（${saved.savedAt.slice(0, 16).replace("T", " ")}）`);
-                window.setTimeout(() => setArchivedMsg(null), 4000);
-              }}
-            >
-              封存呢份行程
-            </button>
-            <button type="button" className="text-btn" onClick={onReset}>
-              換一份行程
-            </button>
+          <div className="trip-id">
+            <p className="trip-title-line">{doc.trip.title}</p>
+            <p className="trip-meta-desk">
+              {formatDateZh(doc.trip.startDate)} – {formatDateZh(doc.trip.endDate)} · {doc.days.length} 天 · {adults} 大人
+              {children ? ` ${children} 小孩` : ""} · {labelOf(PACE_LABEL, doc.trip.pace)}
+            </p>
           </div>
-        </div>
-        <p className="trip-title-line">{doc.trip.title}</p>
-        <p className="trip-meta-desk">
-          {formatDateZh(doc.trip.startDate)} – {formatDateZh(doc.trip.endDate)} · {doc.days.length} 日 · {adults} 大人
-          {children ? ` ${children} 小孩` : ""} · {labelOf(PACE_LABEL, doc.trip.pace)}
-        </p>
-        {archivedMsg ? <p className="archive-toast">{archivedMsg}</p> : null}
-        <details className="quiet-details trip-plan-tools">
-          <summary>
-            行程設定 · {doc.days.length} 日 · {labelOf(PACE_LABEL, doc.trip.pace)}
-          </summary>
-          <p className="trip-meta trip-meta-inline">
-            {formatDateZh(doc.trip.startDate)} – {formatDateZh(doc.trip.endDate)} · {adults} 大人
-            {doc.trip.travelers.children ? ` ${doc.trip.travelers.children} 小孩` : ""}
-          </p>
-          {doc.trip.notes && <p className="trip-notes">{doc.trip.notes}</p>}
-        <details className="quiet-details trip-cost-details tweak-panel">
-          <summary>微改行程</summary>
+          <div className="trip-top-actions">
+            <details className="quiet-details trip-plan-tools tweak-panel">
+              <summary>改當日</summary>
+              <div className="trip-plan-pop">
           <div className="tweak-row">
             <span className="import-label">用法</span>
-            <InfoTip title="點樣微改行程">
+            <InfoTip title="如何改當天行程">
               <ol>
-                <li>時間軸解鎖想改嘅站；鎖住嘅站 AI 唔准郁。</li>
-                <li>喺「想點改」寫清楚日子同動作，例如「第三日下午唔好去美泉宮」。</li>
-                <li>撳「複製微改」→ 貼去會搜網嘅 AI（ChatGPT／Gemini 等）。</li>
-                <li>AI 只應交細份 <strong>patch</strong>（<code>schemaVersion: "1.0.0-patch"</code>），唔使成份行程，手機生成會快好多。</li>
-                <li>將 AI 回覆貼返「貼上 AI 回覆」→「套用」。已打勾去過嘅進度會留住。</li>
+                <li>先切到要改的那一天。</li>
+                <li>小改（換後備、刪站、貼地圖加站、換酒店）直接在時間軸操作，不必找 AI。</li>
+                <li>要重排整天：解鎖想改的站 → 寫「想怎麼改」→「複製當日」貼到 ChatGPT／Gemini。</li>
+                <li>AI 只會拿到這一天的 JSON 範本，回傳 <strong>patch</strong>（<code>schemaVersion: "1.0.0-patch"</code>），不會整份行程重寫。</li>
+                <li>把回復貼回「貼上 AI 回復」→「套用」。其他日子與已打勾進度會保留。</li>
               </ol>
-              <p>換後備、刪站、貼地圖加站、改酒店：直接喺當日時間軸改就得，唔使開 AI。</p>
-              <p>由零重新規劃：去「換一份行程」匯入頁。</p>
+              <p>從零重新規劃：用「換行程」回到匯入頁。</p>
             </InfoTip>
           </div>
           <div className="tweak-row">
             <label className="import-label" htmlFor="tweak-wish">
-              想點改
+              想怎麼改這一天
             </label>
-            <InfoTip title="想點改點寫">
-              <p>呢格會寫入複製俾 AI 嘅 prompt。愈具體愈穩。</p>
+            <InfoTip title="想怎麼改該怎麼寫">
+              <p>只針對你正在查看的那一天。越具體越穩定。</p>
               <ul>
-                <li>改景點：「12月20日下午唔好去美泉宮，改近市區步行景點」</li>
-                <li>改酒店：「維也納嗰晚改近火車站」</li>
-                <li>改節奏：「第三日唔好咁密，刪一個下午景點」</li>
+                <li>改景點：「下午不要去美泉宮，改去市區附近的步行景點」</li>
+                <li>改酒店：「今晚改到火車站附近」</li>
+                <li>改節奏：「不要太緊湊，刪掉一個下午景點」</li>
               </ul>
-              <p>留空＝只准 AI 改明顯錯誤（重複景點、離譜交通／時間），其他幾乎原樣。</p>
+              <p>留空＝僅允許 AI 修改這一天明顯錯誤的交通／時間，其餘幾乎保持原樣。</p>
             </InfoTip>
           </div>
           <textarea
@@ -426,25 +398,24 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
             className="json-update"
             value={tweakWish}
             onChange={(event) => setTweakWish(event.target.value)}
-            placeholder="例如：呢日下午換近啲嘅景點"
+            placeholder="例如：下午換成步行可到的景點"
           />
           <button type="button" className="btn btn-primary" onClick={() => void copyTweak()}>
-            {tweakCopied ? "已複製" : "複製微改"}
+            {tweakCopied ? "已複製當日" : "複製當日"}
           </button>
           <div className="tweak-row tweak-paste-label">
             <label className="import-label" htmlFor="tweak-json">
-              貼上 AI 回覆
+              貼上 AI 回復
             </label>
-            <InfoTip title="貼上邊種 JSON">
+            <InfoTip title="貼上哪種 JSON">
               <p>
-                <strong>首選 patch</strong>：AI 應回類似
+                <strong>首選 patch</strong>：AI 應回傳
                 <code>{`{"schemaVersion":"1.0.0-patch","days":[...],"nights":[],"klook":[]}`}</code>
-                。只放有改過嘅日子；App 會合併，鎖住站同已選酒店會保留。
+                ，而且 <code>days</code> 只放你改的那一天。App 會合併，已鎖定站點與已選酒店會保留。
               </p>
               <p>
-                <strong>完整行程</strong>：若 AI 交返有 <code>trip</code>＋全日 <code>days</code> 嘅大 JSON，會整份取代而家行程（打勾進度仍保留）。
+                <strong>完整行程</strong>：若 AI 回傳包含整週 <code>days</code> 的大型 JSON，會整份取代（打勾進度仍會保留）。請要求它只改當天。
               </p>
-              <p>貼完撳「套用」。若報錯，多數係 JSON 唔完整或 AI 加咗 Markdown 說明——叫佢淨係輸出 JSON 再試。</p>
             </InfoTip>
           </div>
           <textarea
@@ -466,10 +437,38 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
           <button type="button" className="btn btn-primary" disabled={!jsonDraft.trim()} onClick={applyJson}>
             套用
           </button>
-        </details>
-        </details>
+              </div>
+            </details>
+            <details className="quiet-details trip-plan-tools">
+              <summary>設定</summary>
+              <div className="trip-plan-pop">
+          <p className="trip-meta trip-meta-inline">
+            {formatDateZh(doc.trip.startDate)} – {formatDateZh(doc.trip.endDate)} · {adults} 大人
+            {doc.trip.travelers.children ? ` ${doc.trip.travelers.children} 小孩` : ""}
+          </p>
+          {doc.trip.notes && <p className="trip-notes">{doc.trip.notes}</p>}
+              </div>
+            </details>
+            <button
+              type="button"
+              className="text-btn"
+              onClick={() => {
+                const saved = archiveTrip(doc);
+                setArchivedMsg(`已將「${saved.title}」封存至本機（${saved.savedAt.slice(0, 16).replace("T", " ")}）`);
+                window.setTimeout(() => setArchivedMsg(null), 4000);
+              }}
+            >
+              封存
+            </button>
+            <button type="button" className="text-btn" onClick={onReset}>
+              換行程
+            </button>
+          </div>
+        </div>
+        {archivedMsg ? <p className="archive-toast">{archivedMsg}</p> : null}
       </header>
 
+      <div className="trip-workspace">
       <div className="trip-chrome">
       <nav
         ref={dayBarRef}
@@ -491,10 +490,13 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
         </button>
         <div className="day-now">
           <span className="kicker">
-            第 {dayIndex + 1} / {doc.days.length} 日 · {formatDateZh(day.date)} 週{weekdayZh(day.date)}
+            第 {dayIndex + 1} / {doc.days.length} 天 · {formatDateZh(day.date)} 週{weekdayZh(day.date)}
           </span>
           <strong>{dayHeadline(day)}</strong>
           <small>{dayPlace(day)}</small>
+          <button type="button" className="text-btn day-copy" onClick={() => void copyTweak()}>
+            {tweakCopied ? "已複製當日" : "複製當日"}
+          </button>
         </div>
         <button
           type="button"
@@ -523,28 +525,8 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
           </button>
         ))}
       </div>
-
-      {lead ? (
-        <button type="button" className="next-dock" onClick={() => focusItem(lead.index, true)}>
-          <span className="kicker">{lead.kind === "now" ? "現在" : "下一站"}</span>
-          <strong>{lead.item.displayNameZh || lead.item.title}</strong>
-          <small>
-            {lead.item.start}
-            {lead.item.end ? `–${lead.item.end}` : ""}
-            {" · "}
-            {labelOf(TYPE_LABEL, lead.item.type)}
-          </small>
-        </button>
-      ) : (
-        <p className="next-dock next-dock-done">
-          <span className="kicker">這天</span>
-          <strong>已走完</strong>
-          <small>{pickedHotel ? `今晚 ${pickedHotel.name}` : "可以休息了"}</small>
-        </p>
-      )}
       </div>
 
-      <div className="trip-workspace">
       <section className="day-stage" ref={mapPanelRef} id="day-map">
         <div className="panel-head">
           <div className="map-switch">
@@ -592,6 +574,25 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
         </p>
       </section>
 
+      <div className="trip-rail">
+      {lead ? (
+        <button type="button" className="next-dock" onClick={() => focusItem(lead.index, true)}>
+          <span className="kicker">{lead.kind === "now" ? "現在" : "下一站"}</span>
+          <strong>{lead.item.displayNameZh || lead.item.title}</strong>
+          <small>
+            {lead.item.start}
+            {lead.item.end ? `–${lead.item.end}` : ""}
+            {" · "}
+            {labelOf(TYPE_LABEL, lead.item.type)}
+          </small>
+        </button>
+      ) : (
+        <p className="next-dock next-dock-done">
+          <span className="kicker">這一天</span>
+          <strong>已走完</strong>
+          <small>{pickedHotel ? `今晚 ${pickedHotel.name}` : "可以休息了"}</small>
+        </p>
+      )}
       <section className="panel timeline-panel" ref={timelineRef}>
         <ol className="timeline">
           {day.timeline.map((item, index) => {
@@ -599,13 +600,14 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
             const ticketLabel = item.type === "meal" ? "餐費" : "門票";
             const stopNo = stopNumbers[index] ?? 0;
             const focused = focusIndex === index;
+            const isLead = lead?.index === index;
             const finished = done.has(doneKey(day.date, index, item.start));
             const bookUrl = needsBooking(item.transport) ? bookingFallbackUrl(item.transport, day.date, adults) : null;
             return (
             <li
               id={`stop-${day.date}-${index}`}
               key={`${item.start}-${item.title}-${index}`}
-              className={`timeline-stop ${item.mustSee ? "must" : ""} ${focused ? "on" : ""} ${finished ? "is-done" : ""}`.trim()}
+              className={`timeline-stop ${item.mustSee ? "must" : ""} ${focused ? "on" : ""} ${isLead ? "is-lead" : ""} ${finished ? "is-done" : ""}`.trim()}
             >
               <div className="stop-compact-row">
                 <button type="button" className="stop-compact" onClick={() => focusItem(index, true)}>
@@ -655,7 +657,7 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
                     <p className="move">
                       {labelOf(MODE_LABEL, item.transport.mode)}
                       {item.transport.line ? ` · ${item.transport.line}` : ""}
-                      {item.transport.durationMin != null ? ` · ${item.transport.durationMin} 分` : ""}
+                      {item.transport.durationMin != null ? ` · ${item.transport.durationMin} 分鐘` : ""}
                       {item.transport.cost.amount != null
                         ? ` · ${formatMoney(item.transport.cost.amount, item.transport.cost.currency)}`
                         : ""}
@@ -731,59 +733,28 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
           })}
         </ol>
       </section>
-      </div>
 
-      <details className="quiet-details trip-extras">
-        <summary>更多 · 訂餐 · 酒店 · 門票</summary>
-      {(day.routeLogic || day.tip || day.highlights.length > 0) && (
-        <details className="quiet-details day-notes">
-          <summary>當天怎麼走 · 叮嚀</summary>
-          {day.routeLogic && <p className="route">{day.routeLogic}</p>}
-          {day.tip && <p className="tip">叮嚀：{day.tip}</p>}
-          <p className="day-spend-break">
-            交通／機票 {formatMoney(todayCost.transportDisplay, display)}（全團）
-            {" · "}
-            餐飲人均 {formatMoney(todayCost.mealPerPersonDisplay, display)}
-            {" · "}
-            門票 {formatMoney(todayCost.ticketDisplay, display)}
-            {todayCost.hotelPerPersonDisplay != null
-              ? ` · 住宿人均 ${formatMoney(todayCost.hotelPerPersonDisplay, display)}${chosenHotel(night) ? `（${chosenHotel(night)?.name}）` : "（未選則用最平參考）"}`
-              : " · 當晚無酒店"}
-          </p>
-          {day.highlights.length > 0 && (
-            <ul className="highlights">
-              {day.highlights.map((item) => (
-                <li key={`${item.name}-${item.placeQuery}`}>
-                  <span className="stars">{starsText(item.stars)}</span>
-                  <span>{item.name}</span>
-                  {item.bonus && <em>加料</em>}
-                </li>
-              ))}
-            </ul>
-          )}
-        </details>
-      )}
-      <details className="quiet-details day-eats-later">
-        <summary>按時段訂午餐晚餐</summary>
-        <DayEats
-          day={day}
-          points={points}
-          hotelQuery={pickedHotel?.placeQuery || night?.nearPlaceQuery}
-          city={day.stayCity}
-          tripKey={tripEatKey(doc.trip.title, doc.trip.startDate, doc.trip.endDate)}
-          covers={heads}
-        />
-      </details>
-
-      <section className="panel">
+      <div className="trip-extras">
+      <details className="quiet-details extras-stay">
+        <summary>
+          今晚
+          {pickedHotel
+            ? ` · ${pickedHotel.name}`
+            : night?.type === "hotel"
+              ? " · 未選酒店"
+              : night
+                ? ` · ${labelOf(NIGHT_LABEL, night.type)}`
+                : ""}
+        </summary>
+      <section className="panel extras-stay-panel">
         <div className="panel-head">
           <h3>今晚</h3>
-          <span>{night ? labelOf(NIGHT_LABEL, night.type) : "沒有對應夜晚"}</span>
+          <span>{night ? labelOf(NIGHT_LABEL, night.type) : "沒有對應的夜晚"}</span>
         </div>
         {!night && <p className="empty">這天沒有 nights 資料。</p>}
         {night && night.type !== "hotel" && (
           <div className="stay-card">
-            <h4>{night.type === "night_train" ? "夜火車上過夜" : night.type === "flight" ? "飛行中過夜" : "今晚不住房"}</h4>
+            <h4>{night.type === "night_train" ? "在夜火車上過夜" : night.type === "flight" ? "在飛行中過夜" : "今晚不住宿"}</h4>
             {(night.transport || day.timeline.find((item) => item.transport.mode === "night_train" || item.transport.mode === "flight")) && (
               <details className="quiet-details stay-tools">
                 <summary>訂票說明</summary>
@@ -824,15 +795,15 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
                     target="_blank"
                     rel="noreferrer"
                   >
-                    查這間房價
+                    查詢這間房價
                   </a>
                 </div>
               </div>
             ) : (
-              <p className="empty">還沒選今晚酒店。打開下面貼連結或從參考名單選。</p>
+              <p className="empty">尚未選擇今晚酒店。打開下方貼上連結或從參考名單中選擇。</p>
             )}
             <details className="quiet-details stay-extra">
-              <summary>{pickedHotel ? "改酒店／貼連結" : "選酒店或貼連結"}</summary>
+              <summary>{pickedHotel ? "更改酒店／貼上連結" : "選擇酒店或貼連結"}</summary>
               {rest.reason && <p className="stay-why">{rest.reason}</p>}
               <div className="more-links">
                 <a
@@ -847,14 +818,14 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
                   target="_blank"
                   rel="noreferrer"
                 >
-                  Google 查這帶
+                  Google 查詢這一帶
                 </a>
                 <a
                   href={tripHotelUrl(placeLabel(rest.query), night.city, night.date, addDays(night.date, 1), adults, children)}
                   target="_blank"
                   rel="noreferrer"
                 >
-                  Trip.com 查這帶
+                  Trip.com 查詢這一帶
                 </a>
               </div>
               <form
@@ -867,7 +838,7 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
                 <input
                   value={customHotel.name}
                   onChange={(event) => setCustomHotel({ ...customHotel, name: event.target.value })}
-                  placeholder="貼 Google／Trip.com 連結，或打酒店英文名"
+                  placeholder="貼上 Google／Trip.com 連結，或輸入酒店英文名稱"
                 />
                 <input
                   value={customHotel.amount}
@@ -891,7 +862,7 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
                   <li key={hotel.name} className={selected ? "hotel-card chosen" : "hotel-card"}>
                     <div className="hotel-card-top">
                       <div>
-                        <h4>{hotel.name}{selected ? " · 已選" : ""}</h4>
+                        <h4>{hotel.name}{selected ? " · 已選擇" : ""}</h4>
                         <p className="hotel-meta">
                           {hotel.stars ? `${hotel.stars} 星 · ` : ""}
                           一房 {formatMoney(hotel.cost.amount, hotel.cost.currency)}
@@ -906,10 +877,10 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
                         target="_blank"
                         rel="noreferrer"
                       >
-                        查這間 {formatDateZh(night.date)} 房價
+                        查詢這間房價
                       </a>
                       <button type="button" className="text-btn" onClick={() => selectHotel(night.date, hotel)}>
-                        {selected ? "已計入總額" : "用這間計總額"}
+                        {selected ? "已計入總額" : "使用這間計算總額"}
                       </button>
                     </div>
                     <div className="more-links">
@@ -933,12 +904,54 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
           </div>
         )}
       </section>
+      </details>
 
+      <details className="quiet-details extras-eats">
+        <summary>訂餐</summary>
+        <DayEats
+          day={day}
+          points={points}
+          hotelQuery={pickedHotel?.placeQuery || night?.nearPlaceQuery}
+          city={day.stayCity}
+          tripKey={tripEatKey(doc.trip.title, doc.trip.startDate, doc.trip.endDate)}
+          covers={heads}
+        />
+      </details>
+
+      <details className="quiet-details extras-more">
+        <summary>叮嚀{klooks.length ? ` · 門票 ${klooks.length}` : ""}</summary>
+      {(day.routeLogic || day.tip || day.highlights.length > 0) && (
+        <div className="day-notes">
+          {day.routeLogic && <p className="route">{day.routeLogic}</p>}
+          {day.tip && <p className="tip">叮嚀：{day.tip}</p>}
+          <p className="day-spend-break">
+            交通／機票 {formatMoney(todayCost.transportDisplay, display)}（全團）
+            {" · "}
+            餐飲人均 {formatMoney(todayCost.mealPerPersonDisplay, display)}
+            {" · "}
+            門票 {formatMoney(todayCost.ticketDisplay, display)}
+            {todayCost.hotelPerPersonDisplay != null
+              ? ` · 住宿人均 ${formatMoney(todayCost.hotelPerPersonDisplay, display)}${chosenHotel(night) ? `（${chosenHotel(night)?.name}）` : "（未選擇則使用最低價參考）"}`
+              : " · 當晚無住宿"}
+          </p>
+          {day.highlights.length > 0 && (
+            <ul className="highlights">
+              {day.highlights.map((item) => (
+                <li key={`${item.name}-${item.placeQuery}`}>
+                  <span className="stars">{starsText(item.stars)}</span>
+                  <span>{item.name}</span>
+                  {item.bonus && <em>加料</em>}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
       {klooks.length > 0 && (
       <section className="panel">
         <div className="panel-head">
           <h3>Klook</h3>
-          <span>{klooks.length} 項</span>
+          <span>{klooks.length} 項目</span>
         </div>
           <ul className="klooks">
             {klooks.map((item) => (
@@ -958,7 +971,13 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
           </ul>
       </section>
       )}
+      {!day.routeLogic && !day.tip && day.highlights.length === 0 && klooks.length === 0 ? (
+        <p className="empty">這天沒有額外叮嚀。</p>
+      ) : null}
       </details>
+      </div>
+      </div>
+      </div>
           <TripTabs tab="trip" onChange={setMainTab} />
         </>
       )}
