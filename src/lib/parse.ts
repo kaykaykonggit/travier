@@ -13,6 +13,14 @@ function asNumberOrNull(value: unknown): number | null {
   return typeof value === "number" && Number.isFinite(value) ? value : null;
 }
 
+function asCoord(value: unknown, kind: "lat" | "lng"): number | null {
+  const n = asNumberOrNull(value);
+  if (n == null) return null;
+  if (kind === "lat" && (n < -90 || n > 90)) return null;
+  if (kind === "lng" && (n < -180 || n > 180)) return null;
+  return n;
+}
+
 function normalizeStayCity(value: string): string {
   const key = value.trim().toLowerCase().replace(/\s+/g, "_");
   if (["in_transit", "night_train", "flight", "none", "n/a"].includes(key)) return "in_transit";
@@ -108,6 +116,8 @@ function timelineItem(value: unknown): TimelineItem | null {
     title: asString(value.title),
     placeQuery: asString(value.placeQuery),
     displayNameZh: asString(value.displayNameZh),
+    lat: asCoord(value.lat, "lat"),
+    lng: asCoord(value.lng, "lng"),
     mustSee: asBool(value.mustSee),
     notes: asString(value.notes),
     locked: value.locked !== false,

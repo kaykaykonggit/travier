@@ -9,7 +9,7 @@ import { StopEats } from "../components/StopEats";
 import { TimelineEdit } from "../components/TimelineEdit";
 import { TransitBox, TransitStops } from "../components/TransitBox";
 import { TripMap, type TripMapStop } from "../components/TripMap";
-import { geocodeMany, mergePoints, pointsFromCache, type GeocodeQuery } from "../lib/geocode";
+import { geocodeMany, mergePoints, pointsFromCache, rememberPoint, type GeocodeQuery, type LatLng } from "../lib/geocode";
 import { chosenHotel, collectCurrencies, fetchRates, formatMoney, itemCost, partySize, priceNote, summarizeCosts, summarizeDay, type RateTable } from "../lib/costs";
 import { dayHeadline, dayPlace, shortPlace } from "../lib/dayLead";
 import { addDays, formatDateZh, labelOf, MODE_LABEL, NIGHT_LABEL, PACE_LABEL, starsText, TYPE_LABEL, weekdayZh } from "../lib/labels";
@@ -59,10 +59,25 @@ function allPlaceQueries(doc: TripDoc): string[] {
   return allPlaceInputs(doc).map((item) => item.query);
 }
 
+function explicitPoints(doc: TripDoc): Map<string, LatLng> {
+  const result = new Map<string, LatLng>();
+  for (const entry of doc.days) {
+    for (const item of entry.timeline) {
+      const query = item.placeQuery.trim();
+      if (!query || item.lat == null || item.lng == null) continue;
+      const point = { lat: item.lat, lng: item.lng, label: item.displayNameZh || item.title || query };
+      result.set(query, point);
+      rememberPoint(query, point);
+    }
+  }
+  return result;
+}
+
+
 export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (doc: TripDoc) => void; onReset: () => void }) {
   const [dayIndex, setDayIndex] = useState(() => initialDayIndex(doc.days));
   const [rates, setRates] = useState<RateTable>({ [doc.trip.currencies.display]: 1 });
-  const [points, setPoints] = useState(() => pointsFromCache(allPlaceQueries(doc)));
+  const [points, setPoints] = useState(() => mergePoints(pointsFromCache(allPlaceQueries(doc)), explicitPoints(doc)));
   const [mapLoading, setMapLoading] = useState(false);
   const [focusIndex, setFocusIndex] = useState<number | null>(null);
   const [focusToken, setFocusToken] = useState(0);
@@ -262,7 +277,8 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
         ...(night?.candidates.map((hotel) => hotel.placeQuery.trim()) ?? []),
       ].filter(Boolean),
     );
-    const cached = pointsFromCache(allInputs.map((item) => item.query));
+    const pinned = explicitPoints(doc);
+    const cached = mergePoints(pointsFromCache(allInputs.map((item) => item.query)), pinned);
     setPoints(cached);
     const dayMissing = allInputs.filter((item) => dayKeys.has(item.query) && !cached.has(item.query));
     setMapLoading(dayMissing.length > 0);

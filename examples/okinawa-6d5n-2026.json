@@ -964,7 +964,7 @@
         {
           "endNextDay": false,
           "mustSee": false,
-          "notes": "",
+          "notes": "勝連半島東岸觀景點（North White Beach）；已鎖定地圖座標，避免誤指軍事區／市中心。",
           "locked": true,
           "imageUrl": null,
           "backups": [],
@@ -982,12 +982,12 @@
           "end": "14:28",
           "type": "attraction",
           "title": "White Beach",
-          "placeQuery": "ホワイト・ビーチ地区, Uruma, Japan",
+          "placeQuery": "North White Beach, Uruma, Japan",
           "displayNameZh": "白色海灘",
           "transport": {
             "mode": "car",
             "fromPlaceQuery": "伊計ビーチ, Uruma, Japan",
-            "toPlaceQuery": "ホワイト・ビーチ地区, Uruma, Japan",
+            "toPlaceQuery": "North White Beach, Uruma, Japan",
             "fromStop": null,
             "toStop": null,
             "line": "租車自駕",
@@ -1006,7 +1006,9 @@
               "how": "",
               "why": ""
             }
-          }
+          },
+          "lat": 26.3006421,
+          "lng": 127.9218884
         },
         {
           "endNextDay": false,
@@ -1033,7 +1035,7 @@
           "displayNameZh": "勝連城遺址",
           "transport": {
             "mode": "car",
-            "fromPlaceQuery": "ホワイト・ビーチ地区, Uruma, Japan",
+            "fromPlaceQuery": "North White Beach, Uruma, Japan",
             "toPlaceQuery": "勝連城跡, Uruma, Japan",
             "fromStop": null,
             "toStop": null,

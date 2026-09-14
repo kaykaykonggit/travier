@@ -6,7 +6,7 @@ export type GeocodeQuery = {
 };
 
 const cache = new Map<string, LatLng | null>();
-const CACHE_KEY = "travier.geocode.v4";
+const CACHE_KEY = "travier.geocode.v5";
 const cityCache = new Map<string, LatLng | null>();
 
 /** Latin city names ↔ local spellings so Photon/Nominatim Japanese cities still match. */
@@ -108,6 +108,16 @@ export function pointsFromCache(queries: string[]): Map<string, LatLng> {
   }
   return result;
 }
+
+/** Force-pin a query (verified lat/lng). Overwrites any cached geocode miss. */
+export function rememberPoint(query: string, point: LatLng): void {
+  ensureCache();
+  const key = query.trim();
+  if (!key) return;
+  cache.set(key, point);
+  persistCache();
+}
+
 
 function countryCodeOf(value: string | null): string | null {
   if (!value) return null;

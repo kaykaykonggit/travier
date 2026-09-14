@@ -57,6 +57,9 @@ export type TimelineItem = {
   title: string;
   placeQuery: string;
   displayNameZh: string;
+  /** Optional verified map pin; when set, skips fuzzy geocoding for this stop. */
+  lat: number | null;
+  lng: number | null;
   mustSee: boolean;
   notes: string;
   locked: boolean;

@@ -104,6 +104,8 @@ export function insertPlaceAfter(
     title: place.name,
     placeQuery: place.placeQuery,
     displayNameZh: place.name,
+    lat: null,
+    lng: null,
     mustSee: false,
     notes: "從 Google 地圖加入，交通與票價未搜。",
     locked: false,
