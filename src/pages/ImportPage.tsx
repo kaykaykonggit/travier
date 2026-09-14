@@ -61,8 +61,9 @@ export function ImportPage({ onImport }: { onImport: (doc: TripDoc) => void }) {
       </header>
 
       <details className="quiet-details plan-later" {...(errors.length > 0 ? { open: true } : {})}>
-        <summary className="with-info">
-          <span>自己規劃／貼 JSON</span>
+        <summary>自己規劃／貼 JSON</summary>
+        <div className="tweak-row">
+          <span className="import-label">用法</span>
           <InfoTip title="點樣自己規劃">
             <ol>
               <li>網站自己唔會叫 AI。</li>
@@ -72,7 +73,7 @@ export function ImportPage({ onImport }: { onImport: (doc: TripDoc) => void }) {
             </ol>
             <p>若你手上已有行程文字，可「只複製規格」再叫 AI 轉 JSON。</p>
           </InfoTip>
-        </summary>
+        </div>
         <section className="plan-section first">
           <div className="tweak-row">
             <p className="import-label">行程條件</p>

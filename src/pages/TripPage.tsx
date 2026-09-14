@@ -354,8 +354,9 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
           {doc.trip.notes && <p className="trip-notes">{doc.trip.notes}</p>}
         </details>
         <details className="quiet-details trip-cost-details tweak-panel">
-          <summary className="with-info">
-            <span>微改行程</span>
+          <summary>微改行程</summary>
+          <div className="tweak-row">
+            <span className="import-label">用法</span>
             <InfoTip title="點樣微改行程">
               <ol>
                 <li>解鎖想改嘅站（鎖住嘅會保留）。</li>
@@ -366,7 +367,7 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
               <p>亦都接受完整行程 JSON（會整份取代）。由零規劃請去「換一份行程」匯入頁。</p>
               <p>小改（換後備、刪站、貼地圖加站、改酒店）可直接喺當日時間軸改，唔使開 AI。</p>
             </InfoTip>
-          </summary>
+          </div>
           <div className="tweak-row">
             <label className="import-label" htmlFor="tweak-wish">
               想點改
