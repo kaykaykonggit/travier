@@ -17,8 +17,8 @@ export function TransitStops({ transport }: { transport: Transport }) {
 export function TransitBox({ transport, title }: { transport: Transport; title: string }) {
   if (!canEmbedDirections(transport)) return null;
   return (
-    <details className="quiet-details" onClick={(event) => event.stopPropagation()}>
-      <summary>交通路線</summary>
+    <details className="tool-details transit-tool" onClick={(event) => event.stopPropagation()}>
+      <summary>路線</summary>
       <a href={googleDirUrl(transport)} target="_blank" rel="noreferrer">
         在 Google 地圖打開
       </a>
