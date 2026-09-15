@@ -1972,6 +1972,7 @@ summary.with-info::after { margin-left: auto; }
 }
 .trip-outing .timeline-panel.surface-card {
   margin-top: 0;
+  margin-bottom: 8px;
 }
 .trip-outing .day-stage {
   position: relative;
@@ -2005,7 +2006,11 @@ summary.with-info::after { margin-left: auto; }
   flex: 1;
   padding: 8px 12px 20px;
   border-bottom: 0;
-  background: transparent;
+  background: var(--paper);
+}
+.trip-outing .timeline-panel.surface-card {
+  margin-top: 0;
+  margin-bottom: 8px;
 }
 .trip-outing .timeline-panel .panel-head { display: none; }
 .trip-outing .stop-compact {
@@ -2651,7 +2656,7 @@ body.is-reordering-stops * {
   }
   .trip-outing .timeline-panel {
     border: 0;
-    background: transparent;
+    background: var(--paper);
   }
   .trip-rail {
     grid-area: rail;
