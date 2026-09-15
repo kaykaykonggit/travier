@@ -1,6 +1,9 @@
 import { useEffect, useRef } from "react";
 
-/** Hold-and-drag handle: floating ghost card + drop target while reordering. */
+/**
+ * Hold-and-drag grip for timeline reorder.
+ * Uses non-passive touch listeners so phone browsers don't steal the gesture for scrolling.
+ */
 export function StopDragHandle({
   index,
   disabled,
@@ -34,7 +37,7 @@ export function StopDragHandle({
       const dist = Math.abs(clientY - mid);
       const value = Number(row.dataset.stopIndex);
       if (!Number.isFinite(value)) continue;
-      if (clientY >= rect.top - 12 && clientY <= rect.bottom + 12) {
+      if (clientY >= rect.top - 16 && clientY <= rect.bottom + 16) {
         if (!best || dist < best.dist) best = { index: value, dist };
       }
     }
@@ -60,7 +63,7 @@ export function StopDragHandle({
   function moveGhost(x: number, y: number) {
     const ghost = ghostRef.current;
     if (!ghost) return;
-    ghost.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+    ghost.style.transform = `translate3d(${Math.round(x)}px, ${Math.round(y)}px, 0)`;
   }
 
   function destroyGhost() {
@@ -77,63 +80,46 @@ export function StopDragHandle({
     destroyGhost();
   }
 
-  useEffect(() => {
-    function onMove(event: PointerEvent) {
-      if (!draggingRef.current) return;
-      if (pointerIdRef.current != null && event.pointerId !== pointerIdRef.current) return;
-      event.preventDefault();
-      const target = rowIndexFromPoint(event.clientY);
-      if (target != null && target !== lastTo.current) {
-        lastTo.current = target;
-        markTarget(target);
-      }
-      moveGhost(event.clientX - offsetRef.current.x, event.clientY - offsetRef.current.y);
+  function finishDrag() {
+    if (!draggingRef.current) return;
+    draggingRef.current = false;
+    pointerIdRef.current = null;
+    const to = lastTo.current;
+    const from = fromRef.current;
+    cleanupDragClasses();
+    if (to !== from) onReorderRef.current(from, to);
+  }
+
+  function updateDragPosition(clientX: number, clientY: number) {
+    if (!draggingRef.current) return;
+    const target = rowIndexFromPoint(clientY);
+    if (target != null && target !== lastTo.current) {
+      lastTo.current = target;
+      markTarget(target);
     }
+    moveGhost(clientX - offsetRef.current.x, clientY - offsetRef.current.y);
+  }
 
-    function onUp(event: PointerEvent) {
-      if (!draggingRef.current) return;
-      if (pointerIdRef.current != null && event.pointerId !== pointerIdRef.current) return;
-      draggingRef.current = false;
-      pointerIdRef.current = null;
-      const to = lastTo.current;
-      const from = fromRef.current;
-      cleanupDragClasses();
-      if (to !== from) onReorderRef.current(from, to);
-    }
-
-    window.addEventListener("pointermove", onMove, { passive: false });
-    window.addEventListener("pointerup", onUp);
-    window.addEventListener("pointercancel", onUp);
-    return () => {
-      window.removeEventListener("pointermove", onMove);
-      window.removeEventListener("pointerup", onUp);
-      window.removeEventListener("pointercancel", onUp);
-      cleanupDragClasses();
-    };
-  }, []);
-
-  function onPointerDown(event: React.PointerEvent<HTMLButtonElement>) {
-    if (disabled || event.button !== 0) return;
-    event.preventDefault();
-    event.stopPropagation();
-
-    const li = event.currentTarget.closest<HTMLElement>(".timeline-stop[data-stop-index]");
+  function beginDrag(clientX: number, clientY: number, pointerId: number | null) {
+    const handle = handleRef.current;
+    if (!handle || disabled) return false;
+    const li = handle.closest<HTMLElement>(".timeline-stop[data-stop-index]");
     const row = li?.querySelector<HTMLElement>(".stop-compact-row") ?? li;
-    if (!li || !row) return;
+    if (!li || !row) return false;
 
     const rect = row.getBoundingClientRect();
     fromRef.current = index;
     lastTo.current = index;
     draggingRef.current = true;
-    pointerIdRef.current = event.pointerId;
+    pointerIdRef.current = pointerId;
     offsetRef.current = {
-      x: Math.min(Math.max(event.clientX - rect.left, 12), Math.max(rect.width - 12, 12)),
-      y: Math.min(Math.max(event.clientY - rect.top, 8), Math.max(rect.height - 8, 8)),
+      x: Math.min(Math.max(clientX - rect.left, 12), Math.max(rect.width - 12, 12)),
+      y: Math.min(Math.max(clientY - rect.top, 8), Math.max(rect.height - 8, 8)),
     };
     sourceLiRef.current = li;
     li.classList.add("is-drag-source");
     document.body.classList.add("is-reordering-stops");
-    event.currentTarget.classList.add("is-dragging");
+    handle.classList.add("is-dragging");
 
     destroyGhost();
     const ghost = document.createElement("div");
@@ -146,7 +132,79 @@ export function StopDragHandle({
     ghostRef.current = ghost;
     moveGhost(rect.left, rect.top);
     markTarget(index);
+    return true;
+  }
 
+  // Window-level pointer + non-passive touch so mobile scroll doesn't cancel the drag.
+  useEffect(() => {
+    function onPointerMove(event: PointerEvent) {
+      if (!draggingRef.current) return;
+      if (pointerIdRef.current != null && event.pointerId !== pointerIdRef.current) return;
+      event.preventDefault();
+      updateDragPosition(event.clientX, event.clientY);
+    }
+
+    function onPointerUp(event: PointerEvent) {
+      if (!draggingRef.current) return;
+      if (pointerIdRef.current != null && event.pointerId !== pointerIdRef.current) return;
+      finishDrag();
+    }
+
+    function onTouchMove(event: TouchEvent) {
+      if (!draggingRef.current) return;
+      const touch = event.touches[0];
+      if (!touch) return;
+      event.preventDefault();
+      updateDragPosition(touch.clientX, touch.clientY);
+    }
+
+    function onTouchEnd() {
+      if (!draggingRef.current) return;
+      finishDrag();
+    }
+
+    window.addEventListener("pointermove", onPointerMove, { passive: false });
+    window.addEventListener("pointerup", onPointerUp);
+    window.addEventListener("pointercancel", onPointerUp);
+    window.addEventListener("touchmove", onTouchMove, { passive: false });
+    window.addEventListener("touchend", onTouchEnd);
+    window.addEventListener("touchcancel", onTouchEnd);
+    return () => {
+      window.removeEventListener("pointermove", onPointerMove);
+      window.removeEventListener("pointerup", onPointerUp);
+      window.removeEventListener("pointercancel", onPointerUp);
+      window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("touchend", onTouchEnd);
+      window.removeEventListener("touchcancel", onTouchEnd);
+      cleanupDragClasses();
+    };
+  }, []);
+
+  // Bind non-passive touchstart on the button itself (React's onTouchStart is passive in many browsers).
+  useEffect(() => {
+    const handle = handleRef.current;
+    if (!handle) return;
+
+    function onTouchStart(event: TouchEvent) {
+      if (disabled) return;
+      const touch = event.touches[0];
+      if (!touch) return;
+      event.preventDefault();
+      event.stopPropagation();
+      beginDrag(touch.clientX, touch.clientY, null);
+    }
+
+    handle.addEventListener("touchstart", onTouchStart, { passive: false });
+    return () => handle.removeEventListener("touchstart", onTouchStart);
+  }, [disabled, index]);
+
+  function onPointerDown(event: React.PointerEvent<HTMLButtonElement>) {
+    if (disabled || event.button !== 0) return;
+    // Touch is handled by the native touchstart listener above.
+    if (event.pointerType === "touch") return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (!beginDrag(event.clientX, event.clientY, event.pointerId)) return;
     try {
       event.currentTarget.setPointerCapture(event.pointerId);
     } catch {
@@ -158,9 +216,9 @@ export function StopDragHandle({
     <button
       ref={handleRef}
       type="button"
-      className="stop-drag-handle"
-      aria-label="按住拖曳以調整順序"
-      title="按住拖曳"
+      className={`stop-drag-handle${disabled ? " is-disabled" : ""}`}
+      aria-label={disabled ? "無法調整順序" : "按住拖曳以調整順序"}
+      title={disabled ? "只有一站時不能拖曳" : "按住拖曳"}
       disabled={disabled}
       onPointerDown={onPointerDown}
       onClick={(event) => event.stopPropagation()}

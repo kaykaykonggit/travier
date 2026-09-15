@@ -1959,18 +1959,22 @@ summary.with-info::after { margin-left: auto; }
 .trip-outing .stop-compact {
   padding: 6px 0;
   gap: 6px 8px;
-  grid-template-columns: 22px 4.6rem minmax(0, 1fr);
+  grid-template-columns: 24px 4.6rem minmax(0, 1fr);
   align-items: start;
 }
 .trip-outing .stop-compact-row {
-  gap: 6px;
+  gap: 10px;
   padding: 2px 0;
 }
 .trip-outing .stop-num {
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   font-size: 10px;
   margin-top: 1px;
+}
+.trip-outing .stop-drag-handle {
+  width: 32px;
+  height: 38px;
 }
 .trip-outing .stop-time {
   font-size: 12px;
@@ -1999,9 +2003,7 @@ summary.with-info::after { margin-left: auto; }
 .timeline-stop.on {
   background: color-mix(in srgb, var(--accent) 4%, var(--paper));
 }
-.timeline-stop.is-lead:not(.on) .stop-compact-row {
-  box-shadow: inset 3px 0 0 var(--accent);
-}
+/* lead 狀態不再用左側垂直線，避免蓋住景點號碼 */
 .timeline-stop.is-done:not(.on) .stop-compact-row { opacity: 0.5; }
 .timeline-stop.is-drag-source .stop-compact-row {
   opacity: 0.2;
@@ -2016,7 +2018,7 @@ summary.with-info::after { margin-left: auto; }
   z-index: 1;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   min-width: 0;
   padding: 4px 0;
   background: var(--paper);
@@ -2031,7 +2033,7 @@ summary.with-info::after { margin-left: auto; }
   grid-template-columns: 26px minmax(0, 4.6rem) minmax(0, 1fr);
   align-items: center;
   gap: 8px;
-  padding: 8px 6px;
+  padding: 8px 6px 8px 0;
   margin: 0;
   border: 0;
   border-radius: var(--radius-sm);
@@ -2049,10 +2051,15 @@ summary.with-info::after { margin-left: auto; }
   width: 24px;
   height: 24px;
   border-radius: 50%;
+  border: 2px solid #fff;
+  box-sizing: border-box;
   background: var(--ink);
-  color: var(--paper);
+  color: #fff;
   font-size: 11px;
   font-weight: 600;
+  text-shadow: 0 1px 1px rgb(0 0 0 / 0.35);
+  box-shadow: 0 0 0 1px rgb(18 32 22 / 0.22);
+  flex-shrink: 0;
 }
 .stop-time {
   font-size: 13px;
@@ -2135,19 +2142,22 @@ summary.with-info::after { margin-left: auto; }
   flex: 0 0 auto;
   display: grid;
   place-items: center;
-  width: 28px;
-  height: 36px;
+  width: 34px;
+  height: 40px;
   margin: 0;
   padding: 0;
   border: 1px solid color-mix(in srgb, var(--line) 85%, var(--ink));
   border-radius: 8px;
   background: color-mix(in srgb, var(--ink) 5%, var(--paper));
-  color: color-mix(in srgb, var(--muted) 70%, var(--ink));
+  color: color-mix(in srgb, var(--muted) 55%, var(--ink));
   cursor: grab;
   touch-action: none;
+  -webkit-touch-callout: none;
   user-select: none;
   -webkit-user-select: none;
   align-self: center;
+  position: relative;
+  z-index: 2;
 }
 .stop-drag-handle:active,
 .stop-drag-handle.is-dragging {
@@ -2155,6 +2165,15 @@ summary.with-info::after { margin-left: auto; }
   color: var(--accent);
   border-color: color-mix(in srgb, var(--accent) 40%, var(--line));
   background: color-mix(in srgb, var(--accent) 12%, var(--paper));
+}
+.stop-drag-handle:disabled,
+.stop-drag-handle.is-disabled {
+  opacity: 0.28;
+  color: var(--muted);
+  border-color: var(--line);
+  background: color-mix(in srgb, var(--ink) 3%, var(--paper));
+  cursor: not-allowed;
+  pointer-events: none;
 }
 .stop-drag-glyph {
   display: grid;

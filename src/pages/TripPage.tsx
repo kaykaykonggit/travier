@@ -737,9 +737,21 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
                 </p>
               ) : null}
               <div className="stop-compact-row">
-                <StopDragHandle index={index} onReorder={moveStop} />
+                <StopDragHandle
+                  index={index}
+                  disabled={day.timeline.length <= 1}
+                  onReorder={moveStop}
+                />
                 <button type="button" className="stop-compact" onClick={() => focusItem(index, true)}>
-                  {stopNo > 0 ? <span className="stop-num">{stopNo}</span> : <span className="stop-num">·</span>}
+                  {stopNo > 0 ? (
+                    <span className="stop-num" style={{ background: dayColor(dayIndex) }}>
+                      {stopNo}
+                    </span>
+                  ) : (
+                    <span className="stop-num" style={{ background: dayColor(dayIndex) }}>
+                      ·
+                    </span>
+                  )}
                   <span className="stop-time">
                     {item.start}
                     {item.end ? `–${item.end}` : ""}
