@@ -17,6 +17,7 @@ import {
 } from "../lib/life";
 import { formatMoney, partySize, summarizeCosts, type RateTable } from "../lib/costs";
 import { dateDayNumber, formatDateZh, tripDayNumber, weekdayZh } from "../lib/labels";
+import { withKlookCountry } from "../lib/klook";
 import { klookUrl } from "../lib/links";
 import { dayColor } from "../lib/stops";
 import { PlaceSuggest } from "./PlaceSuggest";
@@ -101,7 +102,10 @@ function ExpenseCard({
   const tripDay = tripDayNumber(item.date, startDate);
   const weekday = weekdayZh(item.date);
   const href = item.url ? expenseLinkHref(item.url) : "";
-  const klookSearch = klookUrl(draft.title || draft.place || cat?.hint || "experience", draft.date);
+  const klookSearch = klookUrl(
+    withKlookCountry(draft.title || cat?.hint || "experience", draft.place || draft.title || ""),
+    draft.date,
+  );
 
   return (
     <article className={`life-card life-${item.category}${editing ? " is-editing" : ""}`}>

@@ -113,7 +113,8 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
   const tomorrow = doc.days[dayIndex + 1];
   const rest = night ? nightRestPoint(night, day, tomorrow) : null;
   const listedKlooks = doc.klook.filter((item) => item.date === day.date);
-  const klooks = dayKlookItems(day.date, listedKlooks, day.timeline);
+  const dayCountry = day.countries[0] || null;
+  const klooks = dayKlookItems(day.date, listedKlooks, day.timeline, dayCountry);
   const adults = doc.trip.travelers.adults;
   const children = doc.trip.travelers.children;
   const heads = partySize(adults, children);
@@ -781,7 +782,7 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
                       {isKlookable(item) && (
                         <a
                           className="tool-chip"
-                          href={klookHref(item, matchKlook(listedKlooks, item), day.date, adults)}
+                          href={klookHref(item, matchKlook(listedKlooks, item), day.date, adults, dayCountry)}
                           target="_blank"
                           rel="noreferrer"
                         >
@@ -1065,12 +1066,15 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
               <li key={`${item.date}-${item.name}`}>
                 <div>
                   <strong>{item.name}</strong>
+                  {item.searchQuery && item.searchQuery !== item.name ? (
+                    <p className="klook-query">{item.searchQuery}</p>
+                  ) : null}
                   <p>
                     {formatMoney(item.cost.amount, item.cost.currency)}
                     {priceNote(item.cost) ? ` · ${priceNote(item.cost)}` : ""}
                   </p>
                 </div>
-                <a href={item.cost.source?.includes("klook.com") ? withKlookDate(item.cost.source, item.date) : klookUrl(item.searchQuery, item.date, adults)} target="_blank" rel="noreferrer">
+                <a href={item.cost.source?.includes("klook.com") ? withKlookDate(item.cost.source, item.date) : klookUrl(item.searchQuery, item.date, adults)} target="_blank" rel="noreferrer" title={item.searchQuery}>
                   在 Klook 搜尋
                 </a>
               </li>
