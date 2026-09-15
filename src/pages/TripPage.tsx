@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { BookingBox } from "../components/BookingBox";
+import { DurationWheel } from "../components/DurationWheel";
 import { EditBar } from "../components/EditBar";
 import { TripTabs } from "../components/LifeIcons";
 import { LifeLedger } from "../components/LifeLedger";
@@ -8,6 +9,7 @@ import { DayMap, type MapStop } from "../components/DayMap";
 import { InfoTip } from "../components/InfoTip";
 import { LockButton } from "../components/LockButton";
 import { PlacePhoto } from "../components/PlacePhoto";
+import { StopDragHandle } from "../components/StopDragHandle";
 import { StopEats } from "../components/StopEats";
 import { TimelineEdit } from "../components/TimelineEdit";
 import { TransitBox, TransitStops } from "../components/TransitBox";
@@ -20,7 +22,19 @@ import { dayKlookItems, isKlookable, klookHref, matchKlook } from "../lib/klook"
 import { skipStopEats, tripEatKey } from "../lib/eats";
 import { googleDirUrl, googleHotelsLiveUrl, googleHotelStayUrl, googleSearchUrl, klookUrl, parseHotelPaste, placeLabel, tripHotelUrl, withKlookDate } from "../lib/links";
 import { hotelAccessTransport, lastSightOfDay, nightRestPoint } from "../lib/restPoint";
-import { applyBackup, deleteTimelineItem, insertPlaceAfter, repairTimelinePlace, replaceDayTimeline, setItemLocked, setTicketSource } from "../lib/editTrip";
+import {
+  applyBackup,
+  deleteTimelineItem,
+  insertPlaceAfter,
+  remapDoneKeysForDuration,
+  remapDoneKeysForMove,
+  repairTimelinePlace,
+  replaceDayTimeline,
+  reorderTimelineItem,
+  setItemLocked,
+  setTicketSource,
+  setTimelineDuration,
+} from "../lib/editTrip";
 import { normalizeExpenseUrl } from "../lib/life";
 import { isHomeAirportStop } from "../lib/homeStop";
 import { isBareUrl, isShortMapsUrl, resolvePlaceInput } from "../lib/resolvePlace";
@@ -29,6 +43,7 @@ import { doneKey, loadDone, saveDone, toggleDone } from "../lib/progress";
 import { initialDayIndex, leadOfDay } from "../lib/leadStop";
 import { applyTripUpdate } from "../lib/patch";
 import { stopPlaceOf, placeBreakLabel } from "../lib/stopPlace";
+import { dwellMinutes, formatDurationLabel } from "../lib/timelineTime";
 import { buildTweakPrompt } from "../lib/tweakPrompt";
 import { buildSampleEditPrompt } from "../lib/template";
 import { needsBooking, bookingFallbackUrl } from "../lib/booking";
@@ -101,6 +116,7 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
   const [stopTicketUrl, setStopTicketUrl] = useState("");
   const [hotelEditing, setHotelEditing] = useState(false);
   const [hotelSnapshot, setHotelSnapshot] = useState<Night | null>(null);
+  const [durationIndex, setDurationIndex] = useState<number | null>(null);
   const mapPanelRef = useRef<HTMLElement | null>(null);
   const dayBarRef = useRef<HTMLElement | null>(null);
   const jumpRef = useRef<HTMLDivElement | null>(null);
@@ -281,6 +297,33 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
     saveDone(doc, next);
   }
 
+  function moveStop(from: number, to: number) {
+    if (from === to) return;
+    const prevTimeline = day.timeline;
+    const nextDoc = reorderTimelineItem(doc, dayIndex, from, to);
+    const nextTimeline = nextDoc.days[dayIndex]?.timeline ?? prevTimeline;
+    const nextDone = remapDoneKeysForMove(done, day.date, from, to, nextTimeline, prevTimeline);
+    setDone(nextDone);
+    saveDone(nextDoc, nextDone);
+    onChange(nextDoc);
+    setFocusIndex(to);
+    setFocusToken(Date.now());
+    setDurationIndex(null);
+  }
+
+  function applyDuration(index: number, minutes: number) {
+    const prevTimeline = day.timeline;
+    const nextDoc = setTimelineDuration(doc, dayIndex, index, minutes);
+    const nextTimeline = nextDoc.days[dayIndex]?.timeline ?? prevTimeline;
+    const nextDone = remapDoneKeysForDuration(done, day.date, index, nextTimeline, prevTimeline);
+    setDone(nextDone);
+    saveDone(nextDoc, nextDone);
+    onChange(nextDoc);
+    setDurationIndex(null);
+    setFocusIndex(index);
+    setFocusToken(Date.now());
+  }
+
   function applyJson() {
     const result = applyTripUpdate(doc, jsonDraft);
     if (!result.ok) {
@@ -354,6 +397,7 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
   useEffect(() => {
     setFocusIndex(null);
     setFocusToken(0);
+    setDurationIndex(null);
   }, [day.date]);
 
   useEffect(() => {
@@ -691,7 +735,8 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
                   <span>{placeBreakLabel(place)}</span>
                 </p>
               ) : null}
-              <div className="stop-compact-row">
+              <div className="stop-compact-row" data-stop-index={index}>
+                <StopDragHandle index={index} onReorder={moveStop} />
                 <button type="button" className="stop-compact" onClick={() => focusItem(index, true)}>
                   {stopNo > 0 ? <span className="stop-num">{stopNo}</span> : <span className="stop-num">·</span>}
                   <span className="stop-time">
@@ -710,6 +755,15 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
                   <span className="stop-meta">{labelOf(TYPE_LABEL, item.type)}</span>
                 </button>
                 <div className="stop-compact-actions">
+                  <button
+                    type="button"
+                    className={`text-btn stop-duration-btn${durationIndex === index ? " on" : ""}`}
+                    onClick={() => setDurationIndex((current) => (current === index ? null : index))}
+                    aria-label="調整活動時長"
+                    title="時長"
+                  >
+                    {formatDurationLabel(dwellMinutes(item))}
+                  </button>
                   <label className="done-check">
                     <input
                       type="checkbox"
@@ -727,6 +781,13 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
                   />
                 </div>
               </div>
+              {durationIndex === index ? (
+                <DurationWheel
+                  valueMin={dwellMinutes(item)}
+                  onClose={() => setDurationIndex(null)}
+                  onConfirm={(minutes) => applyDuration(index, minutes)}
+                />
+              ) : null}
               {focused ? (
               <div className="stop-detail body">
                 <div className="spot-main">
