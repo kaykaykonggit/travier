@@ -11,7 +11,9 @@ export const AI_TEMPLATE = `你是行程資料轉換器，不是聊天機器人�
    日本／重名景點（海灘、公園、商店）優先用當地正式地名做 placeQuery；仍易錯就補核實 lat/lng。
 5. placeQuery 格式永遠是：Official local map name, City, Country（用地圖／OSM 找得到嘅正式名，唔好用翻譯暱稱）。
    歐洲例：Stephansdom, Vienna, Austria
-   日本例：用日文官方地名＋城市＋Japan。例：ホワイト・ビーチ地区, Uruma, Japan；勝連城跡, Uruma, Japan。
+   日本例：用日文官方地名＋城市＋Japan（三截）。例：勝連城跡, Uruma, Japan；琉球村, Onna, Japan。
+   易撞名嘅海灘／公園可再補核實 lat/lng。例：North White Beach, Uruma, Japan + lat/lng（唔好只寫 White Beach）。
+   唔好寫四截 Name, City, Okinawa, Japan（會令 city 被当成县名解析错）。
    唔好寫含糊英文如 White Beach（日本多處重名，地圖會指錯／指去北海道）。
    displayNameZh 只係畫面顯示，唔會用嚟定位。
 6. displayNameZh、title、routeLogic、tip 可以用繁體中文。
@@ -59,7 +61,7 @@ export const AI_TEMPLATE = `你是行程資料轉換器，不是聊天機器人�
     - 每一段公共交通：分開寫價錢。當天有幾程地鐵／電車／火車就寫幾筆 transport.cost，不准合成一筆糊過去
     - 城際火車 / 夜火車：ÖBB、Trenitalia 或官方鐵路網的該日車次價
     - 機票：必須用 Google Flights 或航空公司搜「出發地 → 目的地、該出發日、經濟艙、行程人數」。source 填你看到價錢的網址。booking.url 填同一條 Google Flights 或航空公司搜尋頁。不准憑印象填航空公司、班次或舊價錢。搜不到就 amount null、estimated true、notes 寫搜不到。
-    - 每一個要買票的景點／活動／光影展／音樂會：必須同時寫進 klook[]。searchQuery 只填活動主題關鍵字（中英皆可）。source 若是 Klook 網址，必須帶當天 date=YYYY-MM-DD。Travier 會用 searchQuery + 當天日期打開 Klook 搜尋。
+    - 每一個要買票的景點／活動／光影展／音樂會：必須同時寫進 klook[]。searchQuery 必須「國家／目的地在前、景點主題在後」（中英皆可），例：「日本 沖繩 琉球村」「奧地利 維也納 美泉宮」。唔好只寫「琉球村」呢啲會同台灣活動撞名嘅詞。source 若是 Klook 網址，必須帶當天 date=YYYY-MM-DD。Travier 會用 searchQuery + 當天日期打開 Klook 搜尋。
 15. 搜尋時帶上行程的實際日期和人數。聖誕 / 跨年會貴很多，不准用淡季印象價。
 16. cost 一律長這樣：
     { "amount": 123, "currency": "EUR", "estimated": false, "source": "https://完整網址", "asOf": "YYYY-MM-DD" }
@@ -76,7 +78,8 @@ export const AI_TEMPLATE = `你是行程資料轉換器，不是聊天機器人�
 25. 不要用「熱門博物館一律 24 歐、套票一律 45 歐」這種一刀切。每個景點分開搜。
 26. 在 trip.notes 寫清：哪些是搜尋現價、哪些是估算。
 27. 時間軸有門票金額的項目，klook[] 當天必須有對應一筆。不准只寫在 timeline 卻不給 Klook 搜尋詞。
-28. klook[].searchQuery 是主題，不要把日期寫進 query 文字。日期由 Travier 用 klook[].date 帶進 Klook 連結。
+28. klook[].searchQuery 必須以國家（必要時再加城市／地區）開頭，再寫景點主題；不要把日期寫進 query 文字。日期由 Travier 用 klook[].date 帶進 Klook 連結。日本沖繩景點例：「日本 沖繩 琉球村」「日本 沖繩 青之洞窟 浮潛」。
+29. transport.mode 自駕用 private_car（唔好寫 car）。
 
 JSON 形狀：
 {
@@ -187,8 +190,9 @@ export function buildSampleEditPrompt(title: string, data: unknown): string {
 1. 只輸出一個完整 JSON 物件。不要 Markdown、不要 \`\`\`、不要前言、不要解釋。
 2. 必須符合 schemaVersion "1.0.0"，保留 trip、days、nights、klook 等結構。
 3. 可改日期、人數、景點、酒店、節奏；不要由零另寫一份無關行程。
-4. placeQuery 用當地正式地圖名（Official local map name, City, Country）。不要發明經緯度。
+4. placeQuery 用當地正式地圖名（Official local map name, City, Country）。日本三截：日文名, City, Japan。不要發明經緯度；易撞名可補核實 lat/lng。
 5. 改過的門票／交通／酒店請用網頁搜尋該日現價。
+6. klook[].searchQuery 必須國家（及需要時地區）在前，例：「日本 沖繩 琉球村」。自駕 mode 用 private_car。
 
 --- 範本 JSON ---
 ${JSON.stringify(data, null, 2)}

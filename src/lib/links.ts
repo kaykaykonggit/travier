@@ -239,7 +239,7 @@ export function googleHotelStayUrl(
 
 function mapsTravelMode(mode: string): string {
   if (mode === "walk") return "walking";
-  if (mode === "taxi" || mode === "private_car") return "driving";
+  if (mode === "taxi" || mode === "private_car" || mode === "car") return "driving";
   if (mode === "flight") return "driving";
   return "transit";
 }

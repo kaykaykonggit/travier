@@ -19,7 +19,7 @@
     },
     "pace": "normal",
     "language": "zh-Hant",
-    "notes": "自駕為主。地圖地名優先用日文／可搜尋名稱，減少英文地名解析失敗。"
+    "notes": "自駕為主（transport.mode=private_car）。placeQuery 用「日文官方名, City, Japan」三截。Klook 搜尋詞以「日本 沖繩」開頭，避免琉球等詞撞到台灣活動。地圖易撞名景點（如 White Beach）已鎖定 lat/lng。"
   },
   "days": [
     {
@@ -54,7 +54,7 @@
               "amount": 0,
               "currency": "JPY",
               "estimated": false,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             }
           },
@@ -65,7 +65,7 @@
           "placeQuery": "那覇空港, Naha, Japan",
           "displayNameZh": "那霸機場",
           "transport": {
-            "mode": "car",
+            "mode": "private_car",
             "fromPlaceQuery": "那覇空港, Naha, Japan",
             "toPlaceQuery": "リブレガーデンホテル, Naha, Japan",
             "fromStop": "Naha Airport",
@@ -77,12 +77,12 @@
               "amount": 0,
               "currency": "JPY",
               "estimated": false,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             },
             "booking": {
               "required": false,
-              "url": null,
+              "url": "",
               "how": "",
               "why": ""
             }
@@ -101,7 +101,7 @@
               "amount": 31566,
               "currency": "JPY",
               "estimated": false,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             }
           },
@@ -124,7 +124,7 @@
               "amount": 0,
               "currency": "JPY",
               "estimated": false,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             },
             "booking": null
@@ -157,14 +157,34 @@
           "notes": "3 Chome-1-1 Omoromachi, Naha",
           "locked": true,
           "imageUrl": null,
-          "backups": [],
+          "backups": [
+            {
+              "title": "Naha City Museum of History",
+              "displayNameZh": "那霸市歷史博物館",
+              "placeQuery": "那覇市歴史博物館, Naha, Japan",
+              "type": "attraction",
+              "notes": "市區歷史館，步行可達範圍內的文化替代。",
+              "why": "同屬那霸文化線，可替代縣立博物館時段。",
+              "imageUrl": "",
+              "ticket": {
+                "name": "免費參觀",
+                "cost": {
+                  "amount": 0,
+                  "currency": "JPY",
+                  "estimated": false,
+                  "source": "",
+                  "asOf": "2026-09-13"
+                }
+              }
+            }
+          ],
           "ticket": {
             "name": "成人門票x6",
             "cost": {
               "amount": 3000,
               "currency": "JPY",
               "estimated": true,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             }
           },
@@ -175,7 +195,7 @@
           "placeQuery": "沖縄県立博物館・美術館, Naha, Japan",
           "displayNameZh": "沖繩縣立博物館・美術館",
           "transport": {
-            "mode": "car",
+            "mode": "private_car",
             "fromPlaceQuery": "リブレガーデンホテル, Naha, Japan",
             "toPlaceQuery": "沖縄県立博物館・美術館, Naha, Japan",
             "fromStop": "Omoromachi",
@@ -187,12 +207,12 @@
               "amount": 0,
               "currency": "JPY",
               "estimated": false,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             },
             "booking": {
               "required": false,
-              "url": null,
+              "url": "",
               "how": "",
               "why": ""
             }
@@ -204,14 +224,34 @@
           "notes": "421-7 Maaji, Naha",
           "locked": true,
           "imageUrl": null,
-          "backups": [],
+          "backups": [
+            {
+              "title": "Tamaudun",
+              "displayNameZh": "玉陵",
+              "placeQuery": "玉陵, Naha, Japan",
+              "type": "attraction",
+              "notes": "琉球國王陵，鄰近首里。",
+              "why": "同區世界遺產，可替代識名園。",
+              "imageUrl": "",
+              "ticket": {
+                "name": "免費參觀",
+                "cost": {
+                  "amount": 0,
+                  "currency": "JPY",
+                  "estimated": false,
+                  "source": "",
+                  "asOf": "2026-09-13"
+                }
+              }
+            }
+          ],
           "ticket": {
             "name": "成人門票x6",
             "cost": {
               "amount": 2400,
               "currency": "JPY",
               "estimated": true,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             }
           },
@@ -222,7 +262,7 @@
           "placeQuery": "識名園, Naha, Japan",
           "displayNameZh": "識名園",
           "transport": {
-            "mode": "car",
+            "mode": "private_car",
             "fromPlaceQuery": "沖縄県立博物館・美術館, Naha, Japan",
             "toPlaceQuery": "識名園, Naha, Japan",
             "fromStop": null,
@@ -234,12 +274,12 @@
               "amount": 0,
               "currency": "JPY",
               "estimated": false,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             },
             "booking": {
               "required": false,
-              "url": null,
+              "url": "",
               "how": "",
               "why": ""
             }
@@ -251,14 +291,34 @@
           "notes": "琉球王國的歷史象徵",
           "locked": true,
           "imageUrl": null,
-          "backups": [],
+          "backups": [
+            {
+              "title": "Shureimon",
+              "displayNameZh": "守禮門",
+              "placeQuery": "守礼門, Naha, Japan",
+              "type": "attraction",
+              "notes": "首里城正門景觀。",
+              "why": "就在首里城外，可短訪替代。",
+              "imageUrl": "",
+              "ticket": {
+                "name": "免費參觀",
+                "cost": {
+                  "amount": 0,
+                  "currency": "JPY",
+                  "estimated": false,
+                  "source": "",
+                  "asOf": "2026-09-13"
+                }
+              }
+            }
+          ],
           "ticket": {
             "name": "成人門票x6",
             "cost": {
               "amount": 2400,
               "currency": "JPY",
               "estimated": true,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             }
           },
@@ -269,7 +329,7 @@
           "placeQuery": "首里城, Naha, Japan",
           "displayNameZh": "首里城",
           "transport": {
-            "mode": "car",
+            "mode": "private_car",
             "fromPlaceQuery": "識名園, Naha, Japan",
             "toPlaceQuery": "首里城, Naha, Japan",
             "fromStop": null,
@@ -281,12 +341,12 @@
               "amount": 0,
               "currency": "JPY",
               "estimated": false,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             },
             "booking": {
               "required": false,
-              "url": null,
+              "url": "",
               "how": "",
               "why": ""
             }
@@ -298,14 +358,34 @@
           "notes": "位於SAN-A浦添西海岸 PARCO CITY 5F",
           "locked": true,
           "imageUrl": null,
-          "backups": [],
+          "backups": [
+            {
+              "title": "Aeon Mall Okinawa Rycom",
+              "displayNameZh": "AEON Mall 琉球",
+              "placeQuery": "イオンモール沖縄ライカム, Kitanakagusuku, Japan",
+              "type": "attraction",
+              "notes": "大型購物商場替代。",
+              "why": "同屬中部購物／展望休閒。",
+              "imageUrl": "",
+              "ticket": {
+                "name": "免費參觀",
+                "cost": {
+                  "amount": 0,
+                  "currency": "JPY",
+                  "estimated": false,
+                  "source": "",
+                  "asOf": "2026-09-13"
+                }
+              }
+            }
+          ],
           "ticket": {
             "name": "免費參觀",
             "cost": {
               "amount": 0,
               "currency": "JPY",
               "estimated": false,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             }
           },
@@ -316,7 +396,7 @@
           "placeQuery": "サンエー浦添西海岸 PARCO CITY, Urasoe, Japan",
           "displayNameZh": "PARCO CITY瞭望台",
           "transport": {
-            "mode": "car",
+            "mode": "private_car",
             "fromPlaceQuery": "首里城, Naha, Japan",
             "toPlaceQuery": "サンエー浦添西海岸 PARCO CITY, Urasoe, Japan",
             "fromStop": null,
@@ -328,12 +408,12 @@
               "amount": 0,
               "currency": "JPY",
               "estimated": false,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             },
             "booking": {
               "required": false,
-              "url": null,
+              "url": "",
               "how": "",
               "why": ""
             }
@@ -354,7 +434,7 @@
       "highlights": [
         {
           "name": "青之洞窟",
-          "placeQuery": "青の洞窟, Onna, Okinawa, Japan",
+          "placeQuery": "青の洞窟, Onna, Japan",
           "stars": 5,
           "bonus": false
         }
@@ -366,14 +446,34 @@
           "notes": "熱門潛水與浮潛勝地",
           "locked": true,
           "imageUrl": null,
-          "backups": [],
+          "backups": [
+            {
+              "title": "Cape Maeda",
+              "displayNameZh": "真榮田岬",
+              "placeQuery": "真栄田岬, Onna, Japan",
+              "type": "attraction",
+              "notes": "青之洞窟所在岬角，可改為岸邊觀景。",
+              "why": "同一地點、不下水也可看海蝕洞景觀。",
+              "imageUrl": "",
+              "ticket": {
+                "name": "免費參觀",
+                "cost": {
+                  "amount": 0,
+                  "currency": "JPY",
+                  "estimated": false,
+                  "source": "",
+                  "asOf": "2026-09-13"
+                }
+              }
+            }
+          ],
           "ticket": {
             "name": "浮潛體驗x6",
             "cost": {
               "amount": 30000,
               "currency": "JPY",
               "estimated": true,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             }
           },
@@ -381,12 +481,12 @@
           "end": "13:35",
           "type": "activity",
           "title": "Blue Cave Onna",
-          "placeQuery": "青の洞窟, Onna, Okinawa, Japan",
+          "placeQuery": "青の洞窟, Onna, Japan",
           "displayNameZh": "青之洞窟",
           "transport": {
-            "mode": "car",
-            "fromPlaceQuery": "Ginowan, Okinawa, Japan",
-            "toPlaceQuery": "青の洞窟, Onna, Okinawa, Japan",
+            "mode": "private_car",
+            "fromPlaceQuery": "Isa, Ginowan, Japan",
+            "toPlaceQuery": "青の洞窟, Onna, Japan",
             "fromStop": "Ginowan",
             "toStop": "Maeda",
             "line": "租車自駕",
@@ -396,12 +496,12 @@
               "amount": 0,
               "currency": "JPY",
               "estimated": false,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             },
             "booking": {
               "required": false,
-              "url": null,
+              "url": "",
               "how": "",
               "why": ""
             }
@@ -413,14 +513,34 @@
           "notes": "體驗傳統琉球文化",
           "locked": true,
           "imageUrl": null,
-          "backups": [],
+          "backups": [
+            {
+              "title": "Nakagusuku Castle Ruins",
+              "displayNameZh": "中城城跡",
+              "placeQuery": "中城城跡, Nakagusuku, Japan",
+              "type": "attraction",
+              "notes": "世界遺產城跡。",
+              "why": "同屬琉球歷史文化線，可替代主題村。",
+              "imageUrl": "",
+              "ticket": {
+                "name": "免費參觀",
+                "cost": {
+                  "amount": 0,
+                  "currency": "JPY",
+                  "estimated": false,
+                  "source": "",
+                  "asOf": "2026-09-13"
+                }
+              }
+            }
+          ],
           "ticket": {
             "name": "成人門票x6",
             "cost": {
               "amount": 9000,
               "currency": "JPY",
               "estimated": true,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             }
           },
@@ -431,8 +551,8 @@
           "placeQuery": "琉球村, Onna, Japan",
           "displayNameZh": "琉球村",
           "transport": {
-            "mode": "car",
-            "fromPlaceQuery": "青の洞窟, Onna, Okinawa, Japan",
+            "mode": "private_car",
+            "fromPlaceQuery": "青の洞窟, Onna, Japan",
             "toPlaceQuery": "琉球村, Onna, Japan",
             "fromStop": null,
             "toStop": null,
@@ -443,12 +563,12 @@
               "amount": 0,
               "currency": "JPY",
               "estimated": false,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             },
             "booking": {
               "required": false,
-              "url": null,
+              "url": "",
               "how": "",
               "why": ""
             }
@@ -460,14 +580,34 @@
           "notes": "壯麗的海岸線和獨特的岩石地形",
           "locked": true,
           "imageUrl": null,
-          "backups": [],
+          "backups": [
+            {
+              "title": "Cape Kyan",
+              "displayNameZh": "喜屋武岬",
+              "placeQuery": "喜屋武岬, Itoman, Japan",
+              "type": "attraction",
+              "notes": "南部海崖景觀（距離較遠，僅作後備）。",
+              "why": "同為斷崖海景備選。",
+              "imageUrl": "",
+              "ticket": {
+                "name": "免費參觀",
+                "cost": {
+                  "amount": 0,
+                  "currency": "JPY",
+                  "estimated": false,
+                  "source": "",
+                  "asOf": "2026-09-13"
+                }
+              }
+            }
+          ],
           "ticket": {
             "name": "入場費x6",
             "cost": {
               "amount": 600,
               "currency": "JPY",
               "estimated": true,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             }
           },
@@ -478,7 +618,7 @@
           "placeQuery": "万座毛, Onna, Japan",
           "displayNameZh": "萬座毛",
           "transport": {
-            "mode": "car",
+            "mode": "private_car",
             "fromPlaceQuery": "琉球村, Onna, Japan",
             "toPlaceQuery": "万座毛, Onna, Japan",
             "fromStop": null,
@@ -490,12 +630,12 @@
               "amount": 0,
               "currency": "JPY",
               "estimated": false,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             },
             "booking": {
               "required": false,
-              "url": null,
+              "url": "",
               "how": "",
               "why": ""
             }
@@ -507,14 +647,34 @@
           "notes": "清澈見底的海水和古宇利大橋",
           "locked": true,
           "imageUrl": null,
-          "backups": [],
+          "backups": [
+            {
+              "title": "Kouri Ocean Tower",
+              "displayNameZh": "古宇利海洋塔",
+              "placeQuery": "古宇利オーシャンタワー, Nakijin, Japan",
+              "type": "attraction",
+              "notes": "島上展望設施。",
+              "why": "同島可替代環島觀景。",
+              "imageUrl": "",
+              "ticket": {
+                "name": "免費參觀",
+                "cost": {
+                  "amount": 0,
+                  "currency": "JPY",
+                  "estimated": false,
+                  "source": "",
+                  "asOf": "2026-09-13"
+                }
+              }
+            }
+          ],
           "ticket": {
             "name": "免費參觀",
             "cost": {
               "amount": 0,
               "currency": "JPY",
               "estimated": false,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             }
           },
@@ -525,7 +685,7 @@
           "placeQuery": "古宇利島, Nakijin, Japan",
           "displayNameZh": "古宇利島",
           "transport": {
-            "mode": "car",
+            "mode": "private_car",
             "fromPlaceQuery": "万座毛, Onna, Japan",
             "toPlaceQuery": "古宇利島, Nakijin, Japan",
             "fromStop": null,
@@ -537,12 +697,12 @@
               "amount": 0,
               "currency": "JPY",
               "estimated": false,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             },
             "booking": {
               "required": false,
-              "url": null,
+              "url": "",
               "how": "",
               "why": ""
             }
@@ -561,7 +721,7 @@
               "amount": 108960,
               "currency": "JPY",
               "estimated": false,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             }
           },
@@ -569,7 +729,7 @@
           "end": null,
           "type": "hotel",
           "title": "Private Condo Kourijima by COLDIO PREMIUM",
-          "placeQuery": "Private Condo Kourijima by COLDIO PREMIUM, Nakijin, Okinawa, Japan",
+          "placeQuery": "Private Condo Kourijima by COLDIO PREMIUM, Nakijin, Japan",
           "displayNameZh": "古宇利島度假村（連早晚餐）",
           "transport": {
             "mode": "walk",
@@ -584,7 +744,7 @@
               "amount": 0,
               "currency": "JPY",
               "estimated": false,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             },
             "booking": null
@@ -617,14 +777,34 @@
           "notes": "世界著名的巨大水族館",
           "locked": true,
           "imageUrl": null,
-          "backups": [],
+          "backups": [
+            {
+              "title": "Ocean Expo Park",
+              "displayNameZh": "海洋博公園",
+              "placeQuery": "国営沖縄記念公園, Motobu, Japan",
+              "type": "attraction",
+              "notes": "水族館外的公園區。",
+              "why": "同一園區，可不進館也能逛。",
+              "imageUrl": "",
+              "ticket": {
+                "name": "免費參觀",
+                "cost": {
+                  "amount": 0,
+                  "currency": "JPY",
+                  "estimated": false,
+                  "source": "",
+                  "asOf": "2026-09-13"
+                }
+              }
+            }
+          ],
           "ticket": {
             "name": "成人門票x6",
             "cost": {
               "amount": 12900,
               "currency": "JPY",
               "estimated": true,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             }
           },
@@ -635,7 +815,7 @@
           "placeQuery": "沖縄美ら海水族館, Motobu, Japan",
           "displayNameZh": "沖繩美櫻水族館",
           "transport": {
-            "mode": "car",
+            "mode": "private_car",
             "fromPlaceQuery": "古宇利島, Nakijin, Japan",
             "toPlaceQuery": "沖縄美ら海水族館, Motobu, Japan",
             "fromStop": null,
@@ -647,12 +827,12 @@
               "amount": 0,
               "currency": "JPY",
               "estimated": false,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             },
             "booking": {
               "required": false,
-              "url": null,
+              "url": "",
               "how": "",
               "why": ""
             }
@@ -664,14 +844,34 @@
           "notes": "名護市動物園／公園。placeQuery 用日文「ネオパークオキナワ」才能穩定上圖。",
           "locked": true,
           "imageUrl": null,
-          "backups": [],
+          "backups": [
+            {
+              "title": "Nago Pineapple Park",
+              "displayNameZh": "名護鳳梨園",
+              "placeQuery": "ナゴパイナップルパーク, Nago, Japan",
+              "type": "attraction",
+              "notes": "名護親子景點。",
+              "why": "同市輕鬆替代。",
+              "imageUrl": "",
+              "ticket": {
+                "name": "免費參觀",
+                "cost": {
+                  "amount": 0,
+                  "currency": "JPY",
+                  "estimated": false,
+                  "source": "",
+                  "asOf": "2026-09-13"
+                }
+              }
+            }
+          ],
           "ticket": {
             "name": "成人門票x6",
             "cost": {
               "amount": 7800,
               "currency": "JPY",
               "estimated": true,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             }
           },
@@ -682,7 +882,7 @@
           "placeQuery": "ネオパークオキナワ, Nago, Japan",
           "displayNameZh": "名護新奧樂園（ネオパーク）",
           "transport": {
-            "mode": "car",
+            "mode": "private_car",
             "fromPlaceQuery": "沖縄美ら海水族館, Motobu, Japan",
             "toPlaceQuery": "ネオパークオキナワ, Nago, Japan",
             "fromStop": null,
@@ -694,12 +894,12 @@
               "amount": 0,
               "currency": "JPY",
               "estimated": false,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             },
             "booking": {
               "required": false,
-              "url": null,
+              "url": "",
               "how": "",
               "why": ""
             }
@@ -711,14 +911,34 @@
           "notes": "宜野座村松田的鐘乳洞探險",
           "locked": true,
           "imageUrl": null,
-          "backups": [],
+          "backups": [
+            {
+              "title": "Kin Watch Tower",
+              "displayNameZh": "金武町展望台",
+              "placeQuery": "金武町展望台, Kin, Japan",
+              "type": "attraction",
+              "notes": "金武一帶展望。",
+              "why": "同區戶外替代探險洞。",
+              "imageUrl": "",
+              "ticket": {
+                "name": "免費參觀",
+                "cost": {
+                  "amount": 0,
+                  "currency": "JPY",
+                  "estimated": false,
+                  "source": "",
+                  "asOf": "2026-09-13"
+                }
+              }
+            }
+          ],
           "ticket": {
             "name": "導覽門票x6",
             "cost": {
               "amount": 15000,
               "currency": "JPY",
               "estimated": true,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             }
           },
@@ -726,12 +946,12 @@
           "end": "17:32",
           "type": "attraction",
           "title": "Matsuda Mega Gama Cave",
-          "placeQuery": "松田のメガガマ, Ginoza, Okinawa, Japan",
+          "placeQuery": "松田のメガガマ, Ginoza, Japan",
           "displayNameZh": "松田鍾乳洞探險",
           "transport": {
-            "mode": "car",
+            "mode": "private_car",
             "fromPlaceQuery": "ネオパークオキナワ, Nago, Japan",
-            "toPlaceQuery": "松田のメガガマ, Ginoza, Okinawa, Japan",
+            "toPlaceQuery": "松田のメガガマ, Ginoza, Japan",
             "fromStop": null,
             "toStop": null,
             "line": "租車自駕",
@@ -741,12 +961,12 @@
               "amount": 0,
               "currency": "JPY",
               "estimated": false,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             },
             "booking": {
               "required": false,
-              "url": null,
+              "url": "",
               "how": "",
               "why": ""
             }
@@ -765,7 +985,7 @@
               "amount": 49500,
               "currency": "JPY",
               "estimated": false,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             }
           },
@@ -773,12 +993,12 @@
           "end": null,
           "type": "hotel",
           "title": "Sea Side Loco's",
-          "placeQuery": "シーサイドロコズ, Kin, Okinawa, Japan",
+          "placeQuery": "シーサイドロコズ, Kin, Japan",
           "displayNameZh": "Sea Side Loco's 住宿",
           "transport": {
-            "mode": "car",
-            "fromPlaceQuery": "松田のメガガマ, Ginoza, Okinawa, Japan",
-            "toPlaceQuery": "シーサイドロコズ, Kin, Okinawa, Japan",
+            "mode": "private_car",
+            "fromPlaceQuery": "松田のメガガマ, Ginoza, Japan",
+            "toPlaceQuery": "シーサイドロコズ, Kin, Japan",
             "fromStop": null,
             "toStop": null,
             "line": "租車自駕",
@@ -788,12 +1008,12 @@
               "amount": 0,
               "currency": "JPY",
               "estimated": false,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             },
             "booking": {
               "required": false,
-              "url": null,
+              "url": "",
               "how": "",
               "why": ""
             }
@@ -826,14 +1046,34 @@
           "notes": "",
           "locked": true,
           "imageUrl": null,
-          "backups": [],
+          "backups": [
+            {
+              "title": "Hamahiga Island",
+              "displayNameZh": "濱比嘉島",
+              "placeQuery": "浜比嘉島, Uruma, Japan",
+              "type": "attraction",
+              "notes": "海中道路盡頭島嶼。",
+              "why": "同一條海中道路延伸景點。",
+              "imageUrl": "",
+              "ticket": {
+                "name": "免費參觀",
+                "cost": {
+                  "amount": 0,
+                  "currency": "JPY",
+                  "estimated": false,
+                  "source": "",
+                  "asOf": "2026-09-13"
+                }
+              }
+            }
+          ],
           "ticket": {
             "name": "免費參觀",
             "cost": {
               "amount": 0,
               "currency": "JPY",
               "estimated": false,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             }
           },
@@ -844,8 +1084,8 @@
           "placeQuery": "海中道路, Uruma, Japan",
           "displayNameZh": "海中道路展望台",
           "transport": {
-            "mode": "car",
-            "fromPlaceQuery": "シーサイドロコズ, Kin, Okinawa, Japan",
+            "mode": "private_car",
+            "fromPlaceQuery": "シーサイドロコズ, Kin, Japan",
             "toPlaceQuery": "海中道路, Uruma, Japan",
             "fromStop": null,
             "toStop": null,
@@ -856,12 +1096,12 @@
               "amount": 0,
               "currency": "JPY",
               "estimated": false,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             },
             "booking": {
               "required": false,
-              "url": null,
+              "url": "",
               "how": "",
               "why": ""
             }
@@ -873,14 +1113,34 @@
           "notes": "",
           "locked": true,
           "imageUrl": null,
-          "backups": [],
+          "backups": [
+            {
+              "title": "Higashionna Beach",
+              "displayNameZh": "東恩納海灘",
+              "placeQuery": "東恩納ビーチ, Uruma, Japan",
+              "type": "attraction",
+              "notes": "附近海灘。",
+              "why": "同半島海景替代。",
+              "imageUrl": "",
+              "ticket": {
+                "name": "免費參觀",
+                "cost": {
+                  "amount": 0,
+                  "currency": "JPY",
+                  "estimated": false,
+                  "source": "",
+                  "asOf": "2026-09-13"
+                }
+              }
+            }
+          ],
           "ticket": {
             "name": "免費參觀",
             "cost": {
               "amount": 0,
               "currency": "JPY",
               "estimated": false,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             }
           },
@@ -891,7 +1151,7 @@
           "placeQuery": "果報バンタ, Uruma, Japan",
           "displayNameZh": "果報崖",
           "transport": {
-            "mode": "car",
+            "mode": "private_car",
             "fromPlaceQuery": "海中道路, Uruma, Japan",
             "toPlaceQuery": "果報バンタ, Uruma, Japan",
             "fromStop": null,
@@ -903,12 +1163,12 @@
               "amount": 0,
               "currency": "JPY",
               "estimated": false,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             },
             "booking": {
               "required": false,
-              "url": null,
+              "url": "",
               "how": "",
               "why": ""
             }
@@ -920,14 +1180,34 @@
           "notes": "",
           "locked": true,
           "imageUrl": null,
-          "backups": [],
+          "backups": [
+            {
+              "title": "Miyagi Island",
+              "displayNameZh": "宮城島",
+              "placeQuery": "宮城島, Uruma, Japan",
+              "type": "attraction",
+              "notes": "海中道路諸島之一。",
+              "why": "同區島嶼海灘替代。",
+              "imageUrl": "",
+              "ticket": {
+                "name": "免費參觀",
+                "cost": {
+                  "amount": 0,
+                  "currency": "JPY",
+                  "estimated": false,
+                  "source": "",
+                  "asOf": "2026-09-13"
+                }
+              }
+            }
+          ],
           "ticket": {
             "name": "海灘入場費x6",
             "cost": {
               "amount": 2400,
               "currency": "JPY",
               "estimated": true,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             }
           },
@@ -938,7 +1218,7 @@
           "placeQuery": "伊計ビーチ, Uruma, Japan",
           "displayNameZh": "伊計海灘",
           "transport": {
-            "mode": "car",
+            "mode": "private_car",
             "fromPlaceQuery": "果報バンタ, Uruma, Japan",
             "toPlaceQuery": "伊計ビーチ, Uruma, Japan",
             "fromStop": null,
@@ -950,12 +1230,12 @@
               "amount": 0,
               "currency": "JPY",
               "estimated": false,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             },
             "booking": {
               "required": false,
-              "url": null,
+              "url": "",
               "how": "",
               "why": ""
             }
@@ -967,14 +1247,34 @@
           "notes": "勝連半島東岸觀景點（North White Beach）；已鎖定地圖座標，避免誤指軍事區／市中心。",
           "locked": true,
           "imageUrl": null,
-          "backups": [],
+          "backups": [
+            {
+              "title": "Azama Sun Beach",
+              "displayNameZh": "あざまサンサンビーチ",
+              "placeQuery": "あざまサンサンビーチ, Nanjo, Japan",
+              "type": "attraction",
+              "notes": "南城公共海灘。",
+              "why": "同屬東海岸海灘後備。",
+              "imageUrl": "",
+              "ticket": {
+                "name": "免費參觀",
+                "cost": {
+                  "amount": 0,
+                  "currency": "JPY",
+                  "estimated": false,
+                  "source": "",
+                  "asOf": "2026-09-13"
+                }
+              }
+            }
+          ],
           "ticket": {
             "name": "免費參觀",
             "cost": {
               "amount": 0,
               "currency": "JPY",
               "estimated": false,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             }
           },
@@ -985,7 +1285,7 @@
           "placeQuery": "North White Beach, Uruma, Japan",
           "displayNameZh": "白色海灘",
           "transport": {
-            "mode": "car",
+            "mode": "private_car",
             "fromPlaceQuery": "伊計ビーチ, Uruma, Japan",
             "toPlaceQuery": "North White Beach, Uruma, Japan",
             "fromStop": null,
@@ -997,12 +1297,12 @@
               "amount": 0,
               "currency": "JPY",
               "estimated": false,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             },
             "booking": {
               "required": false,
-              "url": null,
+              "url": "",
               "how": "",
               "why": ""
             }
@@ -1016,14 +1316,34 @@
           "notes": "世界文化遺產之一",
           "locked": true,
           "imageUrl": null,
-          "backups": [],
+          "backups": [
+            {
+              "title": "Nakagusuku Castle Ruins",
+              "displayNameZh": "中城城跡",
+              "placeQuery": "中城城跡, Nakagusuku, Japan",
+              "type": "attraction",
+              "notes": "另一座世界遺產城跡。",
+              "why": "同類型城跡替代。",
+              "imageUrl": "",
+              "ticket": {
+                "name": "免費參觀",
+                "cost": {
+                  "amount": 0,
+                  "currency": "JPY",
+                  "estimated": false,
+                  "source": "",
+                  "asOf": "2026-09-13"
+                }
+              }
+            }
+          ],
           "ticket": {
             "name": "免費參觀",
             "cost": {
               "amount": 0,
               "currency": "JPY",
               "estimated": false,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             }
           },
@@ -1034,7 +1354,7 @@
           "placeQuery": "勝連城跡, Uruma, Japan",
           "displayNameZh": "勝連城遺址",
           "transport": {
-            "mode": "car",
+            "mode": "private_car",
             "fromPlaceQuery": "North White Beach, Uruma, Japan",
             "toPlaceQuery": "勝連城跡, Uruma, Japan",
             "fromStop": null,
@@ -1046,12 +1366,12 @@
               "amount": 0,
               "currency": "JPY",
               "estimated": false,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             },
             "booking": {
               "required": false,
-              "url": null,
+              "url": "",
               "how": "",
               "why": ""
             }
@@ -1063,14 +1383,34 @@
           "notes": "",
           "locked": true,
           "imageUrl": null,
-          "backups": [],
+          "backups": [
+            {
+              "title": "Cape Chinen",
+              "displayNameZh": "知念岬公園",
+              "placeQuery": "知念岬公園, Nanjo, Japan",
+              "type": "attraction",
+              "notes": "鄰近岬角公園。",
+              "why": "同一南城海岸線。",
+              "imageUrl": "",
+              "ticket": {
+                "name": "免費參觀",
+                "cost": {
+                  "amount": 0,
+                  "currency": "JPY",
+                  "estimated": false,
+                  "source": "",
+                  "asOf": "2026-09-13"
+                }
+              }
+            }
+          ],
           "ticket": {
             "name": "免費參觀",
             "cost": {
               "amount": 0,
               "currency": "JPY",
               "estimated": false,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             }
           },
@@ -1081,7 +1421,7 @@
           "placeQuery": "ニライカナイ橋, Nanjo, Japan",
           "displayNameZh": "知念岬・ニライカナイ橋展望台",
           "transport": {
-            "mode": "car",
+            "mode": "private_car",
             "fromPlaceQuery": "勝連城跡, Uruma, Japan",
             "toPlaceQuery": "ニライカナイ橋, Nanjo, Japan",
             "fromStop": null,
@@ -1093,12 +1433,12 @@
               "amount": 0,
               "currency": "JPY",
               "estimated": false,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             },
             "booking": {
               "required": false,
-              "url": null,
+              "url": "",
               "how": "",
               "why": ""
             }
@@ -1110,14 +1450,34 @@
           "notes": "南城市好市多採購",
           "locked": true,
           "imageUrl": null,
-          "backups": [],
+          "backups": [
+            {
+              "title": "Aeon Mall Okinawa Rycom",
+              "displayNameZh": "AEON Mall 琉球",
+              "placeQuery": "イオンモール沖縄ライカム, Kitanakagusuku, Japan",
+              "type": "activity",
+              "notes": "大型購物替代。",
+              "why": "同屬採買／伴手禮後備。",
+              "imageUrl": "",
+              "ticket": {
+                "name": "免費參觀",
+                "cost": {
+                  "amount": 0,
+                  "currency": "JPY",
+                  "estimated": false,
+                  "source": "",
+                  "asOf": "2026-09-13"
+                }
+              }
+            }
+          ],
           "ticket": {
             "name": "購物支出",
             "cost": {
               "amount": 0,
               "currency": "JPY",
               "estimated": false,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             }
           },
@@ -1128,7 +1488,7 @@
           "placeQuery": "コストコホールセール沖縄倉庫店, Nanjo, Japan",
           "displayNameZh": "COSTCO好市多 沖繩店",
           "transport": {
-            "mode": "car",
+            "mode": "private_car",
             "fromPlaceQuery": "ニライカナイ橋, Nanjo, Japan",
             "toPlaceQuery": "コストコホールセール沖縄倉庫店, Nanjo, Japan",
             "fromStop": null,
@@ -1140,12 +1500,12 @@
               "amount": 0,
               "currency": "JPY",
               "estimated": false,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             },
             "booking": {
               "required": false,
-              "url": null,
+              "url": "",
               "how": "",
               "why": ""
             }
@@ -1164,7 +1524,7 @@
               "amount": 64648,
               "currency": "JPY",
               "estimated": false,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             }
           },
@@ -1172,12 +1532,12 @@
           "end": null,
           "type": "hotel",
           "title": "SEA VIEW HOUSE KIRA KIRA HINANO",
-          "placeQuery": "SEA VIEW HOUSE KIRA KIRA HINANO, Nanjo, Okinawa, Japan",
+          "placeQuery": "SEA VIEW HOUSE KIRA KIRA HINANO, Nanjo, Japan",
           "displayNameZh": "沖繩的海見渡す絶景の貸切ヴィラ",
           "transport": {
-            "mode": "car",
+            "mode": "private_car",
             "fromPlaceQuery": "コストコホールセール沖縄倉庫店, Nanjo, Japan",
-            "toPlaceQuery": "SEA VIEW HOUSE KIRA KIRA HINANO, Nanjo, Okinawa, Japan",
+            "toPlaceQuery": "SEA VIEW HOUSE KIRA KIRA HINANO, Nanjo, Japan",
             "fromStop": null,
             "toStop": null,
             "line": "租車自駕",
@@ -1187,12 +1547,12 @@
               "amount": 0,
               "currency": "JPY",
               "estimated": false,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             },
             "booking": {
               "required": false,
-              "url": null,
+              "url": "",
               "how": "",
               "why": ""
             }
@@ -1225,14 +1585,34 @@
           "notes": "玻璃船海底觀光",
           "locked": true,
           "imageUrl": null,
-          "backups": [],
+          "backups": [
+            {
+              "title": "Mihama Beach",
+              "displayNameZh": "新原ビーチ",
+              "placeQuery": "新原ビーチ, Nanjo, Japan",
+              "type": "attraction",
+              "notes": "同一海灘岸上區域。",
+              "why": "不下海中展望塔也可享受海灘。",
+              "imageUrl": "",
+              "ticket": {
+                "name": "免費參觀",
+                "cost": {
+                  "amount": 0,
+                  "currency": "JPY",
+                  "estimated": false,
+                  "source": "",
+                  "asOf": "2026-09-13"
+                }
+              }
+            }
+          ],
           "ticket": {
             "name": "玻璃船票x6",
             "cost": {
               "amount": 12000,
               "currency": "JPY",
               "estimated": true,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             }
           },
@@ -1243,8 +1623,8 @@
           "placeQuery": "OCEANS 新原ビーチ海底観光センター, Nanjo, Japan",
           "displayNameZh": "新原海底觀光中心",
           "transport": {
-            "mode": "car",
-            "fromPlaceQuery": "SEA VIEW HOUSE KIRA KIRA HINANO, Nanjo, Okinawa, Japan",
+            "mode": "private_car",
+            "fromPlaceQuery": "SEA VIEW HOUSE KIRA KIRA HINANO, Nanjo, Japan",
             "toPlaceQuery": "OCEANS 新原ビーチ海底観光センター, Nanjo, Japan",
             "fromStop": null,
             "toStop": null,
@@ -1255,12 +1635,12 @@
               "amount": 0,
               "currency": "JPY",
               "estimated": false,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             },
             "booking": {
               "required": false,
-              "url": null,
+              "url": "",
               "how": "",
               "why": ""
             }
@@ -1272,14 +1652,34 @@
           "notes": "壯觀的地下鍾乳洞與文化體驗",
           "locked": true,
           "imageUrl": null,
-          "backups": [],
+          "backups": [
+            {
+              "title": "Gyokusendo Kingdom Village",
+              "displayNameZh": "王國村",
+              "placeQuery": "王国村, Nanjo, Japan",
+              "type": "attraction",
+              "notes": "玉泉洞園區文化村部分。",
+              "why": "同一園區可只逛文化村。",
+              "imageUrl": "",
+              "ticket": {
+                "name": "免費參觀",
+                "cost": {
+                  "amount": 0,
+                  "currency": "JPY",
+                  "estimated": false,
+                  "source": "",
+                  "asOf": "2026-09-13"
+                }
+              }
+            }
+          ],
           "ticket": {
             "name": "成人門票x6",
             "cost": {
               "amount": 12000,
               "currency": "JPY",
               "estimated": true,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             }
           },
@@ -1290,7 +1690,7 @@
           "placeQuery": "おきなわワールド, Nanjo, Japan",
           "displayNameZh": "沖繩世界文化王國・玉泉洞",
           "transport": {
-            "mode": "car",
+            "mode": "private_car",
             "fromPlaceQuery": "OCEANS 新原ビーチ海底観光センター, Nanjo, Japan",
             "toPlaceQuery": "おきなわワールド, Nanjo, Japan",
             "fromStop": null,
@@ -1302,12 +1702,12 @@
               "amount": 0,
               "currency": "JPY",
               "estimated": false,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             },
             "booking": {
               "required": false,
-              "url": null,
+              "url": "",
               "how": "",
               "why": ""
             }
@@ -1326,7 +1726,7 @@
               "amount": 0,
               "currency": "JPY",
               "estimated": false,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             }
           },
@@ -1337,7 +1737,7 @@
           "placeQuery": "那覇空港, Naha, Japan",
           "displayNameZh": "那霸機場搭機返程",
           "transport": {
-            "mode": "car",
+            "mode": "private_car",
             "fromPlaceQuery": "おきなわワールド, Nanjo, Japan",
             "toPlaceQuery": "那覇空港, Naha, Japan",
             "fromStop": null,
@@ -1349,12 +1749,12 @@
               "amount": 0,
               "currency": "JPY",
               "estimated": false,
-              "source": null,
+              "source": "",
               "asOf": "2026-09-13"
             },
             "booking": {
               "required": false,
-              "url": null,
+              "url": "",
               "how": "",
               "why": ""
             }
@@ -1382,7 +1782,7 @@
             "amount": 31566,
             "currency": "JPY",
             "estimated": false,
-            "source": null,
+            "source": "",
             "asOf": "2026-09-13"
           }
         }
@@ -1394,20 +1794,20 @@
       "city": "Ginowan",
       "country": "Japan",
       "area": "Isa",
-      "nearPlaceQuery": "Isa, Ginowan, Okinawa, Japan",
+      "nearPlaceQuery": "Isa, Ginowan, Japan",
       "nearReason": "第二行程結束於宜野灣附近，便利隔天北上。",
       "type": "hotel",
       "chosenName": "Airbnb 宜野灣住宿",
       "candidates": [
         {
           "name": "Airbnb 宜野灣住宿",
-          "placeQuery": "Isa, Ginowan, Okinawa, Japan",
+          "placeQuery": "Isa, Ginowan, Japan",
           "stars": 3,
           "cost": {
             "amount": 55107,
             "currency": "JPY",
             "estimated": false,
-            "source": null,
+            "source": "",
             "asOf": "2026-09-13"
           }
         }
@@ -1419,20 +1819,20 @@
       "city": "Nakijin",
       "country": "Japan",
       "area": "Kouri",
-      "nearPlaceQuery": "Private Condo Kourijima by COLDIO PREMIUM, Nakijin, Okinawa, Japan",
+      "nearPlaceQuery": "Private Condo Kourijima by COLDIO PREMIUM, Nakijin, Japan",
       "nearReason": "第三天行程結束於古宇利島，享受海景度假與早晚餐。",
       "type": "hotel",
       "chosenName": "Private Condo Kourijima by COLDIO PREMIUM",
       "candidates": [
         {
           "name": "Private Condo Kourijima by COLDIO PREMIUM",
-          "placeQuery": "Private Condo Kourijima by COLDIO PREMIUM, Nakijin, Okinawa, Japan",
+          "placeQuery": "Private Condo Kourijima by COLDIO PREMIUM, Nakijin, Japan",
           "stars": 4,
           "cost": {
             "amount": 108960,
             "currency": "JPY",
             "estimated": false,
-            "source": null,
+            "source": "",
             "asOf": "2026-09-13"
           }
         }
@@ -1444,20 +1844,20 @@
       "city": "Kin",
       "country": "Japan",
       "area": "Yaka",
-      "nearPlaceQuery": "シーサイドロコズ, Kin, Okinawa, Japan",
+      "nearPlaceQuery": "シーサイドロコズ, Kin, Japan",
       "nearReason": "第四天行程結束於金武町，方便隔天前往東海岸。",
       "type": "hotel",
       "chosenName": "Sea Side Loco's",
       "candidates": [
         {
           "name": "Sea Side Loco's",
-          "placeQuery": "シーサイドロコズ, Kin, Okinawa, Japan",
+          "placeQuery": "シーサイドロコズ, Kin, Japan",
           "stars": 3,
           "cost": {
             "amount": 49500,
             "currency": "JPY",
             "estimated": false,
-            "source": null,
+            "source": "",
             "asOf": "2026-09-13"
           }
         }
@@ -1469,20 +1869,20 @@
       "city": "Nanjo",
       "country": "Japan",
       "area": "Tsukishiro",
-      "nearPlaceQuery": "SEA VIEW HOUSE KIRA KIRA HINANO, Nanjo, Okinawa, Japan",
+      "nearPlaceQuery": "SEA VIEW HOUSE KIRA KIRA HINANO, Nanjo, Japan",
       "nearReason": "第五天行程結束於南城市，方便隔天參觀南部景點及返回機場。",
       "type": "hotel",
       "chosenName": "SEA VIEW HOUSE KIRA KIRA HINANO",
       "candidates": [
         {
           "name": "SEA VIEW HOUSE KIRA KIRA HINANO",
-          "placeQuery": "SEA VIEW HOUSE KIRA KIRA HINANO, Nanjo, Okinawa, Japan",
+          "placeQuery": "SEA VIEW HOUSE KIRA KIRA HINANO, Nanjo, Japan",
           "stars": 4,
           "cost": {
             "amount": 64648,
             "currency": "JPY",
             "estimated": false,
-            "source": null,
+            "source": "",
             "asOf": "2026-09-13"
           }
         }
@@ -1490,5 +1890,162 @@
       "transport": null
     }
   ],
-  "klook": []
+  "klook": [
+    {
+      "date": "2026-09-20",
+      "name": "沖繩縣立博物館・美術館",
+      "searchQuery": "日本 沖繩 沖繩縣立博物館・美術館",
+      "placeQuery": "沖縄県立博物館・美術館, Naha, Japan",
+      "cost": {
+        "amount": 3000,
+        "currency": "JPY",
+        "estimated": true,
+        "source": "",
+        "asOf": "2026-09-13"
+      }
+    },
+    {
+      "date": "2026-09-20",
+      "name": "識名園",
+      "searchQuery": "日本 沖繩 識名園",
+      "placeQuery": "識名園, Naha, Japan",
+      "cost": {
+        "amount": 2400,
+        "currency": "JPY",
+        "estimated": true,
+        "source": "",
+        "asOf": "2026-09-13"
+      }
+    },
+    {
+      "date": "2026-09-20",
+      "name": "首里城",
+      "searchQuery": "日本 沖繩 首里城",
+      "placeQuery": "首里城, Naha, Japan",
+      "cost": {
+        "amount": 2400,
+        "currency": "JPY",
+        "estimated": true,
+        "source": "",
+        "asOf": "2026-09-13"
+      }
+    },
+    {
+      "date": "2026-09-21",
+      "name": "青之洞窟",
+      "searchQuery": "日本 沖繩 青之洞窟",
+      "placeQuery": "青の洞窟, Onna, Japan",
+      "cost": {
+        "amount": 30000,
+        "currency": "JPY",
+        "estimated": true,
+        "source": "",
+        "asOf": "2026-09-13"
+      }
+    },
+    {
+      "date": "2026-09-21",
+      "name": "琉球村",
+      "searchQuery": "日本 沖繩 琉球村",
+      "placeQuery": "琉球村, Onna, Japan",
+      "cost": {
+        "amount": 9000,
+        "currency": "JPY",
+        "estimated": true,
+        "source": "",
+        "asOf": "2026-09-13"
+      }
+    },
+    {
+      "date": "2026-09-21",
+      "name": "萬座毛",
+      "searchQuery": "日本 沖繩 萬座毛",
+      "placeQuery": "万座毛, Onna, Japan",
+      "cost": {
+        "amount": 600,
+        "currency": "JPY",
+        "estimated": true,
+        "source": "",
+        "asOf": "2026-09-13"
+      }
+    },
+    {
+      "date": "2026-09-22",
+      "name": "沖繩美櫻水族館",
+      "searchQuery": "日本 沖繩 沖繩美櫻水族館",
+      "placeQuery": "沖縄美ら海水族館, Motobu, Japan",
+      "cost": {
+        "amount": 12900,
+        "currency": "JPY",
+        "estimated": true,
+        "source": "",
+        "asOf": "2026-09-13"
+      }
+    },
+    {
+      "date": "2026-09-22",
+      "name": "名護新奧樂園（ネオパーク）",
+      "searchQuery": "日本 沖繩 名護新奧樂園（ネオパーク）",
+      "placeQuery": "ネオパークオキナワ, Nago, Japan",
+      "cost": {
+        "amount": 7800,
+        "currency": "JPY",
+        "estimated": true,
+        "source": "",
+        "asOf": "2026-09-13"
+      }
+    },
+    {
+      "date": "2026-09-22",
+      "name": "松田鍾乳洞探險",
+      "searchQuery": "日本 沖繩 松田鍾乳洞探險",
+      "placeQuery": "松田のメガガマ, Ginoza, Japan",
+      "cost": {
+        "amount": 15000,
+        "currency": "JPY",
+        "estimated": true,
+        "source": "",
+        "asOf": "2026-09-13"
+      }
+    },
+    {
+      "date": "2026-09-23",
+      "name": "伊計海灘",
+      "searchQuery": "日本 沖繩 伊計海灘",
+      "placeQuery": "伊計ビーチ, Uruma, Japan",
+      "cost": {
+        "amount": 2400,
+        "currency": "JPY",
+        "estimated": true,
+        "source": "",
+        "asOf": "2026-09-13"
+      }
+    },
+    {
+      "date": "2026-09-24",
+      "name": "新原海底觀光中心",
+      "searchQuery": "日本 沖繩 新原海底觀光中心",
+      "placeQuery": "OCEANS 新原ビーチ海底観光センター, Nanjo, Japan",
+      "cost": {
+        "amount": 12000,
+        "currency": "JPY",
+        "estimated": true,
+        "source": "",
+        "asOf": "2026-09-13"
+      }
+    },
+    {
+      "date": "2026-09-24",
+      "name": "沖繩世界文化王國・玉泉洞",
+      "searchQuery": "日本 沖繩 沖繩世界文化王國・玉泉洞",
+      "placeQuery": "おきなわワールド, Nanjo, Japan",
+      "cost": {
+        "amount": 12000,
+        "currency": "JPY",
+        "estimated": true,
+        "source": "",
+        "asOf": "2026-09-13"
+      }
+    }
+  ]
 }

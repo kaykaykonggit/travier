@@ -20,6 +20,7 @@ export const MODE_LABEL: Record<string, string> = {
   flight: "飛機",
   cable_car: "纜車",
   private_car: "專車",
+  car: "自駕",
   ferry: "渡輪",
   night_train: "夜火車",
 };

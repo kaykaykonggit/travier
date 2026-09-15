@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { formatMoney } from "../lib/costs";
+import { klookSearchText } from "../lib/klook";
 import { googleDirExploreUrl, klookUrl, looksLikeMapsLink } from "../lib/links";
 import { resolvePlaceInput } from "../lib/resolvePlace";
 import type { BackupPlace, TimelineItem } from "../types";
@@ -75,7 +76,7 @@ export function TimelineEdit({
             />
             <a
               className="life-klook-hint"
-              href={klookUrl(item.displayNameZh || item.title || item.placeQuery)}
+              href={klookUrl(klookSearchText(item))}
               target="_blank"
               rel="noreferrer"
             >
