@@ -1272,6 +1272,11 @@ summary.with-info::after { margin-left: auto; }
   align-items: stretch;
 }
 .klooks li:last-child, .hotels li:last-child { border-bottom: 0; }
+.klooks .klook-query {
+  margin: 2px 0 0;
+  font-size: 12px;
+  color: var(--muted, #6b7280);
+}
 
 @media (min-width: 700px) {
   .spot-main { display: flow-root; }

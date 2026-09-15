@@ -1066,6 +1066,9 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
               <li key={`${item.date}-${item.name}`}>
                 <div>
                   <strong>{item.name}</strong>
+                  {item.searchQuery && item.searchQuery !== item.name ? (
+                    <p className="klook-query">{item.searchQuery}</p>
+                  ) : null}
                   <p>
                     {formatMoney(item.cost.amount, item.cost.currency)}
                     {priceNote(item.cost) ? ` · ${priceNote(item.cost)}` : ""}
