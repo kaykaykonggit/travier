@@ -1291,38 +1291,41 @@ summary.with-info::after { margin-left: auto; }
   width: 100%;
   max-width: 480px;
   margin: 0 auto;
-  padding: 0 0 calc(92px + env(safe-area-inset-bottom, 0px));
+  padding: 0 0 calc(52px + env(safe-area-inset-bottom, 0px));
   line-height: 1.45;
 }
 
 .trip-tabs {
   position: fixed;
   left: 50%;
-  bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  bottom: 0;
   transform: translateX(-50%);
   z-index: 3000;
-  width: min(420px, calc(100% - 28px));
+  width: min(480px, 100%);
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 0;
-  padding: 10px 18px;
+  padding: 4px 8px calc(4px + env(safe-area-inset-bottom, 0px));
   background: #142016;
   border: 0;
-  border-radius: 999px;
-  box-shadow: 0 16px 40px rgb(18 32 22 / 0.32);
+  border-top: 1px solid rgb(244 247 242 / 0.1);
+  border-radius: 0;
+  box-shadow: none;
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
 }
 .trip-tabs button {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: 3px;
+  justify-content: center;
+  gap: 6px;
   border: 0;
   background: transparent;
-  padding: 4px 8px 2px;
+  padding: 8px 10px;
+  min-height: 40px;
   color: rgb(244 247 242 / 0.48);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
 }
@@ -1332,12 +1335,13 @@ summary.with-info::after { margin-left: auto; }
 .trip-tabs .life-quad {
   display: grid;
   place-items: center;
-  width: 28px;
-  height: 28px;
+  width: 20px;
+  height: 20px;
   border-radius: 0;
   background: transparent;
   color: inherit;
-  font-size: 20px;
+  font-size: 16px;
+  flex: 0 0 auto;
 }
 .trip-tabs .tab-icon svg,
 .trip-tabs .life-quad svg { display: block; }
@@ -1476,6 +1480,8 @@ summary.with-info::after { margin-left: auto; }
 
 .life-page {
   padding: 14px 16px 24px;
+  min-width: 0;
+  overflow-x: clip;
 }
 .life-sticky {
   position: sticky;
@@ -1595,8 +1601,10 @@ summary.with-info::after { margin-left: auto; }
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 2px;
   min-width: 0;
+  min-height: 52px;
   border: 1px solid var(--line);
   background: var(--paper);
   border-radius: 12px;
@@ -1605,6 +1613,7 @@ summary.with-info::after { margin-left: auto; }
   color: var(--muted);
   font-size: 11px;
   font-weight: 600;
+  box-sizing: border-box;
 }
 .life-cats button svg {
   width: 22px;
@@ -1649,12 +1658,15 @@ summary.with-info::after { margin-left: auto; }
   border-radius: 14px;
   padding: 12px;
   background: var(--paper);
+  min-width: 0;
+  overflow-x: clip;
 }
 .life-card-head {
   display: flex;
   gap: 8px;
   align-items: flex-start;
   margin-bottom: 10px;
+  min-width: 0;
 }
 .life-chip {
   display: grid;
@@ -1710,10 +1722,19 @@ summary.with-info::after { margin-left: auto; }
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 8px;
+  min-width: 0;
 }
 .life-grid > .life-field.is-main { display: flex; grid-column: 1 / -1; }
-.life-grid > .life-field { display: none; }
+.life-grid > .life-field { display: none; min-width: 0; }
 .life-grid.open > .life-field { display: flex; }
+/* Native date/time controls are wide in zh locales — keep them inside the card. */
+.life-field input[type="date"],
+.life-field input[type="time"] {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
 .life-card.is-editing {
   box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--accent) 45%, var(--line));
 }
@@ -1758,8 +1779,13 @@ summary.with-info::after { margin-left: auto; }
   display: flex;
   align-items: center;
   gap: 6px;
+  min-width: 0;
 }
-.life-link-row input { flex: 1; }
+.life-link-row input {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 100%;
+}
 .life-klook-hint {
   flex-shrink: 0;
   font-size: 12px;
@@ -1790,6 +1816,7 @@ summary.with-info::after { margin-left: auto; }
 }
 .life-field input {
   width: 100%;
+  max-width: 100%;
   min-width: 0;
   border: 1px solid var(--line);
   border-radius: var(--radius-sm);
@@ -1798,6 +1825,7 @@ summary.with-info::after { margin-left: auto; }
   color: var(--ink);
   font-size: 14px;
   font-weight: 500;
+  box-sizing: border-box;
 }
 .place-suggest { position: relative; }
 .place-suggest-row {
@@ -1805,7 +1833,7 @@ summary.with-info::after { margin-left: auto; }
   align-items: center;
   gap: 6px;
 }
-.place-suggest-row input { flex: 1; }
+.place-suggest-row input { flex: 1 1 auto; min-width: 0; width: 100%; }
 .place-map-link {
   flex-shrink: 0;
   font-size: 12px;
@@ -1903,20 +1931,41 @@ summary.with-info::after { margin-left: auto; }
   white-space: nowrap;
 }
 .trip-outing .trip-top-actions {
+  display: flex;
   justify-content: flex-end;
+  align-items: center;
   flex-wrap: nowrap;
+  gap: 2px;
+  min-height: 36px;
+}
+.trip-outing .trip-top-actions .quiet-details {
+  margin-top: 0;
+  display: flex;
+  align-items: center;
 }
 .trip-outing .trip-top-actions:has(.trip-plan-tools[open]) {
   grid-column: 1 / -1;
+  flex-wrap: wrap;
+  align-items: flex-start;
 }
+.trip-outing .trip-top-actions .text-btn,
 .trip-outing .trip-plan-tools > summary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
   border: 0;
   background: transparent;
   color: var(--accent);
-  padding: 8px 10px;
+  padding: 0 10px;
+  margin: 0;
   min-height: 36px;
-  font-size: 15px;
+  height: 36px;
+  line-height: 1;
+  font-size: 14px;
   font-weight: 600;
+  border-radius: 8px;
+  box-shadow: none;
 }
 .trip-outing .trip-plan-tools > summary::after { content: none; }
 .trip-plan-pop { padding-top: 8px; }
@@ -1956,49 +2005,6 @@ summary.with-info::after { margin-left: auto; }
   padding: 2px 12px 6px;
 }
 
-.next-dock {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 6px 8px;
-  width: auto;
-  margin: 10px 16px 12px;
-  padding: 14px 16px;
-  border: 0;
-  border-radius: 22px;
-  background: var(--accent);
-  color: #f4f7f2;
-  text-align: left;
-  cursor: pointer;
-  box-shadow: 0 12px 28px rgb(18 32 22 / 0.18);
-}
-.next-dock .kicker {
-  flex: 0 0 auto;
-  font-size: 12px;
-  letter-spacing: 0;
-  text-transform: none;
-  color: rgb(244 247 242 / 0.72);
-  font-weight: 700;
-}
-.next-dock strong {
-  flex: 1 1 8rem;
-  min-width: 0;
-  margin: 0;
-  font-family: inherit;
-  font-size: 15px;
-  font-weight: 600;
-  line-height: 1.25;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.next-dock small {
-  flex: 0 1 auto;
-  margin: 0;
-  color: rgb(244 247 242 / 0.72);
-  font-size: 12px;
-}
-.next-dock-done { cursor: default; }
 
 .trip-workspace {
   display: grid;
@@ -2077,6 +2083,8 @@ summary.with-info::after { margin-left: auto; }
 .timeline-stop {
   border-bottom: 1px solid var(--line);
   padding: 0;
+  scroll-margin-top: 12px;
+  scroll-margin-bottom: 72px;
 }
 .timeline-stop:last-child { border-bottom: 0; }
 .timeline-stop.on {
@@ -2466,12 +2474,6 @@ summary.with-info::after { margin-left: auto; }
     padding-inline: 16px;
   }
   .trip-outing .day-spend { display: none; }
-  .trip-outing .next-dock {
-    width: auto;
-    padding: 8px 14px;
-    margin: 8px 16px 4px;
-    border-radius: 16px;
-  }
   .trip-outing .day-stage {
     grid-area: map;
     flex: none;
@@ -2607,7 +2609,7 @@ summary.with-info::after { margin-left: auto; }
 
 @media (max-width: 640px) {
   .import-page, .trip-page { padding: 20px 18px 80px; }
-  .trip-page.trip-outing { padding: 0 0 calc(92px + env(safe-area-inset-bottom, 0px)); }
+  .trip-page.trip-outing { padding: 0 0 calc(52px + env(safe-area-inset-bottom, 0px)); }
   .trip-chrome .day-bar { margin-inline: 0; padding-inline: 14px; }
   .day-bar { margin-inline: 0; padding-inline: 14px; }
   .cost-bar { grid-template-columns: 1fr; gap: 14px; }
@@ -2616,6 +2618,22 @@ summary.with-info::after { margin-left: auto; }
   .day-map, .gmap-day, .trip-map { height: min(38vh, 320px); min-height: 220px; }
   .hotel-map { height: 240px; }
   .hotel-pick { grid-template-columns: 1fr; }
+  /* Date + time side-by-side overflows on iPhone with zh date format. */
+  .life-grid,
+  .life-grid.open {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .life-grid.open > .life-field {
+    grid-column: 1 / -1;
+  }
+  .life-card-head {
+    flex-wrap: wrap;
+  }
+  .life-card-actions,
+  .life-card-head .edit-bar {
+    width: 100%;
+    justify-content: flex-end;
+  }
   .hotel-card-top { flex-direction: column; gap: 4px; }
   .plan-table { grid-template-columns: 1fr; }
   .sample-actions { flex-direction: column; }
