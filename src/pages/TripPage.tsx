@@ -900,6 +900,8 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
                 {!skipStopEats(item.type) && (
                   <StopEats
                     item={item}
+                    itemIndex={index}
+                    dayIndex={dayIndex}
                     point={points.get(item.placeQuery.trim())}
                     city={day.stayCity}
                     day={day}

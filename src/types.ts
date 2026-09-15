@@ -49,6 +49,18 @@ export type BackupPlace = {
   ticket: Ticket;
 };
 
+/** AI-curated nearby restaurant (Google Maps rating ≥ 4.0). */
+export type EatCandidate = {
+  name: string;
+  displayNameZh: string;
+  placeQuery: string;
+  /** Google Maps star rating; template requires ≥ 4.0. */
+  rating: number;
+  mapsUrl: string;
+  notes: string;
+  bookingUrl: string | null;
+};
+
 export type TimelineItem = {
   start: string;
   end: string | null;
@@ -67,6 +79,12 @@ export type TimelineItem = {
   transport: Transport;
   ticket: Ticket;
   backups: BackupPlace[];
+  /** Nearby restaurants for this stop (attraction/activity), Google Maps ≥ 4.0. */
+  eats: EatCandidate[];
+  /** Chosen restaurant name from eats[], or null if undecided. */
+  chosenEat: string | null;
+  /** User skipped all recommended restaurants for this stop. */
+  eatSkipped: boolean;
 };
 
 export type Day = {

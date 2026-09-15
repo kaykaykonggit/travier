@@ -139,6 +139,9 @@ export function insertPlaceAfter(
     transport: walkTransport(from, place.placeQuery, currency),
     ticket: { name: null, cost: emptyMoney(currency) },
     backups: [],
+    eats: [],
+    chosenEat: null,
+    eatSkipped: false,
   };
   if (place.source) added.ticket.cost.source = place.source;
   const timeline = [
@@ -286,4 +289,32 @@ export function remapDoneKeysForDuration(
     next.add(doneKey(date, index, start));
   }
   return next;
+}
+
+export function chooseStopEat(doc: TripDoc, dayIndex: number, itemIndex: number, eatName: string): TripDoc {
+  const day = doc.days[dayIndex];
+  const item = day?.timeline[itemIndex];
+  if (!item) return doc;
+  const timeline = day.timeline.map((row, index) =>
+    index === itemIndex ? { ...row, chosenEat: eatName, eatSkipped: false } : row,
+  );
+  return patchDay(doc, dayIndex, timeline);
+}
+
+export function skipStopEatsChoice(doc: TripDoc, dayIndex: number, itemIndex: number): TripDoc {
+  const day = doc.days[dayIndex];
+  if (!day?.timeline[itemIndex]) return doc;
+  const timeline = day.timeline.map((row, index) =>
+    index === itemIndex ? { ...row, chosenEat: null, eatSkipped: true } : row,
+  );
+  return patchDay(doc, dayIndex, timeline);
+}
+
+export function clearStopEatChoice(doc: TripDoc, dayIndex: number, itemIndex: number): TripDoc {
+  const day = doc.days[dayIndex];
+  if (!day?.timeline[itemIndex]) return doc;
+  const timeline = day.timeline.map((row, index) =>
+    index === itemIndex ? { ...row, chosenEat: null, eatSkipped: false } : row,
+  );
+  return patchDay(doc, dayIndex, timeline);
 }

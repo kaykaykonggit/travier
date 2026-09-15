@@ -760,10 +760,17 @@ button, textarea, input { font: inherit; color: inherit; }
   font-weight: 700;
 }
 .eat-row.pinned h4::after {
-  content: " 想食";
+  content: " 已選";
   font-family: "Noto Sans TC", sans-serif;
   font-size: 12px;
   font-weight: 500;
+  color: var(--accent);
+}
+.eat-rating {
+  margin-left: 6px;
+  font-style: normal;
+  font-size: 12px;
+  font-weight: 700;
   color: var(--accent);
 }
 .done-check {

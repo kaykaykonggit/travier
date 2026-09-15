@@ -6,11 +6,8 @@ import {
   defaultEatSlot,
   fetchNearbyEats,
   formatWalk,
-  isPinned,
-  loadEatPins,
   nearbyFromCache,
   rankEats,
-  toggleEatPin,
   walkMeters,
   type EatSlot,
   type EatSlotId,
@@ -27,7 +24,7 @@ export function DayEats({
   points,
   hotelQuery,
   city,
-  tripKey,
+  tripKey: _tripKey,
   covers,
   doc,
   onChange,
@@ -45,7 +42,6 @@ export function DayEats({
   const [slotId, setSlotId] = useState<EatSlotId>(() => defaultEatSlot(slots, day.date));
   const [places, setPlaces] = useState<NearbyEat[]>([]);
   const [loading, setLoading] = useState(false);
-  const [pins, setPins] = useState(() => loadEatPins(tripKey, day.date));
 
   const slot = slots.find((item) => item.id === slotId) ?? slots[0] ?? null;
 
@@ -76,18 +72,11 @@ export function DayEats({
     };
   }, [slot?.lat, slot?.lng, slot?.id]);
 
-  useEffect(() => {
-    setPins(loadEatPins(tripKey, day.date));
-  }, [tripKey, day.date]);
 
   if (!slot) return null;
 
   const ranked = rankEats(places, slot);
-  const pinIds = new Set(pins.filter((pin) => pin.slot === slot.id).map((pin) => pin.id));
-  const shown = [
-    ...pins.filter((pin) => pin.slot === slot.id),
-    ...ranked.filter((place) => !pinIds.has(place.id)),
-  ].slice(0, 6);
+  const shown = ranked.slice(0, 6);
   const area = city && city !== "in_transit" ? city : slot.nearName;
   const mapsKind = slot.id === "snack" || slot.id === "breakfast" ? "cafes" : slot.id === "late" ? "bars" : "restaurants";
   const nearMaps =
@@ -98,16 +87,6 @@ export function DayEats({
   const region = eatRegionOf(day, slot.nearQuery, area);
   const areaLinks = areaBookLinks(bookQuery, region, covers, day.date, slot.bookTime, slot.lat, slot.lng);
 
-  function pinPlace(place: NearbyEat) {
-    setPins(
-      toggleEatPin({
-        ...place,
-        tripKey,
-        date: day.date,
-        slot: slot.id,
-      }),
-    );
-  }
 
   function toggleLedger(place: NearbyEat, bookHref?: string | null) {
     const existing = findMealExpense(doc, day.date, slot.id, place.id);
@@ -115,7 +94,6 @@ export function DayEats({
       onChange(removeMealExpense(doc, day.date, slot.id, place.id));
       return;
     }
-    if (!isPinned(pins, place.id)) pinPlace(place);
     onChange(
       upsertMealExpense(doc, {
         date: day.date,
@@ -134,7 +112,7 @@ export function DayEats({
     <section className="panel eats-panel" id="day-eats">
       <div className="panel-head">
         <h3>按時段找餐廳、訂位</h3>
-        <span>選時段 → 看這一帶餐廳 → 地圖／訂位 →「想吃」或「記入食」同步到衣食住行</span>
+        <span>優先用各景點「附近高評分餐廳」。此處為整天彙總／舊行程後備搜尋；選一間「記入食」，或略過不選。</span>
       </div>
       <div className="eats-slots" role="tablist" aria-label="用餐時段">
         {slots.map((item) => (
@@ -170,9 +148,7 @@ export function DayEats({
               region={region}
               covers={covers}
               date={day.date}
-              pinned={isPinned(pins, place.id)}
               inLedger={Boolean(findMealExpense(doc, day.date, slot.id, place.id))}
-              onPin={() => pinPlace(place)}
               onLedger={(bookHref) => toggleLedger(place, bookHref)}
             />
           ))}
@@ -199,9 +175,7 @@ function EatRow({
   region,
   covers,
   date,
-  pinned,
   inLedger,
-  onPin,
   onLedger,
 }: {
   place: NearbyEat;
@@ -210,9 +184,7 @@ function EatRow({
   region: EatRegion;
   covers: number;
   date: string;
-  pinned: boolean;
   inLedger: boolean;
-  onPin: () => void;
   onLedger: (bookHref?: string | null) => void;
 }) {
   const meters =
@@ -222,7 +194,7 @@ function EatRow({
   const bookHref = place.website || books[0]?.href;
   const extras = place.website ? books : books.slice(1);
   return (
-    <li className={pinned || inLedger ? "eat-row pinned" : "eat-row"}>
+    <li className={inLedger ? "eat-row pinned" : "eat-row"}>
       <div>
         <h4>{place.name}</h4>
         <p>
@@ -244,11 +216,8 @@ function EatRow({
             {link.label}
           </a>
         ))}
-        <button type="button" className="text-btn" onClick={onPin}>
-          {pinned ? "不想吃" : "想吃"}
-        </button>
         <button type="button" className={`text-btn${inLedger ? " on" : ""}`} onClick={() => onLedger(bookHref)}>
-          {inLedger ? "已記入食" : "記入食"}
+          {inLedger ? "已選／記入食" : "選這間／記入食"}
         </button>
       </div>
     </li>
