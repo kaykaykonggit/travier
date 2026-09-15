@@ -4,8 +4,8 @@ const THEME_KEY = "travier.theme.v1";
 
 export const THEMES: Array<{ id: ThemeId; label: string; swatch: string }> = [
   { id: "moss", label: "苔綠", swatch: "#16351c" },
-  { id: "mist", label: "霧藍", swatch: "#355468" },
-  { id: "sand", label: "暖石", swatch: "#3f4a36" },
+  { id: "mist", label: "霧藍", swatch: "#2f5166" },
+  { id: "sand", label: "暖石", swatch: "#3a4532" },
 ];
 
 export function loadTheme(): ThemeId {

@@ -17,29 +17,29 @@
 }
 /* Soft slate-blue — cool, calm reading */
 [data-theme="mist"] {
-  --bg: #e4ebf0;
-  --ink: #18232b;
-  --muted: #61707a;
-  --line: rgba(24, 35, 43, 0.13);
-  --accent: #355468;
-  --paper: #f5f8fa;
+  --bg: #d7e3ec;
+  --ink: #152028;
+  --muted: #5a6b76;
+  --line: rgba(21, 32, 40, 0.14);
+  --accent: #2f5166;
+  --paper: #eef4f8;
   --control: #ffffff;
-  --focus: #355468;
-  --title: #0f171d;
-  --soft: #6e7d87;
+  --focus: #2f5166;
+  --title: #0c141a;
+  --soft: #667787;
 }
 /* Warm stone — taupe paper, deep olive accent (not terracotta) */
 [data-theme="sand"] {
-  --bg: #e8e4dc;
-  --ink: #26221c;
-  --muted: #6a645a;
-  --line: rgba(38, 34, 28, 0.13);
-  --accent: #3f4a36;
-  --paper: #f4f2ed;
+  --bg: #e2d8cb;
+  --ink: #241f19;
+  --muted: #6a6156;
+  --line: rgba(36, 31, 25, 0.14);
+  --accent: #3a4532;
+  --paper: #f2ebe2;
   --control: #ffffff;
-  --focus: #3f4a36;
-  --title: #16130f;
-  --soft: #767066;
+  --focus: #3a4532;
+  --title: #14110d;
+  --soft: #72685c;
 }
 :root,
 [data-theme] {
