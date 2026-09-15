@@ -905,6 +905,8 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
                     day={day}
                     tripKey={tripEatKey(doc.trip.title, doc.trip.startDate, doc.trip.endDate)}
                     covers={heads}
+                    doc={doc}
+                    onChange={onChange}
                   />
                 )}
               </div>
@@ -1103,6 +1105,8 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
           city={day.stayCity}
           tripKey={tripEatKey(doc.trip.title, doc.trip.startDate, doc.trip.endDate)}
           covers={heads}
+          doc={doc}
+          onChange={onChange}
         />
       </details>
       </SurfaceCard>

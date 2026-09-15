@@ -15,9 +15,10 @@ import {
   walkMeters,
   type NearbyEat,
 } from "../lib/eats";
+import { findMealExpense, removeMealExpense, upsertMealExpense } from "../lib/life";
 import type { LatLng } from "../lib/geocode";
 import { googleFoodNearUrl, googleFoodSearchUrl, googleSearchUrl } from "../lib/links";
-import type { Day, TimelineItem } from "../types";
+import type { Day, TimelineItem, TripDoc } from "../types";
 
 export function StopEats({
   item,
@@ -26,6 +27,8 @@ export function StopEats({
   day,
   tripKey,
   covers,
+  doc,
+  onChange,
 }: {
   item: TimelineItem;
   point?: LatLng;
@@ -33,6 +36,8 @@ export function StopEats({
   day: Day;
   tripKey: string;
   covers: number;
+  doc: TripDoc;
+  onChange: (next: TripDoc) => void;
 }) {
   const slot = useMemo(() => stopEatSlot(item, point), [item, point]);
   const region = eatRegionOf(day, slot.nearQuery, city, item.placeQuery);
@@ -105,6 +110,38 @@ export function StopEats({
     .filter(Boolean)
     .join(" · ");
 
+  function pinPlace(place: NearbyEat) {
+    setPins(
+      toggleEatPin({
+        ...place,
+        tripKey,
+        date: day.date,
+        slot: slot.id,
+      }),
+    );
+  }
+
+  function toggleLedger(place: NearbyEat, bookHref?: string | null) {
+    const existing = findMealExpense(doc, day.date, slot.id, place.id);
+    if (existing) {
+      onChange(removeMealExpense(doc, day.date, slot.id, place.id));
+      return;
+    }
+    if (!isPinned(pins, place.id)) pinPlace(place);
+    onChange(
+      upsertMealExpense(doc, {
+        date: day.date,
+        slot: slot.id,
+        slotLabel: slot.label,
+        placeId: place.id,
+        placeName: place.name,
+        place: area,
+        url: place.website || bookHref || null,
+        time: slot.bookTime,
+      }),
+    );
+  }
+
   return (
     <details className="stop-eats" onClick={(event) => event.stopPropagation()}>
       <summary>
@@ -112,7 +149,7 @@ export function StopEats({
         {meta ? <span className="stop-eats-meta">{meta}</span> : null}
       </summary>
       {loading && <p className="empty">正在尋找此景點附近…</p>}
-      {!loading && shown.length === 0 && <p className="empty">未列出店名。請使用下方連結在此景點旁先行預訂。</p>}
+      {!loading && shown.length === 0 && <p className="empty">未列出店名。請用下方連結在此景點旁先搜／訂位。</p>}
       {visible.length > 0 && (
         <ul className="stop-eats-list">
           {visible.map((place) => {
@@ -121,8 +158,9 @@ export function StopEats({
             const books = placeBookLinks(place.name, area, region, covers, day.date, slot.bookTime);
             const bookHref = place.website || books[0]?.href;
             const extras = place.website ? books : books.slice(1);
+            const inLedger = Boolean(findMealExpense(doc, day.date, slot.id, place.id));
             return (
-              <li key={place.id} className={isPinned(pins, place.id) ? "pinned" : undefined}>
+              <li key={place.id} className={isPinned(pins, place.id) || inLedger ? "pinned" : undefined}>
                 <div className="eat-main">
                   <strong>{place.name}</strong>
                   <span>
@@ -144,21 +182,15 @@ export function StopEats({
                       {link.label}
                     </a>
                   ))}
+                  <button type="button" className="text-btn" onClick={() => pinPlace(place)}>
+                    {isPinned(pins, place.id) ? "不想吃" : "想吃"}
+                  </button>
                   <button
                     type="button"
-                    className="text-btn"
-                    onClick={() =>
-                      setPins(
-                        toggleEatPin({
-                          ...place,
-                          tripKey,
-                          date: day.date,
-                          slot: slot.id,
-                        }),
-                      )
-                    }
+                    className={`text-btn${inLedger ? " on" : ""}`}
+                    onClick={() => toggleLedger(place, bookHref)}
                   >
-                    {isPinned(pins, place.id) ? "不想吃" : "想吃"}
+                    {inLedger ? "已記入食" : "記入食"}
                   </button>
                 </div>
               </li>

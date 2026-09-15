@@ -128,12 +128,20 @@ function ExpenseCard({
           <small>
             {formatDateZh(item.date)}
             {cat?.hint ? ` · ${cat.hint}` : ""}
-            {item.link ? " · 連行程" : ""}
+            {item.link?.kind === "hotel"
+              ? " · 連今晚酒店"
+              : item.link?.kind === "flight"
+                ? " · 連機票"
+                : item.link?.kind === "meal"
+                  ? ` · 連訂餐${item.notes ? `（${item.notes}）` : ""}`
+                  : item.link
+                    ? " · 連行程"
+                    : ""}
           </small>
         </div>
         <div className="life-card-actions">
           <EditBar editing={editing} onEdit={onEdit} onSave={save} onCancel={onCancel} />
-          {editing && !item.link ? (
+          {editing && (!item.link || item.link.kind === "meal") ? (
             <button type="button" className="text-btn life-delete" onClick={onDelete}>
               刪除
             </button>

@@ -75,13 +75,13 @@ export function isFlightStop(item: { type: string; transport: { mode: string } }
   return item.type === "flight" || item.transport.mode === "flight";
 }
 
-/** Keep linked hotel/flight rows in sync without wiping manual expenses. */
+/** Keep linked hotel/flight rows in sync without wiping manual / meal expenses. */
 export function ensureLifeExpenses(doc: TripDoc): TripDoc {
   const existing = doc.expenses ?? [];
-  const manual = existing
-    .filter((item) => !item.link)
+  const preserved = existing
+    .filter((item) => item.link?.kind !== "hotel" && item.link?.kind !== "flight")
     .map((item) => ({ ...item, url: item.url ?? "" }));
-  const next: ExpenseItem[] = [...manual];
+  const next: ExpenseItem[] = [...preserved];
 
   for (const night of doc.nights) {
     if (night.type !== "hotel") continue;
@@ -218,8 +218,69 @@ export function updateExpense(doc: TripDoc, id: string, patch: Partial<Omit<Expe
 export function deleteExpense(doc: TripDoc, id: string): TripDoc {
   const base = ensureLifeExpenses(doc);
   const target = (base.expenses ?? []).find((item) => item.id === id);
+  if (target?.link?.kind === "meal") {
+    return { ...base, expenses: (base.expenses ?? []).filter((item) => item.id !== id) };
+  }
   if (target?.link) return updateExpense(base, id, { amount: null });
   return { ...base, expenses: (base.expenses ?? []).filter((item) => item.id !== id) };
+}
+
+export function findMealExpense(
+  doc: TripDoc,
+  date: string,
+  slot: string,
+  placeId: string,
+): ExpenseItem | undefined {
+  return (doc.expenses ?? []).find(
+    (item) =>
+      item.link?.kind === "meal" &&
+      item.link.date === date &&
+      item.link.slot === slot &&
+      item.link.placeId === placeId,
+  );
+}
+
+/** Add or refresh a 食 row linked to a restaurant from 訂餐 / 附近美食. */
+export function upsertMealExpense(
+  doc: TripDoc,
+  input: {
+    date: string;
+    slot: string;
+    slotLabel: string;
+    placeId: string;
+    placeName: string;
+    place: string;
+    url?: string | null;
+    time?: string | null;
+  },
+): TripDoc {
+  const base = ensureLifeExpenses(doc);
+  const prev = findMealExpense(base, input.date, input.slot, input.placeId);
+  const url = normalizeExpenseUrl(input.url ?? "") || prev?.url || "";
+  const item: ExpenseItem = {
+    id: prev?.id ?? `meal-${input.date}-${input.slot}-${input.placeId}`.slice(0, 48),
+    category: "shi",
+    title: input.placeName || prev?.title || "餐飲",
+    place: input.place || prev?.place || "",
+    date: input.date,
+    time: prev?.time ?? input.time ?? null,
+    amount: prev?.amount ?? null,
+    currency: prev?.currency || doc.trip.currencies.display,
+    notes: prev?.notes || input.slotLabel,
+    url,
+    link: { kind: "meal", date: input.date, slot: input.slot, placeId: input.placeId },
+  };
+  const expenses = prev
+    ? (base.expenses ?? []).map((row) => (row.id === prev.id ? item : row))
+    : [item, ...(base.expenses ?? [])];
+  return { ...base, expenses };
+}
+
+export function removeMealExpense(doc: TripDoc, date: string, slot: string, placeId: string): TripDoc {
+  const base = ensureLifeExpenses(doc);
+  const target = findMealExpense(base, date, slot, placeId);
+  if (!target) return base;
+  return deleteExpense(base, target.id);
 }
 
 export function parseAmountInput(raw: string): number | null {

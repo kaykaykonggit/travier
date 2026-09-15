@@ -17,9 +17,10 @@ import {
   type NearbyEat,
 } from "../lib/eats";
 import { areaBookLinks, eatRegionOf, placeBookLinks, type EatRegion } from "../lib/eatBook";
+import { findMealExpense, removeMealExpense, upsertMealExpense } from "../lib/life";
 import type { LatLng } from "../lib/geocode";
 import { googleFoodNearUrl, googleFoodSearchUrl, googleSearchUrl } from "../lib/links";
-import type { Day } from "../types";
+import type { Day, TripDoc } from "../types";
 
 export function DayEats({
   day,
@@ -28,6 +29,8 @@ export function DayEats({
   city,
   tripKey,
   covers,
+  doc,
+  onChange,
 }: {
   day: Day;
   points: Map<string, LatLng>;
@@ -35,6 +38,8 @@ export function DayEats({
   city: string;
   tripKey: string;
   covers: number;
+  doc: TripDoc;
+  onChange: (next: TripDoc) => void;
 }) {
   const slots = useMemo(() => buildEatSlots(day, points, hotelQuery), [day, points, hotelQuery]);
   const [slotId, setSlotId] = useState<EatSlotId>(() => defaultEatSlot(slots, day.date));
@@ -104,11 +109,32 @@ export function DayEats({
     );
   }
 
+  function toggleLedger(place: NearbyEat, bookHref?: string | null) {
+    const existing = findMealExpense(doc, day.date, slot.id, place.id);
+    if (existing) {
+      onChange(removeMealExpense(doc, day.date, slot.id, place.id));
+      return;
+    }
+    if (!isPinned(pins, place.id)) pinPlace(place);
+    onChange(
+      upsertMealExpense(doc, {
+        date: day.date,
+        slot: slot.id,
+        slotLabel: slot.label,
+        placeId: place.id,
+        placeName: place.name,
+        place: area,
+        url: place.website || bookHref || null,
+        time: slot.bookTime,
+      }),
+    );
+  }
+
   return (
     <section className="panel eats-panel" id="day-eats">
       <div className="panel-head">
-        <h3>按時段預訂午餐晚餐</h3>
-        <span>景點下方已有附近餐廳；此處可將早餐／午餐／晚餐一同檢視</span>
+        <h3>按時段找餐廳、訂位</h3>
+        <span>選時段 → 看這一帶餐廳 → 地圖／訂位 →「想吃」或「記入食」同步到衣食住行</span>
       </div>
       <div className="eats-slots" role="tablist" aria-label="用餐時段">
         {slots.map((item) => (
@@ -131,7 +157,7 @@ export function DayEats({
       </p>
       {loading && <p className="empty">正在尋找這一帶的餐廳…</p>}
       {!loading && shown.length === 0 && (
-        <p className="empty">未列出店名。請使用下方連結在地圖和訂位網站先查看，熱門餐廳越早預訂越穩妥。</p>
+        <p className="empty">未列出店名。請用下方 Google／訂位連結先搜這一帶；熱門餐廳越早訂越穩。</p>
       )}
       {shown.length > 0 && (
         <ul className="eats-list">
@@ -145,7 +171,9 @@ export function DayEats({
               covers={covers}
               date={day.date}
               pinned={isPinned(pins, place.id)}
+              inLedger={Boolean(findMealExpense(doc, day.date, slot.id, place.id))}
               onPin={() => pinPlace(place)}
+              onLedger={(bookHref) => toggleLedger(place, bookHref)}
             />
           ))}
         </ul>
@@ -172,7 +200,9 @@ function EatRow({
   covers,
   date,
   pinned,
+  inLedger,
   onPin,
+  onLedger,
 }: {
   place: NearbyEat;
   slot: EatSlot;
@@ -181,7 +211,9 @@ function EatRow({
   covers: number;
   date: string;
   pinned: boolean;
+  inLedger: boolean;
   onPin: () => void;
+  onLedger: (bookHref?: string | null) => void;
 }) {
   const meters =
     slot.lat != null && slot.lng != null ? walkMeters(slot.lat, slot.lng, place.lat, place.lng) : null;
@@ -190,7 +222,7 @@ function EatRow({
   const bookHref = place.website || books[0]?.href;
   const extras = place.website ? books : books.slice(1);
   return (
-    <li className={pinned ? "eat-row pinned" : "eat-row"}>
+    <li className={pinned || inLedger ? "eat-row pinned" : "eat-row"}>
       <div>
         <h4>{place.name}</h4>
         <p>
@@ -214,6 +246,9 @@ function EatRow({
         ))}
         <button type="button" className="text-btn" onClick={onPin}>
           {pinned ? "不想吃" : "想吃"}
+        </button>
+        <button type="button" className={`text-btn${inLedger ? " on" : ""}`} onClick={() => onLedger(bookHref)}>
+          {inLedger ? "已記入食" : "記入食"}
         </button>
       </div>
     </li>

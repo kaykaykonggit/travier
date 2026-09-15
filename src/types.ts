@@ -135,7 +135,9 @@ export type LifeCategory = "yi" | "shi" | "zhu" | "xing" | "wan";
 
 export type ExpenseLink =
   | { kind: "hotel"; nightDate: string }
-  | { kind: "flight"; dayIndex: number; itemIndex: number };
+  | { kind: "flight"; dayIndex: number; itemIndex: number }
+  /** Restaurant shortlisted from 訂餐 / 附近美食. */
+  | { kind: "meal"; date: string; slot: string; placeId: string };
 
 /** User-controlled spend ledger (衣食住行玩), separate from the outing timeline. */
 export type ExpenseItem = {

@@ -755,6 +755,10 @@ button, textarea, input { font: inherit; color: inherit; }
   font-size: 13px;
   align-items: center;
 }
+.eat-actions .text-btn.on {
+  color: var(--accent);
+  font-weight: 700;
+}
 .eat-row.pinned h4::after {
   content: " 想食";
   font-family: "Noto Sans TC", sans-serif;
