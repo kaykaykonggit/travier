@@ -82,6 +82,16 @@ export function LifeGlyph({ id }: { id: GlyphId }) {
   );
 }
 
+export function PrepGlyph() {
+  return (
+    <IconFrame title="預備">
+      <rect x="5.2" y="4.6" width="13.6" height="15.2" rx="1.8" {...stroke} />
+      <path d="M8.2 9.2h7.6M8.2 12.4h7.6M8.2 15.6h5.2" {...stroke} />
+      <path d="M8.4 6.6l1.1 1.1 2.2-2.4" {...stroke} />
+    </IconFrame>
+  );
+}
+
 export function LifeQuadMark({ active = false }: { active?: boolean }) {
   return (
     <span className={`life-quad${active ? " on" : ""}`} aria-hidden="true">
@@ -97,12 +107,18 @@ export function TripTabs({
   tab,
   onChange,
 }: {
-  tab: "trip" | "life";
-  onChange: (tab: "trip" | "life") => void;
+  tab: "prep" | "trip" | "life";
+  onChange: (tab: "prep" | "trip" | "life") => void;
 }) {
   return (
     <nav className="trip-tabs" aria-label="主分頁">
       <p className="tabs-brand">Travier</p>
+      <button type="button" className={tab === "prep" ? "on" : ""} onClick={() => onChange("prep")}>
+        <span className="tab-icon" aria-hidden="true">
+          <PrepGlyph />
+        </span>
+        預備
+      </button>
       <button type="button" className={tab === "trip" ? "on" : ""} onClick={() => onChange("trip")}>
         <span className="tab-icon" aria-hidden="true">
           <LifeGlyph id="day" />

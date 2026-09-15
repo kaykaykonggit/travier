@@ -3,6 +3,7 @@ import { BookingBox } from "../components/BookingBox";
 import { EditBar } from "../components/EditBar";
 import { TripTabs } from "../components/LifeIcons";
 import { LifeLedger } from "../components/LifeLedger";
+import { PrepLedger } from "../components/PrepLedger";
 import { DayEats } from "../components/DayEats";
 import { DayMap, type MapStop } from "../components/DayMap";
 import { InfoTip } from "../components/InfoTip";
@@ -96,7 +97,7 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
   const [tweakCopied, setTweakCopied] = useState<"day" | "full" | null>(null);
   const [applyNote, setApplyNote] = useState<string | null>(null);
   const [archivedMsg, setArchivedMsg] = useState<string | null>(null);
-  const [mainTab, setMainTab] = useState<"trip" | "life">("trip");
+  const [mainTab, setMainTab] = useState<"prep" | "trip" | "life">("trip");
   const [stopEdit, setStopEdit] = useState<{ dayIndex: number; itemIndex: number; snapshot: TimelineItem[] } | null>(null);
   const [stopTicketUrl, setStopTicketUrl] = useState("");
   const [hotelEditing, setHotelEditing] = useState(false);
@@ -415,11 +416,16 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
   }, [doc]);
 
   return (
-    <div className={`trip-page trip-outing${mainTab === "life" ? " tab-life" : " tab-trip"}`}>
+    <div className={`trip-page trip-outing${mainTab === "life" ? " tab-life" : mainTab === "prep" ? " tab-prep" : " tab-trip"}`}>
       {mainTab === "life" ? (
         <>
           <LifeLedger doc={doc} rates={rates} onChange={onChange} />
           <TripTabs tab="life" onChange={setMainTab} />
+        </>
+      ) : mainTab === "prep" ? (
+        <>
+          <PrepLedger doc={doc} onChange={onChange} />
+          <TripTabs tab="prep" onChange={setMainTab} />
         </>
       ) : (
         <>

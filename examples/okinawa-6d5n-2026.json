@@ -1490,5 +1490,476 @@
       "transport": null
     }
   ],
-  "klook": []
+  "klook": [],
+  "prep": [
+    {
+      "id": "prep-seed-1",
+      "section": "him_pack",
+      "group": "拍攝與電子設備",
+      "title": "大容量尿袋（戶外拍片、開地圖極耗電）",
+      "done": false
+    },
+    {
+      "id": "prep-seed-2",
+      "section": "him_pack",
+      "group": "拍攝與電子設備",
+      "title": "Pocket 3 專用配件（充電線、自拍棍／小型三腳架）",
+      "done": false
+    },
+    {
+      "id": "prep-seed-3",
+      "section": "him_pack",
+      "group": "拍攝與電子設備",
+      "title": "萬能插頭（日本兩腳扁插）",
+      "done": false
+    },
+    {
+      "id": "prep-seed-4",
+      "section": "him_pack",
+      "group": "拍攝與電子設備",
+      "title": "車用雙位 USB 充電器（車充）",
+      "done": false
+    },
+    {
+      "id": "prep-seed-5",
+      "section": "him_pack",
+      "group": "拍攝與電子設備",
+      "title": "手機磁吸支架／導航夾（自駕導航用）",
+      "done": false
+    },
+    {
+      "id": "prep-seed-6",
+      "section": "him_pack",
+      "group": "拍攝與電子設備",
+      "title": "太陽眼鏡（司機防眩光用）",
+      "done": false
+    },
+    {
+      "id": "prep-seed-7",
+      "section": "him_pack",
+      "group": "共用藥品與戶外急救",
+      "title": "防蚊蟲叮咬藥膏／蚊怕水",
+      "done": false
+    },
+    {
+      "id": "prep-seed-8",
+      "section": "him_pack",
+      "group": "共用藥品與戶外急救",
+      "title": "暈浪丸（水上活動／離島）",
+      "done": false
+    },
+    {
+      "id": "prep-seed-9",
+      "section": "him_pack",
+      "group": "共用藥品與戶外急救",
+      "title": "常備藥（胃藥、必理痛、消炎止痛、收鼻水、M痛藥、濕疹藥膏、保濟丸、膠布、維他命C）",
+      "done": false
+    },
+    {
+      "id": "prep-seed-10",
+      "section": "him_pack",
+      "group": "防曬與雨具",
+      "title": "大支裝高防曬 SPF50+ PA++++（兩人共用）",
+      "done": false
+    },
+    {
+      "id": "prep-seed-11",
+      "section": "him_pack",
+      "group": "防曬與雨具",
+      "title": "大雨傘／輕便雨衣（9月驟雨）",
+      "done": false
+    },
+    {
+      "id": "prep-seed-12",
+      "section": "him_pack",
+      "group": "代印文件（A4 文件袋）",
+      "title": "租車預約確認信（編號、分店地址電話）",
+      "done": false
+    },
+    {
+      "id": "prep-seed-13",
+      "section": "him_pack",
+      "group": "代印文件（A4 文件袋）",
+      "title": "航班機票憑證（E-ticket）",
+      "done": false
+    },
+    {
+      "id": "prep-seed-14",
+      "section": "him_pack",
+      "group": "代印文件（A4 文件袋）",
+      "title": "酒店預訂確認信",
+      "done": false
+    },
+    {
+      "id": "prep-seed-15",
+      "section": "him_pack",
+      "group": "代印文件（A4 文件袋）",
+      "title": "行程大綱、景點電話及 Mapcode 列表",
+      "done": false
+    },
+    {
+      "id": "prep-seed-16",
+      "section": "him_pack",
+      "group": "代印文件（A4 文件袋）",
+      "title": "旅遊保險單及 24 小時緊急支援電話",
+      "done": false
+    },
+    {
+      "id": "prep-seed-17",
+      "section": "him_pack",
+      "group": "代印文件（A4 文件袋）",
+      "title": "Visit Japan Web QR Code 截圖列印本",
+      "done": false
+    },
+    {
+      "id": "prep-seed-18",
+      "section": "him_todo",
+      "group": "出發前",
+      "title": "辦理香港駕駛執照及國際駕駛許可證（國際牌）正本帶齊",
+      "done": false
+    },
+    {
+      "id": "prep-seed-19",
+      "section": "him_todo",
+      "group": "出發前",
+      "title": "整理並打印所有旅遊與自駕文件",
+      "done": false
+    },
+    {
+      "id": "prep-seed-20",
+      "section": "him_todo",
+      "group": "出發前",
+      "title": "準備少量日圓散銀硬幣（停車場／自動販賣機）",
+      "done": false
+    },
+    {
+      "id": "prep-seed-21",
+      "section": "him_todo",
+      "group": "出發前",
+      "title": "出發前網上 Check-in",
+      "done": false
+    },
+    {
+      "id": "prep-seed-22",
+      "section": "her_pack",
+      "group": "電子",
+      "title": "iPhone 叉電線",
+      "done": false
+    },
+    {
+      "id": "prep-seed-23",
+      "section": "her_pack",
+      "group": "電子",
+      "title": "直髮夾",
+      "done": false
+    },
+    {
+      "id": "prep-seed-24",
+      "section": "her_pack",
+      "group": "電子",
+      "title": "Pocket 3（若由她保管）",
+      "done": false
+    },
+    {
+      "id": "prep-seed-25",
+      "section": "her_pack",
+      "group": "電子",
+      "title": "電話繩（掛頸防跌落水）",
+      "done": false
+    },
+    {
+      "id": "prep-seed-26",
+      "section": "her_pack",
+      "group": "衣物",
+      "title": "上衣 × 5（透氣、快乾、度假風）",
+      "done": false
+    },
+    {
+      "id": "prep-seed-27",
+      "section": "her_pack",
+      "group": "衣物",
+      "title": "下身 × 3（短褲、輕便裙裝）",
+      "done": false
+    },
+    {
+      "id": "prep-seed-28",
+      "section": "her_pack",
+      "group": "衣物",
+      "title": "薄防曬外套／薄恤衫 × 1",
+      "done": false
+    },
+    {
+      "id": "prep-seed-29",
+      "section": "her_pack",
+      "group": "衣物",
+      "title": "睡衣 1 set",
+      "done": false
+    },
+    {
+      "id": "prep-seed-30",
+      "section": "her_pack",
+      "group": "衣物",
+      "title": "Bra × 5",
+      "done": false
+    },
+    {
+      "id": "prep-seed-31",
+      "section": "her_pack",
+      "group": "衣物",
+      "title": "一次性內褲 × 10",
+      "done": false
+    },
+    {
+      "id": "prep-seed-32",
+      "section": "her_pack",
+      "group": "衣物",
+      "title": "一次性襪",
+      "done": false
+    },
+    {
+      "id": "prep-seed-33",
+      "section": "her_pack",
+      "group": "衣物",
+      "title": "毛巾仔",
+      "done": false
+    },
+    {
+      "id": "prep-seed-34",
+      "section": "her_pack",
+      "group": "衣物",
+      "title": "細袋（街上隨身包）",
+      "done": false
+    },
+    {
+      "id": "prep-seed-35",
+      "section": "her_pack",
+      "group": "衣物",
+      "title": "Handcarry 袋（背囊或隨身大袋）",
+      "done": false
+    },
+    {
+      "id": "prep-seed-36",
+      "section": "her_pack",
+      "group": "個人護理",
+      "title": "洗面",
+      "done": false
+    },
+    {
+      "id": "prep-seed-37",
+      "section": "her_pack",
+      "group": "個人護理",
+      "title": "爽膚水",
+      "done": false
+    },
+    {
+      "id": "prep-seed-38",
+      "section": "her_pack",
+      "group": "個人護理",
+      "title": "卸妝",
+      "done": false
+    },
+    {
+      "id": "prep-seed-39",
+      "section": "her_pack",
+      "group": "個人護理",
+      "title": "防曬",
+      "done": false
+    },
+    {
+      "id": "prep-seed-40",
+      "section": "her_pack",
+      "group": "個人護理",
+      "title": "Body lotion",
+      "done": false
+    },
+    {
+      "id": "prep-seed-41",
+      "section": "her_pack",
+      "group": "個人護理",
+      "title": "Eye cream",
+      "done": false
+    },
+    {
+      "id": "prep-seed-42",
+      "section": "her_pack",
+      "group": "個人護理",
+      "title": "護髮素",
+      "done": false
+    },
+    {
+      "id": "prep-seed-43",
+      "section": "her_pack",
+      "group": "個人護理",
+      "title": "髮尾油",
+      "done": false
+    },
+    {
+      "id": "prep-seed-44",
+      "section": "her_pack",
+      "group": "個人護理",
+      "title": "Masks",
+      "done": false
+    },
+    {
+      "id": "prep-seed-45",
+      "section": "her_pack",
+      "group": "個人護理",
+      "title": "蘆薈膠／曬後修護啫喱",
+      "done": false
+    },
+    {
+      "id": "prep-seed-46",
+      "section": "her_pack",
+      "group": "個人護理",
+      "title": "手提風扇",
+      "done": false
+    },
+    {
+      "id": "prep-seed-47",
+      "section": "her_pack",
+      "group": "個人護理",
+      "title": "太陽眼鏡／太陽帽",
+      "done": false
+    },
+    {
+      "id": "prep-seed-48",
+      "section": "her_pack",
+      "group": "個人護理",
+      "title": "腳貼",
+      "done": false
+    },
+    {
+      "id": "prep-seed-49",
+      "section": "her_pack",
+      "group": "個人護理",
+      "title": "化妝品",
+      "done": false
+    },
+    {
+      "id": "prep-seed-50",
+      "section": "her_pack",
+      "group": "個人護理",
+      "title": "眼睫毛",
+      "done": false
+    },
+    {
+      "id": "prep-seed-51",
+      "section": "her_pack",
+      "group": "個人護理",
+      "title": "耳環",
+      "done": false
+    },
+    {
+      "id": "prep-seed-52",
+      "section": "her_pack",
+      "group": "個人護理",
+      "title": "頸鏈",
+      "done": false
+    },
+    {
+      "id": "prep-seed-53",
+      "section": "her_pack",
+      "group": "個人護理",
+      "title": "橡皮筋",
+      "done": false
+    },
+    {
+      "id": "prep-seed-54",
+      "section": "her_pack",
+      "group": "個人護理",
+      "title": "梳",
+      "done": false
+    },
+    {
+      "id": "prep-seed-55",
+      "section": "her_pack",
+      "group": "個人護理",
+      "title": "牙刷",
+      "done": false
+    },
+    {
+      "id": "prep-seed-56",
+      "section": "her_pack",
+      "group": "個人護理",
+      "title": "牙膏",
+      "done": false
+    },
+    {
+      "id": "prep-seed-57",
+      "section": "her_pack",
+      "group": "個人護理",
+      "title": "濕廁紙",
+      "done": false
+    },
+    {
+      "id": "prep-seed-58",
+      "section": "her_pack",
+      "group": "個人護理",
+      "title": "M巾",
+      "done": false
+    },
+    {
+      "id": "prep-seed-59",
+      "section": "her_pack",
+      "group": "個人護理",
+      "title": "口罩",
+      "done": false
+    },
+    {
+      "id": "prep-seed-60",
+      "section": "her_pack",
+      "group": "其他",
+      "title": "HKID（香港身份證）",
+      "done": false
+    },
+    {
+      "id": "prep-seed-61",
+      "section": "her_pack",
+      "group": "其他",
+      "title": "Passport（護照）",
+      "done": false
+    },
+    {
+      "id": "prep-seed-62",
+      "section": "her_pack",
+      "group": "其他",
+      "title": "數據卡",
+      "done": false
+    },
+    {
+      "id": "prep-seed-63",
+      "section": "her_pack",
+      "group": "其他",
+      "title": "日元現金",
+      "done": false
+    },
+    {
+      "id": "prep-seed-64",
+      "section": "her_pack",
+      "group": "其他",
+      "title": "頸枕（航程休息）",
+      "done": false
+    },
+    {
+      "id": "prep-seed-65",
+      "section": "her_pack",
+      "group": "其他",
+      "title": "膠袋／垃圾袋 2–3 個（裝濕衣）",
+      "done": false
+    },
+    {
+      "id": "prep-seed-66",
+      "section": "her_pack",
+      "group": "其他",
+      "title": "紙巾",
+      "done": false
+    },
+    {
+      "id": "prep-seed-67",
+      "section": "her_pack",
+      "group": "其他",
+      "title": "Online Check-in",
+      "done": false
+    }
+  ]
 }
