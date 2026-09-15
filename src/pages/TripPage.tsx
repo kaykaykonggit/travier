@@ -728,6 +728,7 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
             <li
               id={`stop-${day.date}-${index}`}
               key={`${item.start}-${item.title}-${index}`}
+              data-stop-index={index}
               className={`timeline-stop ${item.mustSee ? "must" : ""} ${focused ? "on" : ""} ${isLead ? "is-lead" : ""} ${finished ? "is-done" : ""}`.trim()}
             >
               {cityBreak ? (
@@ -735,7 +736,7 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
                   <span>{placeBreakLabel(place)}</span>
                 </p>
               ) : null}
-              <div className="stop-compact-row" data-stop-index={index}>
+              <div className="stop-compact-row">
                 <StopDragHandle index={index} onReorder={moveStop} />
                 <button type="button" className="stop-compact" onClick={() => focusItem(index, true)}>
                   {stopNo > 0 ? <span className="stop-num">{stopNo}</span> : <span className="stop-num">·</span>}
