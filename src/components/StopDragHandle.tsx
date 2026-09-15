@@ -1,13 +1,4 @@
-import { useEffect, useRef, useState } from "react";
-import { createPortal } from "react-dom";
-
-type DragGhost = {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  html: string;
-};
+import { useEffect, useRef } from "react";
 
 /** Hold-and-drag handle: floating ghost card + drop target while reordering. */
 export function StopDragHandle({
@@ -19,14 +10,14 @@ export function StopDragHandle({
   disabled?: boolean;
   onReorder: (from: number, to: number) => void;
 }) {
-  const [dragging, setDragging] = useState(false);
-  const [ghost, setGhost] = useState<DragGhost | null>(null);
+  const handleRef = useRef<HTMLButtonElement | null>(null);
   const draggingRef = useRef(false);
   const fromRef = useRef(index);
   const lastTo = useRef(index);
   const pointerIdRef = useRef<number | null>(null);
   const offsetRef = useRef({ x: 0, y: 0 });
   const sourceLiRef = useRef<HTMLElement | null>(null);
+  const ghostRef = useRef<HTMLDivElement | null>(null);
   const onReorderRef = useRef(onReorder);
   onReorderRef.current = onReorder;
 
@@ -49,10 +40,10 @@ export function StopDragHandle({
     }
     if (best) return best.index;
     if (!rows.length) return null;
-    const first = rows[0].getBoundingClientRect();
-    const last = rows[rows.length - 1].getBoundingClientRect();
-    if (clientY < first.top) return Number(rows[0].dataset.stopIndex);
-    if (clientY > last.bottom) return Number(rows[rows.length - 1].dataset.stopIndex);
+    if (clientY < rows[0].getBoundingClientRect().top) return Number(rows[0].dataset.stopIndex);
+    if (clientY > rows[rows.length - 1].getBoundingClientRect().bottom) {
+      return Number(rows[rows.length - 1].dataset.stopIndex);
+    }
     return null;
   }
 
@@ -66,11 +57,24 @@ export function StopDragHandle({
     });
   }
 
+  function moveGhost(x: number, y: number) {
+    const ghost = ghostRef.current;
+    if (!ghost) return;
+    ghost.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+  }
+
+  function destroyGhost() {
+    ghostRef.current?.remove();
+    ghostRef.current = null;
+  }
+
   function cleanupDragClasses() {
     clearTargets();
     document.body.classList.remove("is-reordering-stops");
     sourceLiRef.current?.classList.remove("is-drag-source");
     sourceLiRef.current = null;
+    handleRef.current?.classList.remove("is-dragging");
+    destroyGhost();
   }
 
   useEffect(() => {
@@ -83,15 +87,7 @@ export function StopDragHandle({
         lastTo.current = target;
         markTarget(target);
       }
-      setGhost((current) =>
-        current
-          ? {
-              ...current,
-              x: event.clientX - offsetRef.current.x,
-              y: event.clientY - offsetRef.current.y,
-            }
-          : current,
-      );
+      moveGhost(event.clientX - offsetRef.current.x, event.clientY - offsetRef.current.y);
     }
 
     function onUp(event: PointerEvent) {
@@ -99,11 +95,10 @@ export function StopDragHandle({
       if (pointerIdRef.current != null && event.pointerId !== pointerIdRef.current) return;
       draggingRef.current = false;
       pointerIdRef.current = null;
-      setDragging(false);
-      setGhost(null);
-      cleanupDragClasses();
       const to = lastTo.current;
-      if (to !== fromRef.current) onReorderRef.current(fromRef.current, to);
+      const from = fromRef.current;
+      cleanupDragClasses();
+      if (to !== from) onReorderRef.current(from, to);
     }
 
     window.addEventListener("pointermove", onMove, { passive: false });
@@ -113,6 +108,7 @@ export function StopDragHandle({
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerup", onUp);
       window.removeEventListener("pointercancel", onUp);
+      cleanupDragClasses();
     };
   }, []);
 
@@ -131,64 +127,52 @@ export function StopDragHandle({
     draggingRef.current = true;
     pointerIdRef.current = event.pointerId;
     offsetRef.current = {
-      x: event.clientX - rect.left,
-      y: event.clientY - rect.top,
+      x: Math.min(Math.max(event.clientX - rect.left, 12), Math.max(rect.width - 12, 12)),
+      y: Math.min(Math.max(event.clientY - rect.top, 8), Math.max(rect.height - 8, 8)),
     };
     sourceLiRef.current = li;
     li.classList.add("is-drag-source");
     document.body.classList.add("is-reordering-stops");
-    setDragging(true);
-    setGhost({
-      x: rect.left,
-      y: rect.top,
-      width: rect.width,
-      height: rect.height,
-      html: row.innerHTML,
-    });
+    event.currentTarget.classList.add("is-dragging");
+
+    destroyGhost();
+    const ghost = document.createElement("div");
+    ghost.className = "stop-drag-ghost";
+    ghost.setAttribute("aria-hidden", "true");
+    ghost.style.width = `${rect.width}px`;
+    ghost.style.height = `${rect.height}px`;
+    ghost.innerHTML = row.innerHTML;
+    document.body.appendChild(ghost);
+    ghostRef.current = ghost;
+    moveGhost(rect.left, rect.top);
     markTarget(index);
 
     try {
       event.currentTarget.setPointerCapture(event.pointerId);
     } catch {
-      /* capture optional; window listeners still drive the drag */
+      /* window listeners still drive the drag */
     }
   }
 
   return (
-    <>
-      <button
-        type="button"
-        className={`stop-drag-handle${dragging ? " is-dragging" : ""}`}
-        aria-label="按住拖曳以調整順序"
-        title="按住拖曳"
-        disabled={disabled}
-        onPointerDown={onPointerDown}
-        onClick={(event) => event.stopPropagation()}
-      >
-        <span className="stop-drag-glyph" aria-hidden="true">
-          <i />
-          <i />
-          <i />
-          <i />
-          <i />
-          <i />
-        </span>
-      </button>
-      {ghost
-        ? createPortal(
-            <div
-              className="stop-drag-ghost"
-              style={{
-                width: ghost.width,
-                height: ghost.height,
-                transform: `translate3d(${ghost.x}px, ${ghost.y}px, 0)`,
-              }}
-              aria-hidden="true"
-              dangerouslySetInnerHTML={{ __html: ghost.html }}
-            />,
-            document.body,
-          )
-        : null}
-    </>
+    <button
+      ref={handleRef}
+      type="button"
+      className="stop-drag-handle"
+      aria-label="按住拖曳以調整順序"
+      title="按住拖曳"
+      disabled={disabled}
+      onPointerDown={onPointerDown}
+      onClick={(event) => event.stopPropagation()}
+    >
+      <span className="stop-drag-glyph" aria-hidden="true">
+        <i />
+        <i />
+        <i />
+        <i />
+        <i />
+        <i />
+      </span>
+    </button>
   );
 }

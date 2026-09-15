@@ -2185,18 +2185,21 @@ body.is-reordering-stops * {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 5000;
+  z-index: 6000;
   display: flex;
   align-items: center;
   gap: 8px;
+  box-sizing: border-box;
   padding: 4px 8px;
+  border: 1px solid color-mix(in srgb, var(--accent) 25%, var(--line));
   border-radius: 12px;
-  background: var(--paper);
-  box-shadow: 0 10px 28px rgb(18 32 22 / 0.18);
+  background: color-mix(in srgb, var(--paper) 92%, white);
+  box-shadow: 0 12px 32px rgb(18 32 22 / 0.22);
   opacity: 0.8; /* 20% 透視度 */
   pointer-events: none;
   touch-action: none;
   will-change: transform;
+  overflow: hidden;
 }
 .stop-drag-ghost .stop-drag-handle {
   pointer-events: none;
