@@ -2,10 +2,10 @@ import type { PrepItem, PrepSection, TripDoc } from "../types";
 
 export type { PrepItem, PrepSection } from "../types";
 
-export const PREP_SECTIONS: { id: PrepSection; label: string; hint: string; addLabel: string }[] = [
-  { id: "him_pack", label: "男友行李", hint: "設備／藥品／文件", addLabel: "新增男友行李" },
-  { id: "him_todo", label: "待辦", hint: "出發前要做", addLabel: "新增待辦" },
-  { id: "her_pack", label: "女友行李", hint: "衣物／護理／證件", addLabel: "新增女友行李" },
+export const PREP_SECTIONS: { id: PrepSection; label: string; short: string; hint: string; addLabel: string }[] = [
+  { id: "him_pack", label: "男友行李", short: "男友", hint: "設備／藥品／文件", addLabel: "新增男友行李" },
+  { id: "him_todo", label: "待辦", short: "待辦", hint: "出發前要做", addLabel: "新增待辦" },
+  { id: "her_pack", label: "女友行李", short: "女友", hint: "衣物／護理／證件", addLabel: "新增女友行李" },
 ];
 
 function newId(prefix: string): string {

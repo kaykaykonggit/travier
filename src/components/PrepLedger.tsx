@@ -75,9 +75,9 @@ export function PrepLedger({ doc, onChange }: { doc: TripDoc; onChange: (doc: Tr
               onClick={() => setFilter(row.id)}
             >
               <span className="prep-sec-mark" aria-hidden="true">
-                {row.label.slice(0, 1)}
+                {row.short.slice(0, 1)}
               </span>
-              <span>{row.label}</span>
+              <span>{row.short}</span>
             </button>
           ))}
         </div>
