@@ -2367,23 +2367,32 @@ body.is-reordering-stops * {
 
 .trip-extras {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
+  flex-wrap: nowrap;
   gap: 8px;
-  align-items: flex-start;
-  margin: 0 16px calc(12px + env(safe-area-inset-bottom, 0px));
-  padding: 10px 0 8px;
-  border-top: 1px solid var(--line);
+  align-items: stretch;
+  margin: 8px 0 calc(12px + env(safe-area-inset-bottom, 0px));
+  padding: 0;
+  border-top: 0;
   position: relative;
   z-index: 1;
+  background: transparent;
+}
+.trip-outing .trip-extras .extras-card.surface-card {
+  margin-inline: 10px;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding: 4px 12px 8px;
   background: var(--paper);
 }
-.trip-extras > details { margin-top: 0; }
-.trip-extras > details[open] { flex: 1 1 100%; }
+.trip-extras > .extras-card > details { margin-top: 0; }
+.trip-extras > .extras-card > details[open] { flex: 1 1 auto; }
 .extras-stay-panel {
   border: 0;
   padding: 4px 0 0;
+  background: transparent;
 }
-.trip-extras > summary {
+.trip-extras summary {
   font-size: 14px;
   font-weight: 500;
   color: var(--ink);
@@ -2727,12 +2736,16 @@ body.is-reordering-stops * {
     max-height: 36%;
     overflow: auto;
     min-width: 0;
-    margin: 0;
-    padding: 8px 16px 12px;
-    background: var(--paper);
-    border-top: 1px solid var(--line);
+    margin: 8px 0 0;
+    padding: 0;
+    background: transparent;
+    border-top: 0;
     position: relative;
     z-index: 1;
+    gap: 8px;
+  }
+  .trip-outing .trip-extras .extras-card.surface-card {
+    margin-inline: 0;
   }
   .trip-outing .timeline-panel .panel-head { display: flex; }
   .life-page { padding: 20px 28px 32px; }

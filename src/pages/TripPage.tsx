@@ -916,6 +916,7 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
       </SurfaceCard>
 
       <div className="trip-extras">
+      <SurfaceCard className="extras-card">
       <details className="quiet-details extras-stay">
         <summary>
           今晚
@@ -1090,7 +1091,9 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
         )}
       </section>
       </details>
+      </SurfaceCard>
 
+      <SurfaceCard className="extras-card">
       <details className="quiet-details extras-eats">
         <summary>訂餐</summary>
         <DayEats
@@ -1102,7 +1105,9 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
           covers={heads}
         />
       </details>
+      </SurfaceCard>
 
+      <SurfaceCard className="extras-card">
       <details className="quiet-details extras-more">
         <summary>叮嚀{klooks.length ? ` · 門票 ${klooks.length}` : ""}</summary>
       {(day.routeLogic || day.tip || day.highlights.length > 0) && (
@@ -1160,6 +1165,7 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
         <p className="empty">這天沒有額外叮嚀。</p>
       ) : null}
       </details>
+      </SurfaceCard>
       </div>
       </div>
       </div>
