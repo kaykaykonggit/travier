@@ -665,26 +665,6 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
       </section>
 
       <div className="trip-rail">
-      {lead ? (
-        <button type="button" className="next-dock" onClick={() => focusItem(lead.index, true)}>
-          <span className="kicker">{lead.kind === "now" ? "現在" : "下一站"}</span>
-          <strong>{lead.item.displayNameZh || lead.item.title}</strong>
-          <small>
-            {lead.item.start}
-            {lead.item.end ? `–${lead.item.end}` : ""}
-            {(() => {
-              const place = stopPlaceOf(lead.item, day.stayCity);
-              return place.label ? ` · ${place.label}` : "";
-            })()}
-          </small>
-        </button>
-      ) : (
-        <p className="next-dock next-dock-done">
-          <span className="kicker">這一天</span>
-          <strong>已走完</strong>
-          <small>{pickedHotel ? `今晚 ${pickedHotel.name}` : "可以休息了"}</small>
-        </p>
-      )}
       <section className="panel timeline-panel" ref={timelineRef}>
         <ol className="timeline">
           {day.timeline.map((item, index) => {
