@@ -10,6 +10,7 @@ import { InfoTip } from "../components/InfoTip";
 import { LockButton } from "../components/LockButton";
 import { PlacePhoto } from "../components/PlacePhoto";
 import { StopDragHandle } from "../components/StopDragHandle";
+import { SurfaceCard } from "../components/SurfaceCard";
 import { ThemeSwitch } from "../components/ThemeSwitch";
 import { StopEats } from "../components/StopEats";
 import { TimelineEdit } from "../components/TimelineEdit";
@@ -670,7 +671,7 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
       </div>
       </div>
 
-      <section className="day-stage" ref={mapPanelRef} id="day-map">
+      <SurfaceCard as="section" className="day-stage" ref={mapPanelRef} id="day-map">
         <div className="panel-head">
           <div className="map-switch">
             <button type="button" className={mapScope === "day" ? "on" : ""} onClick={() => setMapScope("day")}>
@@ -715,10 +716,10 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
           當天人均 {formatMoney(todayCost.perPersonDisplay, display)} · 全團 {formatMoney(todayCost.totalDisplay, display)}
           {pickedHotel ? ` · 今晚 ${pickedHotel.name}` : ""}
         </p>
-      </section>
+      </SurfaceCard>
 
       <div className="trip-rail">
-      <section className="panel timeline-panel" ref={timelineRef}>
+      <SurfaceCard as="section" className="panel timeline-panel" ref={timelineRef}>
         <ol className="timeline">
           {day.timeline.map((item, index) => {
             const lineTotal = itemCost(item, display, rates);
@@ -912,7 +913,7 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
             );
           })}
         </ol>
-      </section>
+      </SurfaceCard>
 
       <div className="trip-extras">
       <details className="quiet-details extras-stay">
