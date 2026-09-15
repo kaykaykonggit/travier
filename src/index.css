@@ -2171,6 +2171,9 @@ summary.with-info::after { margin-left: auto; }
   border-radius: 0;
   background: transparent;
   box-shadow: none;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
   color: color-mix(in srgb, var(--muted) 45%, var(--ink));
   cursor: grab;
   touch-action: none;
@@ -2180,6 +2183,11 @@ summary.with-info::after { margin-left: auto; }
   position: relative;
   z-index: 2;
   box-sizing: border-box;
+}
+.stop-drag-handle:focus,
+.stop-drag-handle:focus-visible {
+  outline: none;
+  box-shadow: none;
 }
 .stop-drag-handle:active,
 .stop-drag-handle.is-dragging {
