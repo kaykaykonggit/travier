@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { InfoTip } from "../components/InfoTip";
 import { PlannerForm } from "../components/PlannerForm";
+import { ThemeSwitch } from "../components/ThemeSwitch";
 import { parseTripDoc, parseTripJson } from "../lib/parse";
 import { buildPlannerPrompt, loadBrief, saveBrief, type TripBrief } from "../lib/planner";
 import { AI_TEMPLATE, buildSampleEditPrompt } from "../lib/template";
 import { formatDateZh } from "../lib/labels";
 import { deleteSavedTrip, listSavedTrips, loadSavedTrip, type SavedTripMeta } from "../lib/storage";
+import { applyTheme, loadTheme, saveTheme, type ThemeId } from "../lib/theme";
 import type { TripDoc } from "../types";
 import austriaSample from "../../examples/austria-italy-christmas-2026.json";
 import okinawaSample from "../../examples/okinawa-6d5n-2026.json";
@@ -30,10 +32,16 @@ export function ImportPage({
   const [errors, setErrors] = useState<string[]>([]);
   const [copied, setCopied] = useState<string | null>(null);
   const [saved, setSaved] = useState<SavedTripMeta[]>(() => listSavedTrips());
+  const [theme, setTheme] = useState<ThemeId>(() => loadTheme());
 
   useEffect(() => {
     saveBrief(brief);
   }, [brief]);
+
+  useEffect(() => {
+    applyTheme(theme);
+    saveTheme(theme);
+  }, [theme]);
 
   function handleParse(raw: string) {
     const result = parseTripJson(raw);
@@ -90,7 +98,10 @@ export function ImportPage({
   return (
     <div className="import-page">
       <header className="import-hero">
-        <p className="brand">Travier</p>
+        <div className="import-hero-top">
+          <p className="brand">Travier</p>
+          <ThemeSwitch value={theme} onChange={setTheme} />
+        </div>
         <h1>出發當天，手機只顯示下一站。</h1>
         <p className="lead">地圖、今晚酒店、景點附近美食與訂位，無需臨場才開 Google 搜尋。</p>
         <ul className="import-points">

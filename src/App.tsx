@@ -1,11 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { clearTrip, loadStoredTrip, saveTrip, unlinkLibrary } from "./lib/storage";
+import { applyTheme, loadTheme } from "./lib/theme";
 import { ImportPage } from "./pages/ImportPage";
 import { TripPage } from "./pages/TripPage";
 import type { TripDoc } from "./types";
 
 export default function App() {
   const [doc, setDoc] = useState<TripDoc | null>(() => loadStoredTrip());
+
+  useEffect(() => {
+    applyTheme(loadTheme());
+  }, []);
 
   function setActive(next: TripDoc) {
     saveTrip(next);

@@ -10,6 +10,7 @@ import { InfoTip } from "../components/InfoTip";
 import { LockButton } from "../components/LockButton";
 import { PlacePhoto } from "../components/PlacePhoto";
 import { StopDragHandle } from "../components/StopDragHandle";
+import { ThemeSwitch } from "../components/ThemeSwitch";
 import { StopEats } from "../components/StopEats";
 import { TimelineEdit } from "../components/TimelineEdit";
 import { TransitBox, TransitStops } from "../components/TransitBox";
@@ -48,6 +49,7 @@ import { buildTweakPrompt } from "../lib/tweakPrompt";
 import { buildSampleEditPrompt } from "../lib/template";
 import { needsBooking, bookingFallbackUrl } from "../lib/booking";
 import { archiveTrip } from "../lib/storage";
+import { applyTheme, loadTheme, saveTheme, type ThemeId } from "../lib/theme";
 import type { Day, HotelCandidate, Night, TimelineItem, TripDoc } from "../types";
 
 function nightForDay(doc: TripDoc, day: Day): Night | undefined {
@@ -117,12 +119,18 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
   const [hotelEditing, setHotelEditing] = useState(false);
   const [hotelSnapshot, setHotelSnapshot] = useState<Night | null>(null);
   const [durationIndex, setDurationIndex] = useState<number | null>(null);
+  const [theme, setTheme] = useState<ThemeId>(() => loadTheme());
   const mapPanelRef = useRef<HTMLElement | null>(null);
   const dayBarRef = useRef<HTMLElement | null>(null);
   const jumpRef = useRef<HTMLDivElement | null>(null);
   const timelineRef = useRef<HTMLElement | null>(null);
   const failedLinks = useRef(new Set<string>());
   const swipeX = useRef<number | null>(null);
+
+  useEffect(() => {
+    applyTheme(theme);
+    saveTheme(theme);
+  }, [theme]);
 
   const day = doc.days[dayIndex] ?? doc.days[0];
   const night = nightForDay(doc, day);
@@ -496,6 +504,7 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
             </p>
           </div>
           <div className="trip-top-actions">
+            <ThemeSwitch value={theme} onChange={setTheme} />
             <details className="quiet-details trip-plan-tools tweak-panel">
               <summary>改當日</summary>
               <div className="trip-plan-pop">
@@ -737,21 +746,17 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
                 </p>
               ) : null}
               <div className="stop-compact-row">
-                <StopDragHandle
-                  index={index}
-                  disabled={day.timeline.length <= 1}
-                  onReorder={moveStop}
-                />
+                <div className="stop-index-col">
+                  <StopDragHandle
+                    index={index}
+                    disabled={day.timeline.length <= 1}
+                    onReorder={moveStop}
+                  />
+                  <span className="stop-num" style={{ background: dayColor(dayIndex) }}>
+                    {stopNo > 0 ? stopNo : "·"}
+                  </span>
+                </div>
                 <button type="button" className="stop-compact" onClick={() => focusItem(index, true)}>
-                  {stopNo > 0 ? (
-                    <span className="stop-num" style={{ background: dayColor(dayIndex) }}>
-                      {stopNo}
-                    </span>
-                  ) : (
-                    <span className="stop-num" style={{ background: dayColor(dayIndex) }}>
-                      ·
-                    </span>
-                  )}
                   <span className="stop-time">
                     {item.start}
                     {item.end ? `–${item.end}` : ""}

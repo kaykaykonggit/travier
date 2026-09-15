@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Noto+Sans+TC:wght@400;500;600;700&display=swap");
 
-:root {
+:root,
+[data-theme="moss"] {
   --bg: #e7eee6;
   --ink: #122016;
   --muted: #5c6b5e;
@@ -11,6 +12,37 @@
   --focus: #16351c;
   --radius: 28px;
   --radius-sm: 16px;
+  --title: #0a140d;
+  --soft: #748276;
+}
+/* Soft slate-blue — cool, calm reading */
+[data-theme="mist"] {
+  --bg: #e4ebf0;
+  --ink: #18232b;
+  --muted: #61707a;
+  --line: rgba(24, 35, 43, 0.13);
+  --accent: #355468;
+  --paper: #f5f8fa;
+  --control: #ffffff;
+  --focus: #355468;
+  --title: #0f171d;
+  --soft: #6e7d87;
+}
+/* Warm stone — taupe paper, deep olive accent (not terracotta) */
+[data-theme="sand"] {
+  --bg: #e8e4dc;
+  --ink: #26221c;
+  --muted: #6a645a;
+  --line: rgba(38, 34, 28, 0.13);
+  --accent: #3f4a36;
+  --paper: #f4f2ed;
+  --control: #ffffff;
+  --focus: #3f4a36;
+  --title: #16130f;
+  --soft: #767066;
+}
+:root,
+[data-theme] {
   font-family: Manrope, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
   color: var(--ink);
   background: var(--bg);
@@ -1957,84 +1989,48 @@ summary.with-info::after { margin-left: auto; }
 }
 .trip-outing .timeline-panel .panel-head { display: none; }
 .trip-outing .stop-compact {
-  padding: 6px 0;
-  gap: 6px 8px;
-  grid-template-columns: 24px 4.6rem minmax(0, 1fr);
-  align-items: start;
+  padding: 4px 0;
+  gap: 6px 10px;
+  grid-template-columns: minmax(0, 4.6rem) minmax(0, 1fr);
+  align-items: center;
 }
 .trip-outing .stop-compact-row {
-  gap: 12px;
-  padding: 2px 0;
-}
-.trip-outing .stop-num {
-  width: 22px;
-  height: 22px;
-  font-size: 10px;
-  margin-top: 1px;
-}
-.trip-outing .stop-drag-handle {
-  width: 32px;
-  height: 38px;
-  margin-right: 2px;
-}
-.trip-outing .stop-time {
-  font-size: 12px;
-  white-space: nowrap;
-  overflow-wrap: normal;
-  padding-top: 2px;
-}
-.trip-outing .stop-name { font-size: 14px; }
-.trip-outing .stop-compact-actions { gap: 2px; align-self: start; padding-top: 2px; }
-.trip-outing .day-dot { padding: 4px 2px; width: 48px; max-width: none; }
-
-.timeline-stop {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  grid-template-columns: none;
-  gap: 0;
-  border-bottom: 1px solid var(--line);
-  padding: 0;
-  scroll-margin-top: 12px;
-  scroll-margin-bottom: 72px;
-  min-width: 0;
-}
-.timeline-stop:last-child { border-bottom: 0; }
-.timeline-stop.on {
-  background: color-mix(in srgb, var(--accent) 4%, var(--paper));
-}
-/* lead 狀態不再用左側垂直線，避免蓋住景點號碼 */
-.timeline-stop.is-done:not(.on) .stop-compact-row { opacity: 0.5; }
-.timeline-stop.is-drag-source .stop-compact-row {
-  opacity: 0.2;
-}
-.timeline-stop.is-drop-target > .stop-compact-row {
-  background: color-mix(in srgb, var(--accent) 8%, var(--paper));
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 35%, var(--line));
-}
-
-.stop-compact-row {
   position: relative;
   z-index: 1;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   min-width: 0;
-  padding: 4px 0;
+  padding: 8px 0;
   background: var(--paper);
 }
 .timeline-stop.on > .stop-compact-row {
   background: color-mix(in srgb, var(--accent) 4%, var(--paper));
 }
+.stop-index-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 4px;
+  flex: 0 0 auto;
+  width: 22px;
+  align-self: center;
+}
+.stop-index-col .stop-drag-handle,
+.stop-index-col .stop-num {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+}
 .stop-compact {
   flex: 1;
   min-width: 0;
   display: grid;
-  grid-template-columns: 26px minmax(0, 4.6rem) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 4.6rem) minmax(0, 1fr);
   align-items: center;
-  gap: 8px;
-  padding: 8px 6px 8px 0;
+  gap: 8px 10px;
+  padding: 4px 6px 4px 0;
   margin: 0;
   border: 0;
   border-radius: var(--radius-sm);
@@ -2049,30 +2045,34 @@ summary.with-info::after { margin-left: auto; }
 .stop-num {
   display: grid;
   place-items: center;
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   border: 2px solid #fff;
   box-sizing: border-box;
   background: var(--ink);
   color: #fff;
-  font-size: 11px;
-  font-weight: 600;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
   text-shadow: 0 1px 1px rgb(0 0 0 / 0.35);
   box-shadow: 0 0 0 1px rgb(18 32 22 / 0.22);
   flex-shrink: 0;
 }
 .stop-time {
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
   font-variant-numeric: tabular-nums;
+  color: var(--title);
   min-width: 0;
   overflow-wrap: anywhere;
 }
 .stop-name {
   display: block;
-  font-size: 15px;
-  font-weight: 500;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--title);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -2085,10 +2085,10 @@ summary.with-info::after { margin-left: auto; }
   min-width: 0;
 }
 .stop-place {
-  margin-top: 1px;
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--muted);
+  margin-top: 2px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--soft);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -2143,22 +2143,22 @@ summary.with-info::after { margin-left: auto; }
   flex: 0 0 auto;
   display: grid;
   place-items: center;
-  width: 34px;
-  height: 40px;
+  width: 22px;
+  height: 22px;
   margin: 0;
   padding: 0;
-  border: 1px solid color-mix(in srgb, var(--line) 85%, var(--ink));
-  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--line) 80%, var(--ink));
+  border-radius: 6px;
   background: color-mix(in srgb, var(--ink) 5%, var(--paper));
-  color: color-mix(in srgb, var(--muted) 55%, var(--ink));
+  color: color-mix(in srgb, var(--muted) 50%, var(--ink));
   cursor: grab;
   touch-action: none;
   -webkit-touch-callout: none;
   user-select: none;
   -webkit-user-select: none;
-  align-self: center;
   position: relative;
   z-index: 2;
+  box-sizing: border-box;
 }
 .stop-drag-handle:active,
 .stop-drag-handle.is-dragging {
@@ -2178,15 +2178,15 @@ summary.with-info::after { margin-left: auto; }
 }
 .stop-drag-glyph {
   display: grid;
-  grid-template-columns: 3px 3px;
-  grid-template-rows: repeat(3, 3px);
-  gap: 2.5px;
+  grid-template-columns: 2px 2px;
+  grid-template-rows: repeat(3, 2px);
+  gap: 1.5px;
   pointer-events: none;
 }
 .stop-drag-glyph i {
   display: block;
-  width: 3px;
-  height: 3px;
+  width: 2px;
+  height: 2px;
   border-radius: 50%;
   background: currentColor;
 }
@@ -2315,7 +2315,7 @@ body.is-reordering-stops * {
 .stop-detail {
   position: relative;
   z-index: 0;
-  padding: 8px 0 14px 36px;
+  padding: 8px 0 14px;
   margin: 0;
   border-top: 1px dashed color-mix(in srgb, var(--line) 80%, transparent);
   min-width: 0;
@@ -2325,9 +2325,9 @@ body.is-reordering-stops * {
   aspect-ratio: 16 / 10;
 }
 .trip-outing .stop-detail h4 {
-  font-size: 16px;
+  font-size: 18px;
   font-family: inherit;
-  font-weight: 600;
+  font-weight: 800;
 }
 
 .trip-extras {
@@ -2622,9 +2622,14 @@ body.is-reordering-stops * {
   .trip-outing .stop-compact {
     padding: 5px 0;
     gap: 6px 8px;
-    grid-template-columns: 22px 4.6rem minmax(0, 1fr);
+    grid-template-columns: minmax(0, 4.6rem) minmax(0, 1fr);
   }
   .trip-outing .stop-meta { display: none; }
+  .trip-outing .stop-index-col,
+  .trip-outing .stop-index-col .stop-drag-handle,
+  .trip-outing .stop-index-col .stop-num {
+    width: 22px;
+  }
   .trip-outing .stop-num { width: 22px; height: 22px; font-size: 10px; }
   .trip-outing .stop-time { font-size: 12px; white-space: nowrap; overflow-wrap: normal; }
   .trip-outing .stop-name { font-size: 14px; }
@@ -2662,7 +2667,7 @@ body.is-reordering-stops * {
     padding: 0 16px 16px;
   }
   .trip-outing .stop-detail {
-    padding: 8px 0 12px 36px;
+    padding: 10px 0 14px;
   }
   .trip-outing .stop-detail .spot-photo-btn {
     min-height: 72px;
@@ -2759,4 +2764,147 @@ body.is-reordering-stops * {
   .plan-table { grid-template-columns: 1fr; }
   .sample-actions { flex-direction: column; }
   .sample-actions .btn { width: 100%; }
+}
+
+
+/* —— Theme switch —— */
+.theme-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px;
+}
+.theme-swatch {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid color-mix(in srgb, var(--paper) 70%, white);
+  background: var(--swatch, var(--accent));
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--ink) 18%, transparent);
+  padding: 0;
+  cursor: pointer;
+}
+.theme-swatch.on {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+.import-hero-top,
+.trip-top-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.import-hero-top {
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+/* —— Stronger title hierarchy / centered stop cards —— */
+.trip-outing .trip-title-line {
+  margin: 0;
+  font-size: clamp(19px, 4.8vw, 23px);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.18;
+  color: var(--title);
+  text-align: left;
+}
+.trip-outing .trip-meta-desk {
+  margin: 5px 0 0;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--soft);
+  letter-spacing: 0.01em;
+}
+.trip-outing .stop-name {
+  font-weight: 800;
+  color: var(--title);
+}
+.trip-outing .stop-place {
+  color: var(--soft);
+  font-weight: 500;
+}
+.trip-outing .stop-detail {
+  text-align: center;
+  padding: 12px 4px 18px;
+  margin: 0 auto 6px;
+  max-width: 22rem;
+  width: 100%;
+  border-top: 0;
+}
+.trip-outing .stop-detail .spot-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+.trip-outing .stop-detail .spot-photo,
+.trip-outing .stop-detail .spot-photo-btn {
+  width: 100%;
+  max-width: 22rem;
+  float: none;
+  margin: 0;
+}
+.trip-outing .stop-detail .spot-copy {
+  width: 100%;
+  max-width: 22rem;
+  text-align: center;
+  margin-inline: auto;
+}
+.trip-outing .stop-detail .item-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 2px;
+}
+.trip-outing .stop-detail h4 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--title);
+  line-height: 1.25;
+  font-family: inherit;
+}
+.trip-outing .stop-detail .item-price {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.trip-outing .stop-detail .en,
+.trip-outing .stop-detail .stop-place-detail,
+.trip-outing .stop-detail .move,
+.trip-outing .stop-detail .ticket,
+.trip-outing .stop-detail .notes,
+.trip-outing .stop-detail .stops {
+  color: var(--soft);
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 1.45;
+}
+.trip-outing .stop-detail .en {
+  font-size: 12px;
+  font-weight: 500;
+  opacity: 0.92;
+}
+.trip-outing .stop-tools {
+  justify-content: center;
+}
+.trip-outing .stop-compact-row .stop-copy {
+  align-items: flex-start;
+  text-align: left;
+}
+
+@media (min-width: 700px) {
+  .trip-outing .stop-detail .spot-main {
+    display: flex;
+  }
+  .trip-outing .stop-detail .spot-photo {
+    float: none;
+    width: 100%;
+    max-width: 22rem;
+    margin: 0;
+  }
 }
