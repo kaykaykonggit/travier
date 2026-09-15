@@ -11,19 +11,28 @@ export function StopDragHandle({
   onReorder: (from: number, to: number) => void;
 }) {
   const [dragging, setDragging] = useState(false);
+  const draggingRef = useRef(false);
   const fromRef = useRef(index);
   const lastTo = useRef(index);
 
   function rowIndexFromPoint(clientY: number): number | null {
     const rows = document.querySelectorAll<HTMLElement>("[data-stop-index]");
+    let best: { index: number; dist: number } | null = null;
     for (const row of rows) {
       const rect = row.getBoundingClientRect();
-      if (clientY >= rect.top && clientY <= rect.bottom) {
-        const value = Number(row.dataset.stopIndex);
-        return Number.isFinite(value) ? value : null;
+      const mid = (rect.top + rect.bottom) / 2;
+      const dist = Math.abs(clientY - mid);
+      const value = Number(row.dataset.stopIndex);
+      if (!Number.isFinite(value)) continue;
+      if (clientY >= rect.top - 8 && clientY <= rect.bottom + 8) {
+        if (!best || dist < best.dist) best = { index: value, dist };
       }
     }
-    return null;
+    return best?.index ?? null;
+  }
+
+  function clearTargets() {
+    document.querySelectorAll("[data-stop-index]").forEach((node) => node.classList.remove("is-drop-target"));
   }
 
   function onPointerDown(event: React.PointerEvent<HTMLButtonElement>) {
@@ -32,12 +41,13 @@ export function StopDragHandle({
     event.stopPropagation();
     fromRef.current = index;
     lastTo.current = index;
+    draggingRef.current = true;
     setDragging(true);
     event.currentTarget.setPointerCapture(event.pointerId);
   }
 
   function onPointerMove(event: React.PointerEvent<HTMLButtonElement>) {
-    if (!dragging) return;
+    if (!draggingRef.current) return;
     const target = rowIndexFromPoint(event.clientY);
     if (target == null || target === lastTo.current) return;
     lastTo.current = target;
@@ -47,9 +57,10 @@ export function StopDragHandle({
   }
 
   function finish(event: React.PointerEvent<HTMLButtonElement>) {
-    if (!dragging) return;
+    if (!draggingRef.current) return;
+    draggingRef.current = false;
     setDragging(false);
-    document.querySelectorAll("[data-stop-index]").forEach((node) => node.classList.remove("is-drop-target"));
+    clearTargets();
     try {
       event.currentTarget.releasePointerCapture(event.pointerId);
     } catch {
@@ -71,7 +82,14 @@ export function StopDragHandle({
       onPointerUp={finish}
       onPointerCancel={finish}
     >
-      <span aria-hidden="true">⋮⋮</span>
+      <span className="stop-drag-glyph" aria-hidden="true">
+        <i />
+        <i />
+        <i />
+        <i />
+        <i />
+        <i />
+      </span>
     </button>
   );
 }

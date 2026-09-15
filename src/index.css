@@ -2098,26 +2098,38 @@ summary.with-info::after { margin-left: auto; }
   flex: 0 0 auto;
   display: grid;
   place-items: center;
-  width: 28px;
-  height: 36px;
+  width: 32px;
+  height: 40px;
   margin: 0;
   padding: 0;
-  border: 0;
-  border-radius: 8px;
-  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--ink) 4%, var(--paper));
   color: var(--muted);
   cursor: grab;
   touch-action: none;
   user-select: none;
-  font-size: 14px;
-  letter-spacing: -2px;
-  line-height: 1;
+  -webkit-user-select: none;
 }
 .stop-drag-handle:active,
 .stop-drag-handle.is-dragging {
   cursor: grabbing;
   color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--line));
+  background: color-mix(in srgb, var(--accent) 12%, var(--paper));
+}
+.stop-drag-glyph {
+  display: grid;
+  grid-template-columns: 4px 4px;
+  grid-template-rows: repeat(3, 4px);
+  gap: 3px;
+}
+.stop-drag-glyph i {
+  display: block;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: currentColor;
 }
 .timeline-stop.is-drop-target,
 [data-stop-index].is-drop-target {
