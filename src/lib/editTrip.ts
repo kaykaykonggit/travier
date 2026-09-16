@@ -1,4 +1,6 @@
 import type { BackupPlace, Money, TimelineItem, Transport, TripDoc } from "../types";
+import { doneKey } from "./progress";
+import { applyDwell, cascadeTimelineTimes, rewireTransportLinks } from "./timelineTime";
 
 function emptyMoney(currency: string): Money {
   return { amount: null, currency, estimated: true, source: null, asOf: null };
@@ -187,4 +189,101 @@ function previousPlace(doc: TripDoc, dayIndex: number, itemIndex: number): strin
 
 export function itemLabel(item: TimelineItem): string {
   return item.displayNameZh || item.title;
+}
+
+function mapIndexAfterMove(index: number, from: number, to: number): number {
+  if (from === to) return index;
+  if (index === from) return to;
+  if (from < to) {
+    if (index > from && index <= to) return index - 1;
+    return index;
+  }
+  if (index >= to && index < from) return index + 1;
+  return index;
+}
+
+export function reorderTimelineItem(doc: TripDoc, dayIndex: number, fromIndex: number, toIndex: number): TripDoc {
+  const day = doc.days[dayIndex];
+  if (!day) return doc;
+  if (fromIndex === toIndex) return doc;
+  if (fromIndex < 0 || toIndex < 0 || fromIndex >= day.timeline.length || toIndex >= day.timeline.length) return doc;
+
+  const moving = day.timeline[fromIndex];
+  const without = day.timeline.filter((_, index) => index !== fromIndex);
+  const reordered = [...without.slice(0, toIndex), moving, ...without.slice(toIndex)];
+  const linked = rewireTransportLinks(reordered);
+  const cascaded = cascadeTimelineTimes(linked, 0);
+  return patchDay(doc, dayIndex, cascaded);
+}
+
+export function setTimelineDuration(
+  doc: TripDoc,
+  dayIndex: number,
+  itemIndex: number,
+  durationMin: number,
+): TripDoc {
+  const day = doc.days[dayIndex];
+  const current = day?.timeline[itemIndex];
+  if (!current) return doc;
+  const updated = day.timeline.map((item, index) =>
+    index === itemIndex ? { ...item, ...applyDwell(item.start, durationMin) } : item,
+  );
+  const cascaded = cascadeTimelineTimes(updated, itemIndex);
+  return patchDay(doc, dayIndex, cascaded);
+}
+
+export function remapDoneKeysForMove(
+  done: Set<string>,
+  date: string,
+  fromIndex: number,
+  toIndex: number,
+  nextTimeline: TimelineItem[],
+  prevTimeline: TimelineItem[],
+): Set<string> {
+  const next = new Set<string>();
+  for (const key of done) {
+    if (!key.startsWith(`${date}#`)) {
+      next.add(key);
+      continue;
+    }
+    const parts = key.split("#");
+    const oldIndex = Number(parts[1]);
+    if (!Number.isFinite(oldIndex)) {
+      next.add(key);
+      continue;
+    }
+    const newIndex = mapIndexAfterMove(oldIndex, fromIndex, toIndex);
+    const start = nextTimeline[newIndex]?.start ?? prevTimeline[oldIndex]?.start ?? parts[2] ?? "";
+    next.add(doneKey(date, newIndex, start));
+  }
+  return next;
+}
+
+export function remapDoneKeysForDuration(
+  done: Set<string>,
+  date: string,
+  itemIndex: number,
+  nextTimeline: TimelineItem[],
+  prevTimeline: TimelineItem[],
+): Set<string> {
+  const next = new Set<string>();
+  for (const key of done) {
+    if (!key.startsWith(`${date}#`)) {
+      next.add(key);
+      continue;
+    }
+    const parts = key.split("#");
+    const index = Number(parts[1]);
+    if (!Number.isFinite(index)) {
+      next.add(key);
+      continue;
+    }
+    if (index < itemIndex) {
+      next.add(key);
+      continue;
+    }
+    const start = nextTimeline[index]?.start ?? prevTimeline[index]?.start ?? parts[2] ?? "";
+    next.add(doneKey(date, index, start));
+  }
+  return next;
 }

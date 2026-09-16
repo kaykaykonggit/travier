@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { BookingBox } from "../components/BookingBox";
+import { DurationWheel } from "../components/DurationWheel";
 import { EditBar } from "../components/EditBar";
 import { TripTabs } from "../components/LifeIcons";
 import { LifeLedger } from "../components/LifeLedger";
@@ -9,6 +10,7 @@ import { DayMap, type MapStop } from "../components/DayMap";
 import { InfoTip } from "../components/InfoTip";
 import { LockButton } from "../components/LockButton";
 import { PlacePhoto } from "../components/PlacePhoto";
+import { StopDragHandle } from "../components/StopDragHandle";
 import { StopEats } from "../components/StopEats";
 import { TimelineEdit } from "../components/TimelineEdit";
 import { TransitBox, TransitStops } from "../components/TransitBox";
@@ -21,7 +23,19 @@ import { dayKlookItems, isKlookable, klookHref, matchKlook } from "../lib/klook"
 import { skipStopEats, tripEatKey } from "../lib/eats";
 import { googleDirUrl, googleHotelsLiveUrl, googleHotelStayUrl, googleSearchUrl, klookUrl, parseHotelPaste, placeLabel, tripHotelUrl, withKlookDate } from "../lib/links";
 import { hotelAccessTransport, lastSightOfDay, nightRestPoint } from "../lib/restPoint";
-import { applyBackup, deleteTimelineItem, insertPlaceAfter, repairTimelinePlace, replaceDayTimeline, setItemLocked, setTicketSource } from "../lib/editTrip";
+import {
+  applyBackup,
+  deleteTimelineItem,
+  insertPlaceAfter,
+  remapDoneKeysForDuration,
+  remapDoneKeysForMove,
+  repairTimelinePlace,
+  replaceDayTimeline,
+  reorderTimelineItem,
+  setItemLocked,
+  setTicketSource,
+  setTimelineDuration,
+} from "../lib/editTrip";
 import { normalizeExpenseUrl } from "../lib/life";
 import { isHomeAirportStop } from "../lib/homeStop";
 import { isBareUrl, isShortMapsUrl, resolvePlaceInput } from "../lib/resolvePlace";
@@ -30,6 +44,7 @@ import { doneKey, loadDone, saveDone, toggleDone } from "../lib/progress";
 import { initialDayIndex, leadOfDay } from "../lib/leadStop";
 import { applyTripUpdate } from "../lib/patch";
 import { stopPlaceOf, placeBreakLabel } from "../lib/stopPlace";
+import { dwellMinutes, formatDurationLabel } from "../lib/timelineTime";
 import { buildTweakPrompt } from "../lib/tweakPrompt";
 import { buildSampleEditPrompt } from "../lib/template";
 import { needsBooking, bookingFallbackUrl } from "../lib/booking";
@@ -102,6 +117,7 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
   const [stopTicketUrl, setStopTicketUrl] = useState("");
   const [hotelEditing, setHotelEditing] = useState(false);
   const [hotelSnapshot, setHotelSnapshot] = useState<Night | null>(null);
+  const [durationIndex, setDurationIndex] = useState<number | null>(null);
   const mapPanelRef = useRef<HTMLElement | null>(null);
   const dayBarRef = useRef<HTMLElement | null>(null);
   const jumpRef = useRef<HTMLDivElement | null>(null);
@@ -136,7 +152,11 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
   const stopNumbers = numbersByDay[dayIndex] ?? [];
   const focusQuery = focusIndex != null ? day.timeline[focusIndex]?.placeQuery.trim() || null : null;
   const focusNumber =
-    focusIndex != null ? stopNumbers[focusIndex] ?? null : lead ? stopNumbers[lead.index] ?? null : null;
+    focusIndex != null
+      ? stopNumbers[focusIndex] || null
+      : lead
+        ? stopNumbers[lead.index] || null
+        : null;
 
   const stops: MapStop[] = useMemo(() => {
     const list: MapStop[] = [];
@@ -278,6 +298,33 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
     saveDone(doc, next);
   }
 
+  function moveStop(from: number, to: number) {
+    if (from === to) return;
+    const prevTimeline = day.timeline;
+    const nextDoc = reorderTimelineItem(doc, dayIndex, from, to);
+    const nextTimeline = nextDoc.days[dayIndex]?.timeline ?? prevTimeline;
+    const nextDone = remapDoneKeysForMove(done, day.date, from, to, nextTimeline, prevTimeline);
+    setDone(nextDone);
+    saveDone(nextDoc, nextDone);
+    onChange(nextDoc);
+    setFocusIndex(to);
+    setFocusToken(Date.now());
+    setDurationIndex(null);
+  }
+
+  function applyDuration(index: number, minutes: number) {
+    const prevTimeline = day.timeline;
+    const nextDoc = setTimelineDuration(doc, dayIndex, index, minutes);
+    const nextTimeline = nextDoc.days[dayIndex]?.timeline ?? prevTimeline;
+    const nextDone = remapDoneKeysForDuration(done, day.date, index, nextTimeline, prevTimeline);
+    setDone(nextDone);
+    saveDone(nextDoc, nextDone);
+    onChange(nextDoc);
+    setDurationIndex(null);
+    setFocusIndex(index);
+    setFocusToken(Date.now());
+  }
+
   function applyJson() {
     const result = applyTripUpdate(doc, jsonDraft);
     if (!result.ok) {
@@ -315,8 +362,22 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
     setFocusIndex(index);
     setFocusToken(Date.now());
     if (!scroll) return;
+    // Wait for the expanded stop detail to layout, then scroll it into view
+    // (timeline may live inside an overflow panel on desktop).
     window.requestAnimationFrame(() => {
-      document.getElementById(`stop-${day.date}-${index}`)?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      window.requestAnimationFrame(() => {
+        const el = document.getElementById(`stop-${day.date}-${index}`);
+        if (!el) return;
+        const panel = timelineRef.current;
+        if (panel && panel.scrollHeight > panel.clientHeight + 4) {
+          const panelRect = panel.getBoundingClientRect();
+          const elRect = el.getBoundingClientRect();
+          const nextTop = panel.scrollTop + (elRect.top - panelRect.top) - 12;
+          panel.scrollTo({ top: Math.max(0, nextTop), behavior: "smooth" });
+          return;
+        }
+        el.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
+      });
     });
   }
 
@@ -337,6 +398,7 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
   useEffect(() => {
     setFocusIndex(null);
     setFocusToken(0);
+    setDurationIndex(null);
   }, [day.date]);
 
   useEffect(() => {
@@ -653,26 +715,6 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
       </section>
 
       <div className="trip-rail">
-      {lead ? (
-        <button type="button" className="next-dock" onClick={() => focusItem(lead.index, true)}>
-          <span className="kicker">{lead.kind === "now" ? "現在" : "下一站"}</span>
-          <strong>{lead.item.displayNameZh || lead.item.title}</strong>
-          <small>
-            {lead.item.start}
-            {lead.item.end ? `–${lead.item.end}` : ""}
-            {(() => {
-              const place = stopPlaceOf(lead.item, day.stayCity);
-              return place.label ? ` · ${place.label}` : "";
-            })()}
-          </small>
-        </button>
-      ) : (
-        <p className="next-dock next-dock-done">
-          <span className="kicker">這一天</span>
-          <strong>已走完</strong>
-          <small>{pickedHotel ? `今晚 ${pickedHotel.name}` : "可以休息了"}</small>
-        </p>
-      )}
       <section className="panel timeline-panel" ref={timelineRef}>
         <ol className="timeline">
           {day.timeline.map((item, index) => {
@@ -692,6 +734,7 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
             <li
               id={`stop-${day.date}-${index}`}
               key={`${item.start}-${item.title}-${index}`}
+              data-stop-index={index}
               className={`timeline-stop ${item.mustSee ? "must" : ""} ${focused ? "on" : ""} ${isLead ? "is-lead" : ""} ${finished ? "is-done" : ""}`.trim()}
             >
               {cityBreak ? (
@@ -700,8 +743,21 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
                 </p>
               ) : null}
               <div className="stop-compact-row">
+                <StopDragHandle
+                  index={index}
+                  disabled={day.timeline.length <= 1}
+                  onReorder={moveStop}
+                />
                 <button type="button" className="stop-compact" onClick={() => focusItem(index, true)}>
-                  {stopNo > 0 ? <span className="stop-num">{stopNo}</span> : <span className="stop-num">·</span>}
+                  {stopNo > 0 ? (
+                    <span className="stop-num" style={{ background: dayColor(dayIndex) }}>
+                      {stopNo}
+                    </span>
+                  ) : (
+                    <span className="stop-num" style={{ background: dayColor(dayIndex) }}>
+                      ·
+                    </span>
+                  )}
                   <span className="stop-time">
                     {item.start}
                     {item.end ? `–${item.end}` : ""}
@@ -718,6 +774,15 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
                   <span className="stop-meta">{labelOf(TYPE_LABEL, item.type)}</span>
                 </button>
                 <div className="stop-compact-actions">
+                  <button
+                    type="button"
+                    className={`text-btn stop-duration-btn${durationIndex === index ? " on" : ""}`}
+                    onClick={() => setDurationIndex((current) => (current === index ? null : index))}
+                    aria-label="調整活動時長"
+                    title="時長"
+                  >
+                    {formatDurationLabel(dwellMinutes(item))}
+                  </button>
                   <label className="done-check">
                     <input
                       type="checkbox"
@@ -735,6 +800,13 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
                   />
                 </div>
               </div>
+              {durationIndex === index ? (
+                <DurationWheel
+                  valueMin={dwellMinutes(item)}
+                  onClose={() => setDurationIndex(null)}
+                  onConfirm={(minutes) => applyDuration(index, minutes)}
+                />
+              ) : null}
               {focused ? (
               <div className="stop-detail body">
                 <div className="spot-main">
