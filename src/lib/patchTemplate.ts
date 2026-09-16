@@ -15,8 +15,8 @@ schemaVersion 必須係 "1.0.0-patch"。
 硬性規則：
 1. days[].date / nights[].date 必須係現有行程入面已有嘅日子；若 prompt 指定 focusDate，只准交嗰一日。
 2. 交 day 就要交齊嗰日完整 timeline（含 transport、ticket、backups）。
-3. locked=true、已去過、已選酒店（chosenName）要原樣保留。
-4. 只改用戶點名、或者已解鎖、或者明顯錯誤嘅時段。
+3. locked=true 嘅項目要保留（Travier 會按 placeQuery／景點名對應，唔好刪）。若你喺完整 timeline 入面因為加景點而順移後面時間，可以交新 start/end／transport，但同一景點唔好重複兩次。
+4. 只改用戶點名、或者已解鎖、或者明顯錯誤嘅時段。交齊嗰日 timeline 時，每個景點只出現一次。
 5. placeQuery 格式：Official English name, City, Country
 6. 輸出前用網頁搜尋核對「你改過」嗰啲該日現價；冇改過嘅價錢可沿用。
 7. 有門票金額嘅新景點／活動，要一齊寫入該日 klook。

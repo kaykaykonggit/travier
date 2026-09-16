@@ -87,7 +87,7 @@ export function buildTweakPrompt(doc: TripDoc, done: Set<string>, wish: string, 
 2. days / nights / klook 只可以包含 date = ${viewingDate}。其他日子一個都唔准交，亦唔准交完整行程。
 3. 交 day 就要交齊嗰日完整 timeline（含 transport、ticket、backups）。冇改當晚酒店就 nights: []。冇改門票就 klook: []。
 4. 「已去過」名單入面嘅 placeQuery，正選同 backups 都唔准再出現。
-5. locked=true 嘅項目，連時間、交通、門票都要原樣保留，除非用戶喺「想怎麼改」明確點名要改。
+5. locked=true 嘅項目要保留內容（景點／門票／備註）；若因加景點而要順移後面時間，同一個 placeQuery 只准出現一次，唔好舊時間＋新時間各一筆。
 6. 用戶已選酒店（chosenName）要保留。
 7. 只可以改 locked=false、未去過、或者用戶點名要改嘅時段。改完要接得返前後銜接同當晚休息點。
 8. 輸出前用網頁搜尋核對你改過嗰啲嘅該日現價。冇改過嘅價錢可以沿用。

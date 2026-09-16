@@ -25,20 +25,48 @@ export function looksLikePatch(data: unknown): boolean {
   return Array.isArray(data.days) || Array.isArray(data.nights) || Array.isArray(data.klook);
 }
 
+function timelineIdentity(item: TimelineItem): string {
+  const place = item.placeQuery.trim().toLowerCase();
+  const primary = place.split(",")[0]?.trim();
+  const name = primary || (item.displayNameZh || item.title).trim().toLowerCase();
+  return `${item.type}:${name}`;
+}
+
+/**
+ * When a patch returns a full-day timeline, keep locked stops by place identity
+ * (not start time). Matching only by start caused duplicates after inserts that
+ * shift later stops (e.g. add 鳳梨園 → 鐘乳洞/酒店 get new times, then old
+ * locked copies were re-inserted).
+ */
 function mergeTimelinePreserveLocked(oldItems: TimelineItem[], nextItems: TimelineItem[]): TimelineItem[] {
-  const lockedByStart = new Map(oldItems.filter((item) => item.locked).map((item) => [item.start, item]));
+  const lockedById = new Map<string, TimelineItem>();
+  for (const item of oldItems) {
+    if (!item.locked) continue;
+    const key = timelineIdentity(item);
+    if (!lockedById.has(key)) lockedById.set(key, item);
+  }
+
   const used = new Set<string>();
   const merged = nextItems.map((item) => {
-    const locked = lockedByStart.get(item.start);
-    if (locked) {
-      used.add(item.start);
-      return locked;
-    }
-    return item;
+    const key = timelineIdentity(item);
+    const locked = lockedById.get(key);
+    if (!locked) return item;
+    used.add(key);
+    // Preserve locked content; accept schedule/transport from patch so the day stays coherent.
+    return {
+      ...locked,
+      start: item.start,
+      end: item.end,
+      endNextDay: item.endNextDay,
+      transport: item.transport,
+      locked: true,
+    };
   });
-  for (const [start, locked] of lockedByStart) {
-    if (used.has(start)) continue;
-    const insertAt = merged.findIndex((item) => item.start > start);
+
+  // Locked stops missing from the patch (AI tried to drop them) stay inserted.
+  for (const [key, locked] of lockedById) {
+    if (used.has(key)) continue;
+    const insertAt = merged.findIndex((item) => item.start > locked.start);
     if (insertAt < 0) merged.push(locked);
     else merged.splice(insertAt, 0, locked);
   }
