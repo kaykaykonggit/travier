@@ -1,4 +1,4 @@
-import type { BackupPlace, Day, EatCandidate, ExpenseItem, HotelCandidate, KlookItem, LifeCategory, Money, Night, Ticket, TimelineItem, Transport, TripDoc } from "../types";
+import type { BackupPlace, Day, EatCandidate, ExpenseItem, HotelCandidate, KlookItem, LifeCategory, Money, Night, PrepItem, PrepSection, Ticket, TimelineItem, Transport, TripDoc } from "../types";
 import { cleanSourceUrl, sanitizeTripJson } from "./sanitize";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -228,6 +228,7 @@ export function parseKlook(value: unknown): KlookItem | null {
 }
 
 const LIFE_CATS = new Set(["yi", "shi", "zhu", "xing", "wan"]);
+const PREP_SECTIONS = new Set(["him_pack", "him_todo", "her_pack"]);
 
 function parseExpense(value: unknown): ExpenseItem | null {
   if (!isRecord(value)) return null;
@@ -258,6 +259,21 @@ function parseExpense(value: unknown): ExpenseItem | null {
     notes: asString(value.notes),
     url: asString(value.url) || asString(value.bookingUrl) || asString(value.klookUrl),
     link,
+  };
+}
+
+function parsePrep(value: unknown): PrepItem | null {
+  if (!isRecord(value)) return null;
+  const id = asString(value.id);
+  const section = asString(value.section);
+  const title = asString(value.title);
+  if (!id || !title || !PREP_SECTIONS.has(section)) return null;
+  return {
+    id,
+    section: section as PrepSection,
+    group: asString(value.group),
+    title,
+    done: value.done === true,
   };
 }
 
@@ -325,6 +341,9 @@ export function parseTripDoc(data: unknown): ParseResult {
     klook: Array.isArray(data.klook) ? data.klook.map(parseKlook).filter((k): k is KlookItem => k != null) : [],
     expenses: Array.isArray(data.expenses)
       ? data.expenses.map(parseExpense).filter((item): item is ExpenseItem => item != null)
+      : undefined,
+    prep: Array.isArray(data.prep)
+      ? data.prep.map(parsePrep).filter((item): item is PrepItem => item != null)
       : undefined,
   };
 

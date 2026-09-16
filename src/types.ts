@@ -173,6 +173,18 @@ export type ExpenseItem = {
   link: ExpenseLink | null;
 };
 
+/** User packing / todo checklist (預備清單), separate from outing timeline. */
+export type PrepSection = "him_pack" | "him_todo" | "her_pack";
+
+export type PrepItem = {
+  id: string;
+  section: PrepSection;
+  /** Subgroup label, e.g. 拍攝與電子設備. Empty string if none. */
+  group: string;
+  title: string;
+  done: boolean;
+};
+
 export type TripDoc = {
   schemaVersion: string;
   trip: Trip;
@@ -181,4 +193,6 @@ export type TripDoc = {
   klook: KlookItem[];
   /** Optional; older saves may omit this. */
   expenses?: ExpenseItem[];
+  /** Optional packing / prep checklist. */
+  prep?: PrepItem[];
 };

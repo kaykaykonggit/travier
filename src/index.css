@@ -1355,7 +1355,7 @@ summary.with-info::after { margin-left: auto; }
   z-index: 3000;
   width: min(480px, 100%);
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 0;
   padding: 4px 8px calc(4px + env(safe-area-inset-bottom, 0px));
   background: #142016;
@@ -1413,6 +1413,121 @@ summary.with-info::after { margin-left: auto; }
   width: 100%;
   height: 100%;
   padding: 1px;
+}
+
+.prep-progress {
+  margin: 0;
+  flex: 0 0 auto;
+  padding: 6px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.prep-sec-mark {
+  display: grid;
+  place-items: center;
+  width: 1em;
+  height: 1em;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1;
+}
+.prep-add {
+  display: grid;
+  gap: 10px;
+  margin: 0 0 16px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--paper);
+}
+.prep-add-field {
+  display: grid;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 600;
+}
+.prep-add-field input,
+.prep-add-field select {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: var(--bg);
+  color: var(--ink);
+  font: inherit;
+}
+.prep-add-row {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+.prep-add-row input { flex: 1; min-width: 0; }
+.prep-add-btn {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+.prep-list {
+  display: grid;
+  gap: 14px;
+}
+.prep-group h2 {
+  margin: 0 0 8px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+}
+.prep-group ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--paper);
+  overflow: hidden;
+}
+.prep-group li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 12px;
+  border-bottom: 1px solid var(--line);
+}
+.prep-group li:last-child { border-bottom: 0; }
+.prep-group li.is-done .prep-check span {
+  color: var(--muted);
+  text-decoration: line-through;
+}
+.prep-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.4;
+}
+.prep-check input {
+  margin-top: 2px;
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+  accent-color: var(--accent);
+}
+.prep-delete {
+  flex: 0 0 auto;
+  margin-top: 1px;
+  font-size: 12px;
+  color: var(--muted);
 }
 
 .life-page {
