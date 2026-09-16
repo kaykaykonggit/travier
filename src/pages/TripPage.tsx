@@ -50,7 +50,6 @@ import { dwellMinutes, formatDurationLabel } from "../lib/timelineTime";
 import { buildTweakPrompt } from "../lib/tweakPrompt";
 import { buildSampleEditPrompt } from "../lib/template";
 import { needsBooking, bookingFallbackUrl } from "../lib/booking";
-import { archiveTrip } from "../lib/storage";
 import { applyTheme, loadTheme, saveTheme, type ThemeId } from "../lib/theme";
 import type { Day, HotelCandidate, Night, TimelineItem, TripDoc } from "../types";
 
@@ -114,7 +113,7 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
   const [tweakWish, setTweakWish] = useState("");
   const [tweakCopied, setTweakCopied] = useState<"day" | "full" | null>(null);
   const [applyNote, setApplyNote] = useState<string | null>(null);
-  const [archivedMsg, setArchivedMsg] = useState<string | null>(null);
+  const [toolsOpen, setToolsOpen] = useState(false);
   const [mainTab, setMainTab] = useState<"prep" | "trip" | "life">("trip");
   const [stopEdit, setStopEdit] = useState<{ dayIndex: number; itemIndex: number; snapshot: TimelineItem[] } | null>(null);
   const [stopTicketUrl, setStopTicketUrl] = useState("");
@@ -510,115 +509,102 @@ export function TripPage({ doc, onChange, onReset }: { doc: TripDoc; onChange: (
               {children ? ` ${children} 小孩` : ""} · {labelOf(PACE_LABEL, doc.trip.pace)}
             </p>
           </div>
-          <div className="trip-top-actions">
+          <div className="trip-top-actions" role="toolbar" aria-label="行程工具">
             <ThemeSwitch value={theme} onChange={setTheme} />
-            <details className="quiet-details trip-plan-tools tweak-panel">
-              <summary>改當日</summary>
-              <div className="trip-plan-pop">
-          <div className="tweak-row">
-            <span className="import-label">用法</span>
-            <InfoTip title="如何改當天行程">
-              <ol>
-                <li>先切到要改的那一天。</li>
-                <li>小改（換後備、刪站、貼地圖加站、換酒店）直接在時間軸操作，不必找 AI。</li>
-                <li>要重排整天：解鎖想改的站 → 寫「想怎麼改」→「複製當日」貼到 ChatGPT／Gemini。</li>
-                <li>要改日期、人數或整份大翻：用「複製全程」，AI 會拿到完整行程 JSON。</li>
-                <li>AI 只改當天時回傳 <strong>patch</strong>（<code>schemaVersion: "1.0.0-patch"</code>）。整份大改則回傳完整行程 JSON。</li>
-                <li>把回復貼回「貼上 AI 回復」→「套用」。其他日子與已打勾進度會保留。</li>
-              </ol>
-              <p>從零重新規劃：用「換行程」回到匯入頁。</p>
-            </InfoTip>
-          </div>
-          <div className="tweak-row">
-            <label className="import-label" htmlFor="tweak-wish">
-              想怎麼改這一天
-            </label>
-            <InfoTip title="想怎麼改該怎麼寫">
-              <p>只針對你正在查看的那一天。越具體越穩定。</p>
-              <ul>
-                <li>改景點：「下午不要去美泉宮，改去市區附近的步行景點」</li>
-                <li>改酒店：「今晚改到火車站附近」</li>
-                <li>改節奏：「不要太緊湊，刪掉一個下午景點」</li>
-              </ul>
-              <p>留空＝僅允許 AI 修改這一天明顯錯誤的交通／時間，其餘幾乎保持原樣。</p>
-            </InfoTip>
-          </div>
-          <textarea
-            id="tweak-wish"
-            className="json-update"
-            value={tweakWish}
-            onChange={(event) => setTweakWish(event.target.value)}
-            placeholder="例如：下午換成步行可到的景點"
-          />
-          <button type="button" className="btn btn-primary" onClick={() => void copyTweak()}>
-            {tweakCopied === "day" ? "已複製當日" : "複製當日"}
-          </button>
-          <button type="button" className="text-btn" onClick={() => void copyFull()}>
-            {tweakCopied === "full" ? "已複製全程" : "複製全程"}
-          </button>
-          <div className="tweak-row tweak-paste-label">
-            <label className="import-label" htmlFor="tweak-json">
-              貼上 AI 回復
-            </label>
-            <InfoTip title="貼上哪種 JSON">
-              <p>
-                <strong>首選 patch</strong>：AI 應回傳
-                <code>{`{"schemaVersion":"1.0.0-patch","days":[...],"nights":[],"klook":[]}`}</code>
-                ，而且 <code>days</code> 只放你改的那一天。App 會合併，已鎖定站點與已選酒店會保留。
-              </p>
-              <p>
-                <strong>完整行程</strong>：若 AI 回傳包含整週 <code>days</code> 的大型 JSON，會整份取代（打勾進度仍會保留）。請要求它只改當天。
-              </p>
-            </InfoTip>
-          </div>
-          <textarea
-            id="tweak-json"
-            className="json-update"
-            value={jsonDraft}
-            onChange={(event) => setJsonDraft(event.target.value)}
-            placeholder='{"schemaVersion":"1.0.0-patch","days":[...]}'
-            spellCheck={false}
-          />
-          {jsonErrors.length > 0 && (
-            <ul className="import-errors">
-              {jsonErrors.map((error) => (
-                <li key={error}>{error}</li>
-              ))}
-            </ul>
-          )}
-          {applyNote && <p className="cost-note">{applyNote}</p>}
-          <button type="button" className="btn btn-primary" disabled={!jsonDraft.trim()} onClick={applyJson}>
-            套用
-          </button>
-              </div>
-            </details>
-            <details className="quiet-details trip-plan-tools">
-              <summary>設定</summary>
-              <div className="trip-plan-pop">
-          <p className="trip-meta trip-meta-inline">
-            {formatDateZh(doc.trip.startDate)} – {formatDateZh(doc.trip.endDate)} · {adults} 大人
-            {doc.trip.travelers.children ? ` ${doc.trip.travelers.children} 小孩` : ""}
-          </p>
-          {doc.trip.notes && <p className="trip-notes">{doc.trip.notes}</p>}
-              </div>
-            </details>
             <button
               type="button"
-              className="text-btn"
-              onClick={() => {
-                const saved = archiveTrip(doc);
-                setArchivedMsg(`已存「${saved.title}」。按「換行程」可再打開。`);
-                window.setTimeout(() => setArchivedMsg(null), 4000);
-              }}
+              className={`trip-tool-btn${toolsOpen ? " on" : ""}`}
+              aria-pressed={toolsOpen}
+              aria-expanded={toolsOpen}
+              onClick={() => setToolsOpen((open) => !open)}
             >
-              封存
+              微調
             </button>
-            <button type="button" className="text-btn" onClick={onReset}>
-              換行程
+            <button type="button" className="trip-tool-btn" onClick={onReset}>
+              換程
             </button>
           </div>
         </div>
-        {archivedMsg ? <p className="archive-toast">{archivedMsg}</p> : null}
+        {toolsOpen ? (
+          <div className="trip-plan-drawer" id="trip-tweak-drawer">
+            {doc.trip.notes ? <p className="trip-notes trip-notes-inline">{doc.trip.notes}</p> : null}
+            <div className="tweak-row">
+              <span className="import-label">用法</span>
+              <InfoTip title="如何微調當天行程">
+                <ol>
+                  <li>先切到要改的那一天。</li>
+                  <li>小改（換後備、刪站、貼地圖加站、換酒店）直接在時間軸操作，不必找 AI。</li>
+                  <li>要重排整天：解鎖想改的站 → 寫「想怎麼改」→「複製當日」貼到 ChatGPT／Gemini。</li>
+                  <li>要改日期、人數或整份大翻：用「複製全程」，AI 會拿到完整行程 JSON。</li>
+                  <li>AI 只改當天時回傳 <strong>patch</strong>（<code>schemaVersion: "1.0.0-patch"</code>）。整份大改則回傳完整行程 JSON。</li>
+                  <li>把回復貼回「貼上 AI 回復」→「套用」。其他日子與已打勾進度會保留。</li>
+                </ol>
+                <p>從零重新規劃：用「換程」回到匯入頁。行程會自動保存在本機清單。</p>
+              </InfoTip>
+            </div>
+            <div className="tweak-row">
+              <label className="import-label" htmlFor="tweak-wish">
+                想怎麼改這一天
+              </label>
+              <InfoTip title="想怎麼改該怎麼寫">
+                <p>只針對你正在查看的那一天。越具體越穩定。</p>
+                <ul>
+                  <li>改景點：「下午不要去美泉宮，改去市區附近的步行景點」</li>
+                  <li>改酒店：「今晚改到火車站附近」</li>
+                  <li>改節奏：「不要太緊湊，刪掉一個下午景點」</li>
+                </ul>
+                <p>留空＝僅允許 AI 修改這一天明顯錯誤的交通／時間，其餘幾乎保持原樣。</p>
+              </InfoTip>
+            </div>
+            <textarea
+              id="tweak-wish"
+              className="json-update"
+              value={tweakWish}
+              onChange={(event) => setTweakWish(event.target.value)}
+              placeholder="例如：下午換成步行可到的景點"
+            />
+            <button type="button" className="btn btn-primary" onClick={() => void copyTweak()}>
+              {tweakCopied === "day" ? "已複製當日" : "複製當日"}
+            </button>
+            <button type="button" className="text-btn" onClick={() => void copyFull()}>
+              {tweakCopied === "full" ? "已複製全程" : "複製全程"}
+            </button>
+            <div className="tweak-row tweak-paste-label">
+              <label className="import-label" htmlFor="tweak-json">
+                貼上 AI 回復
+              </label>
+              <InfoTip title="貼上哪種 JSON">
+                <p>
+                  <strong>首選 patch</strong>：AI 應回傳
+                  <code>{`{"schemaVersion":"1.0.0-patch","days":[...],"nights":[],"klook":[]}`}</code>
+                  ，而且 <code>days</code> 只放你改的那一天。App 會合併，已鎖定站點與已選酒店會保留。
+                </p>
+                <p>
+                  <strong>完整行程</strong>：若 AI 回傳包含整週 <code>days</code> 的大型 JSON，會整份取代（打勾進度仍會保留）。請要求它只改當天。
+                </p>
+              </InfoTip>
+            </div>
+            <textarea
+              id="tweak-json"
+              className="json-update"
+              value={jsonDraft}
+              onChange={(event) => setJsonDraft(event.target.value)}
+              placeholder='{"schemaVersion":"1.0.0-patch","days":[...]}'
+              spellCheck={false}
+            />
+            {jsonErrors.length > 0 && (
+              <ul className="import-errors">
+                {jsonErrors.map((error) => (
+                  <li key={error}>{error}</li>
+                ))}
+              </ul>
+            )}
+            {applyNote && <p className="cost-note">{applyNote}</p>}
+            <button type="button" className="btn btn-primary" disabled={!jsonDraft.trim()} onClick={applyJson}>
+              套用
+            </button>
+          </div>
+        ) : null}
       </header>
 
       <div className="trip-workspace">

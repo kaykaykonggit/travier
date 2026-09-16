@@ -30,7 +30,8 @@ export function loadStoredTrip(): TripDoc | null {
 
 export function saveTrip(doc: TripDoc): void {
   localStorage.setItem(ACTIVE_KEY, JSON.stringify(doc));
-  syncLinkedLibrary(doc);
+  // Keep the on-device library in sync so leaving/switching trips never loses work.
+  upsertLibrary(doc);
 }
 
 export function clearTrip(): void {
@@ -105,23 +106,19 @@ function setLibraryId(id: string | null): void {
   else localStorage.removeItem(LIBRARY_ID_KEY);
 }
 
-function syncLinkedLibrary(doc: TripDoc): void {
-  const linkedId = localStorage.getItem(LIBRARY_ID_KEY);
-  if (!linkedId) return;
-  const list = readLibrary();
-  const index = list.findIndex((item) => item.id === linkedId);
-  if (index < 0) {
-    setLibraryId(null);
-    return;
-  }
+/** Upsert active trip into local library (max 20). */
+function upsertLibrary(doc: TripDoc): SavedTripMeta {
   const nextId = tripId(doc);
-  list[index] = toSaved({
+  const linkedId = localStorage.getItem(LIBRARY_ID_KEY);
+  const list = readLibrary().filter((item) => item.id !== nextId && item.id !== linkedId);
+  const entry = toSaved({
     id: nextId,
     savedAt: new Date().toISOString(),
     doc,
   });
-  writeLibrary(list);
+  writeLibrary([entry, ...list].slice(0, 20));
   setLibraryId(nextId);
+  return toMeta(entry);
 }
 
 export function unlinkLibrary(): void {
@@ -139,19 +136,10 @@ export function loadSavedTrip(id: string, link = true): TripDoc | null {
   return found.doc;
 }
 
-/** Archive current itinerary into the on-device library (no backend yet). */
+/** @deprecated Prefer automatic saveTrip upsert; kept for callers that want an explicit snapshot. */
 export function archiveTrip(doc: TripDoc): SavedTripMeta {
-  const nextId = tripId(doc);
-  const list = readLibrary().filter((item) => item.id !== nextId && item.id !== localStorage.getItem(LIBRARY_ID_KEY));
-  const entry = toSaved({
-    id: nextId,
-    savedAt: new Date().toISOString(),
-    doc,
-  });
-  writeLibrary([entry, ...list].slice(0, 20));
-  setLibraryId(nextId);
-  saveTrip(doc);
-  return entry;
+  localStorage.setItem(ACTIVE_KEY, JSON.stringify(doc));
+  return upsertLibrary(doc);
 }
 
 export function deleteSavedTrip(id: string): void {

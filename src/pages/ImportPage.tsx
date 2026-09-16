@@ -262,7 +262,7 @@ export function ImportPage({
             </label>
             <InfoTip title="匯入 JSON">
               <p>此欄位只需<strong>完整行程</strong>：至少包含 <code>schemaVersion</code>、<code>trip</code>、<code>days</code>。</p>
-              <p>匯入頁面<strong>不接收</strong>微改 patch（<code>1.0.0-patch</code>）。若已有行程只需改某一天，請前往行程頁的「改當日」貼上。</p>
+              <p>匯入頁面<strong>不接收</strong>微改 patch（<code>1.0.0-patch</code>）。若已有行程只需改某一天，請前往行程頁的「微調」貼上。</p>
               <p>若匯入失敗：檢查 AI 是否加上了前言或 ``` 符號；必須是純 JSON。常見錯誤為 true/false 後面多出文字，或將連結寫成 Markdown 格式。</p>
             </InfoTip>
           </div>
