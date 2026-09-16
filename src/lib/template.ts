@@ -71,6 +71,11 @@ export const AI_TEMPLATE = `你是行程資料轉換器，不是聊天機器人�
 21. 如果搜到的是每人價（機票、門票、餐），你先乘人數再寫進 amount。
 22. 用餐不要只估價錢。熱門旅遊區（意大利、維也納聖誕、巴黎、日本等）午餐／晚餐必須寫具體餐廳英文名與 placeQuery，不要只寫區域名當餐廳。notes 寫要不要訂。歐洲填 TheFork / OpenTable／官方；日本填 Tabelog / ホットペッパー / ぐるなび / 一休／官方。有網址就放 transport.booking.url。餐費 estimated 可以 true。午餐 / 晚餐 / 下午茶分開放。amount 仍是全桌／全團。
 22a. 同一帶逗留超過 3 小時，除午餐外可加下午茶或小食（type meal），方便用戶出發前訂。宵夜只在晚上 21:00 後仍在外面才加。
+22b. 每個 attraction / activity（用餐、純交通、飛機、酒店除外）必須給 eats[]：1 到 3 間「該景點步行約 10–15 分鐘內」的餐廳，且必須用 Google Maps 查到評分 ≥ 4.0（不准填 3.x 或沒評分）。每間要有：
+    name（地圖正式名）、displayNameZh、placeQuery、rating（數字，例 4.3）、mapsUrl（該店 Google Maps 連結或搜尋連結）、notes（一句：菜系／是否要訂）、bookingUrl（可訂則填 TheFork／OpenTable／Tabelog／官網，否則 null）。
+    chosenEat 一律先填 ""；eatSkipped 一律 false。用戶會在 Travier 選一間或按「略過」。
+22c. type meal 的主餐廳同樣必須 Google Maps ≥ 4.0。同區備選優先寫進前後景點的 eats[]。
+22d. 搜不到 ≥ 4.0 的店：eats 用 []，並在該站 notes 寫「附近高評分餐廳不足」。不准灌水假評分。
 23. 市區地鐵單程若搜不到，才可用當地官方單程票價；仍要寫 source。
 24. 機票 currency 用 HKD；其他當地花費用 local 貨幣。
 25. 不要用「熱門博物館一律 24 歐、套票一律 45 歐」這種一刀切。每個景點分開搜。
@@ -125,6 +130,19 @@ timeline item:
       "ticket": { "name": "", "cost": { "amount": 0, "currency": "EUR", "estimated": true, "source": "", "asOf": "2026-09-06" } }
     }
   ],
+  "eats": [
+    {
+      "name": "Restaurant official map name",
+      "displayNameZh": "餐廳中文名",
+      "placeQuery": "Restaurant name, City, Country",
+      "rating": 4.3,
+      "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Restaurant+name",
+      "notes": "意大利菜 · 建議訂位",
+      "bookingUrl": "https://www.thefork.com/"
+    }
+  ],
+  "chosenEat": "",
+  "eatSkipped": false,
   "transport": {
     "mode": "walk|metro|train|bus|tram|taxi|flight|cable_car|private_car|ferry|night_train",
     "fromPlaceQuery": "",

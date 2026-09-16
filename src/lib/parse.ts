@@ -1,4 +1,4 @@
-import type { BackupPlace, Day, ExpenseItem, HotelCandidate, KlookItem, LifeCategory, Money, Night, PrepItem, PrepSection, Ticket, TimelineItem, Transport, TripDoc } from "../types";
+import type { BackupPlace, Day, EatCandidate, ExpenseItem, HotelCandidate, KlookItem, LifeCategory, Money, Night, PrepItem, PrepSection, Ticket, TimelineItem, Transport, TripDoc } from "../types";
 import { cleanSourceUrl, sanitizeTripJson } from "./sanitize";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -104,6 +104,24 @@ function backupPlace(value: unknown): BackupPlace | null {
   };
 }
 
+function eatCandidate(value: unknown): EatCandidate | null {
+  if (!isRecord(value)) return null;
+  const name = asString(value.name);
+  const placeQuery = asString(value.placeQuery);
+  if (!name && !placeQuery) return null;
+  const ratingRaw = typeof value.rating === "number" ? value.rating : Number(value.rating);
+  const rating = Number.isFinite(ratingRaw) ? ratingRaw : 0;
+  return {
+    name: name || placeQuery,
+    displayNameZh: asString(value.displayNameZh),
+    placeQuery: placeQuery || name,
+    rating,
+    mapsUrl: asString(value.mapsUrl),
+    notes: asString(value.notes),
+    bookingUrl: typeof value.bookingUrl === "string" && value.bookingUrl.trim() ? value.bookingUrl.trim() : null,
+  };
+}
+
 function timelineItem(value: unknown): TimelineItem | null {
   if (!isRecord(value)) return null;
   const start = asString(value.start);
@@ -127,6 +145,11 @@ function timelineItem(value: unknown): TimelineItem | null {
     backups: Array.isArray(value.backups)
       ? value.backups.map(backupPlace).filter((item): item is BackupPlace => item != null)
       : [],
+    eats: Array.isArray(value.eats)
+      ? value.eats.map(eatCandidate).filter((item): item is EatCandidate => item != null)
+      : [],
+    chosenEat: typeof value.chosenEat === "string" && value.chosenEat.trim() ? value.chosenEat.trim() : null,
+    eatSkipped: asBool(value.eatSkipped),
   };
 }
 
